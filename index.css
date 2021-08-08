@@ -1,0 +1,61 @@
+body {
+    background-color: lightblue;
+    font-family: Verdana, Geneva, Tahoma, sans-serif, Helvetica, sans-serif;
+    padding-bottom: 5rem;
+}
+
+#PageTitle {
+    text-align: center;
+}
+
+.main-content {
+    margin-left:35%;
+    margin-right: 35%;
+}
+
+.div-card {
+    background-color: white;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 0.2rem;
+    box-shadow: 0 2px 4px 0 black;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.margin-top-1 {
+    margin-top: 1rem;
+}
+
+/* Footer Content*/
+#credit-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    color: black;
+    text-align: center;
+    
+    padding: 0.5rem;
+}
+#github-logo {
+    vertical-align: middle;
+    display:inline;
+    width: 4em;
+}
+#linkedin-logo {
+    vertical-align: middle;
+    display:inline;
+    width: 5em;
+}
+
+/* Responsive page width media queries*/
+@media (max-width: 960px) {
+    .main-content {
+        margin-left:10%;
+        margin-right: 10%;
+    }
+}
