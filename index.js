@@ -15,5 +15,5 @@ function addPriority() {
 
     PriorityCard.append(PriorityText);
     PrioritiesBlock.append(PriorityCard);
-
+    PriorityField.value = "";
 }
