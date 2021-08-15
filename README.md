@@ -1,4 +1,4 @@
-# My Simple Priorities - Web
+# Web - My Simple Priorities
 ## Description
 My Simple Priorities is a simple priority management website.
 
