@@ -4,6 +4,10 @@ body {
     padding-bottom: 5rem;
 }
 
+button {
+    margin: 0.2rem;
+}
+
 #PageTitle {
     text-align: center;
 }
