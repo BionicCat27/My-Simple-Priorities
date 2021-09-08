@@ -1,12 +1,34 @@
-var AddPriorityButton = document.getElementById("PriorityButton");
-AddPriorityButton.addEventListener("click", function() {
-    addPriority();
-});
+function initListeners() {
+    addPriorityListener();
+    deletePriorityListener();
+}
+
+function addPriorityListener() {
+    var AddPriorityButton = document.getElementById("PriorityButton");
+    AddPriorityButton.addEventListener("click", function() {
+        addPriority();
+    });
+}
+
+function deletePriorityListener() {
+    var DeletePriorityButtons = document.getElementsByClassName("delete-priority");
+    for(var i = 0; i < DeletePriorityButtons.length; i++) {
+        DeletePriorityButtons[i].addEventListener('click', function() {
+            this.parentNode.parentNode.remove();
+        });
+    }
+}
+
+initListeners();
 
 var PriorityField = document.getElementById("PriorityField");
 var PriorityContent = document.getElementById("PriorityContent");
 
 function addPriority() {
+    //Check value isn't empty
+    if(PriorityField.value == "") {
+        return;
+    }
     //Create priority card
     var PrioritiesBlock = document.getElementById("PrioritiesBlock");
     var PriorityCard = document.createElement("div");
@@ -23,6 +45,7 @@ function addPriority() {
     PriorityDown.innerText = "Move Down";
     var PriorityDelete = document.createElement("button");
     PriorityDelete.innerText = "Delete Priority";
+    PriorityDelete.classList.add("delete-priority");
 
     //Add buttons to button group
     ButtonBlock.append(PriorityUp);
@@ -34,4 +57,6 @@ function addPriority() {
     PriorityCard.append(ButtonBlock);
     PrioritiesBlock.append(PriorityCard);
     PriorityField.value = "";
+
+    initListeners();
 }
