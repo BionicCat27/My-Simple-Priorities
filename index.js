@@ -3,6 +3,7 @@ function initListeners() {
     deletePriorityListener();
     moveUpListener();
     moveDownListener();
+    cardHoverListener();
 }
 
 function addPriorityListener() {
@@ -33,6 +34,16 @@ function moveDownListener() {
     });
 }
 
+function cardHoverListener() {
+    $('.priority-card').on("mouseover", function() {
+        $(this).find('div.button-block').show();
+    });
+
+    $('.priority-card').on("mouseout", function() {
+        $(this).find('div.button-block').hide();
+    });
+}
+
 
 initListeners();
 
@@ -47,13 +58,14 @@ function addPriority() {
     //Create priority card
     var PrioritiesBlock = document.getElementById("PrioritiesBlock");
     var PriorityCard = document.createElement("div");
-    PriorityCard.classList.add("div-card");
+    PriorityCard.classList.add("div-card", "priority-card");
     var PriorityText = document.createElement("h3");
     PriorityText.innerText = PriorityField.value;
 
     //Create priority card buttons
     var ButtonBlock = document.createElement("div");
     ButtonBlock.classList.add("button-block");
+    ButtonBlock.style.display = "none";
     var PriorityUp = document.createElement("button");
     PriorityUp.innerText = "Move Up";
     PriorityUp.classList.add("moveup-priority");
