@@ -6,19 +6,15 @@ function initListeners() {
 }
 
 function addPriorityListener() {
-    var AddPriorityButton = document.getElementById("PriorityButton");
-    AddPriorityButton.addEventListener("click", function() {
+    $("#PriorityButton").off("click").click(function() {
         addPriority();
     });
 }
 
 function deletePriorityListener() {
-    var DeletePriorityButtons = document.getElementsByClassName("delete-priority");
-    for(var i = 0; i < DeletePriorityButtons.length; i++) {
-        DeletePriorityButtons[i].addEventListener('click', function() {
-            this.parentNode.parentNode.remove();
-        });
-    }
+    $('.delete-priority').off("click").click(function() {
+        $(this).parent().parent().remove();
+    });
 }
 
 function moveUpListener() {
