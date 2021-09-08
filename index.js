@@ -13,7 +13,11 @@ function addPriorityListener() {
 
 function deletePriorityListener() {
     $('.delete-priority').off("click").click(function() {
-        $(this).parent().parent().remove();
+
+        var answer = confirm("Delete this priority?");
+        if (answer) {
+            $(this).parent().parent().remove();
+        }
     });
 }
 
