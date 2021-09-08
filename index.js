@@ -35,12 +35,12 @@ function moveDownListener() {
 }
 
 function cardHoverListener() {
-    $('.priority-card').on("mouseover", function() {
-        $(this).find('div.button-block').show();
-    });
-
-    $('.priority-card').on("mouseout", function() {
-        $(this).find('div.button-block').hide();
+    $('.priority-card').off("click").on("click", function() {
+        if($(this).find('div.button-block').is(":visible")) {
+            $(this).find('div.button-block').hide();
+        } else {
+            $(this).find('div.button-block').show();
+        }
     });
 }
 
