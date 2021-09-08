@@ -1,11 +1,25 @@
 body {
     background-color: lightblue;
-    font-family: Verdana, Geneva, Tahoma, sans-serif, Helvetica, sans-serif;
+    font-family: 'Arial', sans-serif;
+    font-family: 'Urbanist', sans-serif;
     padding-bottom: 5rem;
 }
 
 button {
     margin: 0.2rem;
+    font-size: .8rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    background-color: white;
+    border: none;
+    border: 1.5px solid #555555;
+    display:inline-block;
+}
+
+button:hover {
+    background-color: lightblue;
 }
 
 #PageTitle {
