@@ -1,6 +1,8 @@
 function initListeners() {
     addPriorityListener();
     deletePriorityListener();
+    moveUpListener();
+    moveDownListener();
 }
 
 function addPriorityListener() {
@@ -18,6 +20,19 @@ function deletePriorityListener() {
         });
     }
 }
+
+function moveUpListener() {
+    $('.moveup-priority').off("click").click(function(){
+        $(this).parent().parent().prev().insertAfter($(this).parent().parent());
+    });
+}
+
+function moveDownListener() {
+    $('.movedown-priority').off("click").click(function(){
+        $(this).parent().parent().next().insertBefore($(this).parent().parent());
+    });
+}
+
 
 initListeners();
 
@@ -41,8 +56,10 @@ function addPriority() {
     ButtonBlock.classList.add("button-block");
     var PriorityUp = document.createElement("button");
     PriorityUp.innerText = "Move Up";
+    PriorityUp.classList.add("moveup-priority");
     var PriorityDown = document.createElement("button");
     PriorityDown.innerText = "Move Down";
+    PriorityDown.classList.add("movedown-priority");
     var PriorityDelete = document.createElement("button");
     PriorityDelete.innerText = "Delete Priority";
     PriorityDelete.classList.add("delete-priority");
