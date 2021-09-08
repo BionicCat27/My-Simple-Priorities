@@ -13,6 +13,7 @@ Download the source files, and open the `index.html` file in a browser. Add and 
 ## Features in progress
  - Multiple priority lists
  - Sub priority lists
+ - Login system
 
 ## Design Information
 This project uses **HTML** and **CSS** for the frontend, and uses **JavaScript** for the backend logic.
