@@ -92,6 +92,32 @@ button:hover {
 
 /* Responsive page width media queries*/
 @media (max-width: 960px) {
+    body {
+        font-size: 2vw;
+    }
+    
+    .main-content {
+        margin-left:10%;
+        margin-right: 10%;
+    }
+}
+
+@media (max-width: 720) {
+    body {
+        font-size: 3vw;
+    }
+    
+    .main-content {
+        margin-left:10%;
+        margin-right: 10%;
+    }
+}
+
+@media (max-width: 480) {
+    body {
+        font-size: 4vw;
+    }
+    
     .main-content {
         margin-left:10%;
         margin-right: 10%;
