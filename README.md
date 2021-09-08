@@ -7,11 +7,12 @@ Download the source files, and open the `index.html` file in a browser. Add and 
 
 ## Complete features
  - Adding priorities
-
-## Features in progress
  - Changing priority order
  - Deleting priorities
+
+## Features in progress
  - Multiple priority lists
+ - Sub priority lists
 
 ## Design Information
 This project uses **HTML** and **CSS** for the frontend, and uses **JavaScript** for the backend logic.
