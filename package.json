@@ -1,0 +1,22 @@
+{
+  "name": "my-simple-priorities-web",
+  "version": "1.0.0",
+  "description": "My Simple Priorities is a simple priority management website.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BionicCat27/My-Simple-Priorities-Web.git"
+  },
+  "author": "AslanBB",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BionicCat27/My-Simple-Priorities-Web/issues"
+  },
+  "homepage": "https://github.com/BionicCat27/My-Simple-Priorities-Web#readme",
+  "dependencies": {
+    "dotenv": "^14.2.0"
+  }
+}
