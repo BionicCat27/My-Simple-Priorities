@@ -6,21 +6,23 @@ module.exports = {
   entry: '/src/app.js',
   module: {
     rules: [{
-        loader: 'babel-loader',
-        test: /\js$/,
-        exclude: /node_modules/
+      loader: 'babel-loader',
+      test: /\js$/,
+      exclude: /node_modules/
     }]
-},
+  },
   resolve: {
     extensions: ["*", ".js", ".jsx"],
   },
   output: {
     filename: 'bundle.js',
-    path: path.join(__dirname, 'src')
-},
+    path: path.join(__dirname, 'src'),
+    publicPath: '/'
+  },
   plugins: [new webpack.HotModuleReplacementPlugin()],
   devServer: {
     static: path.join(__dirname, 'src'),
-    hot: true
+    hot: true,
+    historyApiFallback: true
   }
 };
