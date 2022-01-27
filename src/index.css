@@ -1,0 +1,125 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    font-family: 'Urbanist', sans-serif;
+
+    padding-bottom: 5rem;
+
+    color: black;
+    font-size: 1vw;
+
+    background: #C33764;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #1D2671, #C33764);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #1D2671, #C33764); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+button {
+    margin: 0.2rem;
+    font-size: .8rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    background-color: white;
+    border: none;
+    border: 1.5px solid #555555;
+    display:inline-block;
+}
+
+a {
+    color: black;
+}
+
+button:hover {
+    background-color: lightblue;
+}
+
+#PageTitle {
+    text-align: center;
+    color: white;
+}
+
+.main-content {
+    margin-left:35%;
+    margin-right: 35%;
+}
+
+.div-card {
+    background-color: white;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 0.2rem;
+    box-shadow: 0 2px 4px 0 black;
+}
+
+.priority-card {
+    
+}
+
+.text-center {
+    text-align: center;
+}
+
+.margin-top-1 {
+    margin-top: 1rem;
+}
+
+/* Footer Content*/
+#credit-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    color: black;
+    text-align: center;
+    
+    padding: 0.5rem;
+}
+#github-logo {
+    vertical-align: middle;
+    display:inline;
+    width: 4em;
+}
+#linkedin-logo {
+    vertical-align: middle;
+    display:inline;
+    width: 5em;
+}
+
+/* Responsive page width media queries*/
+@media (max-width: 960px) {
+    body {
+        font-size: 2vw;
+    }
+    
+    .main-content {
+        margin-left:10%;
+        margin-right: 10%;
+    }
+}
+
+@media (max-width: 720px) {
+    body {
+        font-size: 3vw;
+    }
+    
+    .main-content {
+        margin-left:10%;
+        margin-right: 10%;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 4vw;
+    }
+    
+    .main-content {
+        margin-left:10%;
+        margin-right: 10%;
+    }
+}

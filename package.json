@@ -4,7 +4,8 @@
   "description": "My Simple Priorities is a simple priority management website.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "webpack serve"
   },
   "repository": {
     "type": "git",
