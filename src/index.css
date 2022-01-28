@@ -17,7 +17,7 @@ body {
 }
 
 button {
-    margin: 0.2rem;
+    line-height: 1rem;
     font-size: .8rem;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -26,6 +26,7 @@ button {
     background-color: white;
     border: none;
     border: 1.5px solid #555555;
+    border-radius: 2px;
     display:inline-block;
 }
 
@@ -37,7 +38,7 @@ button:hover {
     background-color: lightblue;
 }
 
-#PageTitle {
+.page-title {
     text-align: center;
     color: white;
 }
@@ -55,16 +56,30 @@ button:hover {
     box-shadow: 0 2px 4px 0 black;
 }
 
-.priority-card {
-    
-}
-
 .text-center {
     text-align: center;
 }
 
+.display-none {
+    display: none;
+}
+
 .margin-top-1 {
     margin-top: 1rem;
+}
+
+/* Priority Page */
+#priority_field {
+    margin-right: 0.2rem;
+    line-height: 1rem;
+    font-size: .8rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+/* Priority Card Buttons */
+.priority-button {
+    margin-right: 0.2rem;
 }
 
 /* Footer Content*/
