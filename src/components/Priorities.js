@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import PriorityCard from "./PriorityCard";
 
-const Priorities = (props) => {
+function Priorities(props) {
     return (
-        < div >
+        < div key={props.priorityIndex} >
             {
-                props.priorityList.map((priorityTitle, index) => <PriorityCard title={priorityTitle} key={index} />)
+                props.priorityList.map((priorityTitle, index) => <PriorityCard title={priorityTitle} key={index} priorityIndex={index} movePriority={props.movePriority} deletePriority={props.deletePriority} />)
             }
         </div>
     );

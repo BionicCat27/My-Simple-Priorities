@@ -60,6 +60,10 @@ button:hover {
     text-align: center;
 }
 
+.display-inline-block {
+    display:inline-block;
+}
+
 .display-none {
     display: none;
 }
