@@ -42,6 +42,12 @@ const PriorityPage = () => {
         setPriorityList(workingList);
     }
 
+    function updatePriority(index, value) {
+        let workingList = priorityList.slice();
+        workingList[index] = value;
+        setPriorityList(workingList);
+    }
+
     return (
         <div className="main-content">
             <PageTitle title="My Simple Priorities" />
@@ -49,7 +55,7 @@ const PriorityPage = () => {
                 <p>My Priorities</p>
                 <input value={priorityInput} onChange={field => onPriorityInputChange(field.target.value)} type="text" id="priority_field" />
                 <button id="PriorityButton" onClick={() => addPriority()}>Add priority!</button>
-                <Priorities priorityList={priorityList} key={priorityList} movePriority={movePriority} deletePriority={deletePriority} />
+                <Priorities priorityList={priorityList} key={priorityList} movePriority={movePriority} deletePriority={deletePriority} updatePriority={updatePriority} />
             </div>
         </div >
     );

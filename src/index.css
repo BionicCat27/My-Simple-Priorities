@@ -72,6 +72,11 @@ button:hover {
     margin-top: 1rem;
 }
 
+.margin-y-1 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
 /* Priority Page */
 #priority_field {
     margin-right: 0.2rem;
