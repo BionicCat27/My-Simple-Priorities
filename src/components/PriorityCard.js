@@ -33,22 +33,28 @@ const PriorityCard = (props) => {
     let buttonBlockClassList = "button-block ";
     if (!showButtons) {
         buttonBlockClassList += "display-none ";
+    } else {
+        buttonBlockClassList += "display-inline-block ";
     }
 
     return (
         <div className="div-card" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
-            {editingPriority ? <input className="margin-y-1" onChange={field => updatePriorityInput(field.target.value)} value={priorityInputValue}></input> : <h3 onClick={() => setEditingPriority(true)}>{priorityValue}</h3>}
-            <div className={buttonBlockClassList}>
+            <div id="priorityContainer">
+                {editingPriority ? <input className="margin-y-1" onChange={field => updatePriorityInput(field.target.value)} value={priorityInputValue}></input> : <h3 onClick={() => setEditingPriority(true)}>{priorityValue}</h3>}
+            </div>
+            <div id="priorityButtonContainer" className={buttonBlockClassList}>
                 {
                     editingPriority ? <button id="edit_priority" className="priority-button" onClick={updatePriority}>Done</button>
-                        : <button id="edit_priority" className="priority-button" onClick={() => setEditingPriority(true)}>Edit</button>
+                        : <div>
+                            <button id="edit_priority" className="priority-button" onClick={() => setEditingPriority(true)}>Edit</button>
+                            <button id="moveup_priority" className="priority-button" onClick={movePriorityUp}>Up</button>
+                            <button id="movedown_priority" className="priority-button" onClick={movePriorityDown}>Down</button>
+                            <button id="delete_priority" className="priority-button" onClick={deletePriority}>Delete</button>
+                        </div>
                 }
-                <button id="moveup_priority" className="priority-button" onClick={movePriorityUp}>Move Up</button>
-                <button id="movedown_priority" className="priority-button" onClick={movePriorityDown}>Move Down</button>
-                <button id="delete_priority" className="priority-button" onClick={deletePriority}>Delete Priority</button>
             </div>
         </div >
     );
 };
 
-export default PriorityCard;
+export default PriorityCard;;
