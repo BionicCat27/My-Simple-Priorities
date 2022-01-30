@@ -8,7 +8,8 @@
     "build": "webpack",
     "start": "webpack serve",
     "server": "nodemon --exec npm start",
-    "firebase": "nodemon --exec \"npm run build && C:/users/aslan/AppData/Roaming/npm/firebase serve\""
+    "firebase": "nodemon --exec \"npm run build && C:/users/aslan/AppData/Roaming/npm/firebase serve\"",
+    "deploy": "npm run build && C:/users/aslan/AppData/Roaming/npm/firebase deploy --only hosting"
   },
   "repository": {
     "type": "git",
