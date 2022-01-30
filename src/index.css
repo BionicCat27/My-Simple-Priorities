@@ -98,6 +98,18 @@ button:hover {
     overflow: hidden;
 }
 
+.priority-card {
+    background-color: white;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 0.2rem;
+    border: 1px solid lightgray;
+}
+
+.priority-card:hover {
+    box-shadow: 0 2px 4px 0 grey;
+}
+
 /* Priority Card Buttons */
 .priority-button {
     margin-right: 0.2rem;

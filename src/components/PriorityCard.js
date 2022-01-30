@@ -31,7 +31,7 @@ const PriorityCard = (props) => {
     }
 
     return (
-        <div className="div-card" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
+        <div className="priority-card" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
             <div id="priorityContainer">
                 {editingPriority
                     ? <input className="margin-y-1" onChange={field => updatePriorityInput(field.target.value)} value={priorityInputValue}></input>
