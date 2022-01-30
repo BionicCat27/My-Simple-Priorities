@@ -9,6 +9,9 @@ const PriorityPage = () => {
     const [priorityInput, setPriorityInput] = useState("");
 
     function addPriority() {
+        if (priorityInput.length == 0) {
+            return;
+        }
         let concatList = priorityList.concat([priorityInput]);
         setPriorityList(concatList);
         setPriorityInput("");
@@ -46,6 +49,7 @@ const PriorityPage = () => {
         let workingList = priorityList.slice();
         workingList[index] = value;
         setPriorityList(workingList);
+        console.log(index + " " + value + " " + workingList + " " + priorityList);
     }
 
     return (
