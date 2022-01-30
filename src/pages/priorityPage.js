@@ -12,10 +12,9 @@ const PriorityPage = () => {
         if (priorityInput.length == 0) {
             return;
         }
-        let concatList = priorityList.concat([priorityInput]);
+        let concatList = [priorityInput].concat(priorityList);
         setPriorityList(concatList);
         setPriorityInput("");
-        console.log("Priorities: " + priorityList);
     }
 
     function onPriorityInputChange(value) {
@@ -49,7 +48,6 @@ const PriorityPage = () => {
         let workingList = priorityList.slice();
         workingList[index] = value;
         setPriorityList(workingList);
-        console.log(index + " " + value + " " + workingList + " " + priorityList);
     }
 
     return (
