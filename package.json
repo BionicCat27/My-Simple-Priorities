@@ -6,9 +6,8 @@
   "scripts": {
     "test": "test",
     "build": "webpack",
-    "start": "webpack serve",
-    "server": "nodemon --exec npm start",
-    "firebase": "nodemon --exec \"npm run build && C:/users/aslan/AppData/Roaming/npm/firebase serve\"",
+    "start": "firebase serve",
+    "watch": "nodemon --exec \"npm run build\"",
     "deploy": "npm run build && C:/users/aslan/AppData/Roaming/npm/firebase deploy --only hosting"
   },
   "repository": {
@@ -31,7 +30,9 @@
     "webpack-dev-server": "^4.2.1"
   },
   "dependencies": {
+    "css-loader": "^6.5.1",
     "dotenv": "^14.3.2",
+    "firebase": "^9.6.5",
     "nodemon": "^2.0.15",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

@@ -54,4 +54,4 @@ const PriorityCard = (props) => {
     );
 };
 
-export default PriorityCard;;
+export default PriorityCard;
