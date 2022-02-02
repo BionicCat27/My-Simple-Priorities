@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getDatabase, ref, set, onValue } from "firebase/database";
 
 //Components
 import PageTitle from '../components/PageTitle';
@@ -14,15 +15,43 @@ const PriorityPage = () => {
     const [user, setUser] = useState(undefined);
 
     const auth = getAuth();
+    const database = getDatabase();
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
             setUser(user);
+            loadPriorities();
         } else {
             setUser(undefined);
             window.location = "/login";
         }
     });
+
+    function loadPriorities() {
+        if (user) {
+            onValue(ref(database, 'users/' + user.uid + '/priorities'), (snapshot) => {
+                const data = snapshot.val();
+                console.log("Read: " + data);
+            });
+            console.log("Loaded prio");
+        } else {
+            console.log("No prio to load");
+            return [];
+        }
+
+    }
+
+    function writePriorities(list_of_priorities) {
+        console.log("Writing! " + priorityList);
+        set(ref(database, 'users/' + user.uid), {
+            priorities: list_of_priorities
+        });
+        console.log("Wrote!");
+        onValue(ref(database, 'users/' + user.uid + '/priorities'), (snapshot) => {
+            const data = snapshot.val();
+            console.log("Read: " + data + " " + list_of_priorities);
+        });
+    }
 
     function userSignOut() {
         signOut(auth).then(() => {
@@ -40,7 +69,7 @@ const PriorityPage = () => {
         let concatList = [priorityInput].concat(priorityList);
         setPriorityList(concatList);
         setPriorityInput("");
-
+        writePriorities(concatList);
     }
 
     function onPriorityInputChange(value) {
@@ -58,6 +87,7 @@ const PriorityPage = () => {
         workingList.splice(fromIndex, 1);
         workingList.splice(toIndex, 0, element);
         setPriorityList(workingList);
+        writePriorities(workingList);
     }
 
     function deletePriority(index) {
@@ -68,12 +98,14 @@ const PriorityPage = () => {
         let workingList = priorityList.slice();
         workingList.splice(index, 1);
         setPriorityList(workingList);
+        writePriorities(workingList);
     }
 
     function updatePriority(index, value) {
         let workingList = priorityList.slice();
         workingList[index] = value;
         setPriorityList(workingList);
+        writePriorities(workingList);
     }
 
     if (user) {
@@ -94,8 +126,6 @@ const PriorityPage = () => {
     } else {
         return null;
     }
-
-
 };
 
 export default PriorityPage;

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 //Components
 import PageTitle from '../components/PageTitle';
