@@ -13,6 +13,7 @@ const LoginPage = (props) => {
     const auth = getAuth();
 
     function prepareSignIn() {
+        console.log("Starting signin");
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 console.log("Auth success");
