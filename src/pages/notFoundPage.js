@@ -1,10 +1,11 @@
 import React from 'react';
+import PageTitle from '../components/PageTitle';
 
 const NotFoundPage = () => {
     return (
         <div className="main-content">
-            <h1 className="page-title">404 - Page Not Found!</h1>
             <div className="div-card text-center">
+                <PageTitle title="404 - Page Not Found!" />
                 <p>We couldn't find this page! :(</p>
                 <p>Try <a href="/login">logging</a> in!</p>
             </div>

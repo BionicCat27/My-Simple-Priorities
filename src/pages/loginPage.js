@@ -15,7 +15,8 @@ const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    function prepareSignIn() {
+    function prepareSignIn(event) {
+        event.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 window.location = "/";
@@ -29,13 +30,14 @@ const LoginPage = () => {
 
     return (
         <div className="main-content">
-            <PageTitle title="Login" />
-            <div className="text-center div-card">
-                <input id="em" type="email" value={email} onChange={field => setEmail(field.target.value)}></input>
-                <input id="pass" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
-                <button onClick={prepareSignIn}>Login</button>
+            <div className="text-center div-card vertical-center">
+                <PageTitle title="Login" />
+                <form id="loginForm">
+                    <input id="loginFormEmail" className="loginFormElement" type="email" value={email} onChange={field => setEmail(field.target.value)}></input>
+                    <input id="loginFormPassword" className="loginFormElement" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
+                    <button onClick={prepareSignIn}>Login</button>
+                </form>
             </div>
-            <Description />
             <Footer />
         </div>
     );

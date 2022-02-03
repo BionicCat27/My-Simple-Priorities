@@ -10,10 +10,12 @@ body {
 
     color: black;
     font-size: 1rem;
+}
 
-    background: #C33764;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to left, #1D2671, #C33764);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to left, #1D2671, #C33764); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+input {
+    font-family: 'Arial', sans-serif;
+    font-family: 'Urbanist', sans-serif;
 }
 
 button {
@@ -28,6 +30,8 @@ button {
     border: 1.5px solid #555555;
     border-radius: 2px;
     display:inline-block;
+    font-family: 'Arial', sans-serif;
+    font-family: 'Urbanist', sans-serif;
 }
 
 a {
@@ -40,7 +44,7 @@ button:hover {
 
 .page-title {
     text-align: center;
-    color: white;
+    color: black;
 }
 
 .main-content {
@@ -84,6 +88,26 @@ button:hover {
 .margin-x-1 {
     margin-left: 1rem;
     margin-right: 1rem;
+}
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#loginForm {
+    padding: 1rem;
+}
+
+.loginFormElement{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1rem;
+    display: block;
 }
 
 /* Priority Page */
@@ -130,7 +154,6 @@ button:hover {
     left: 0;
     bottom: 0;
     width: 100%;
-    background-color: white;
     color: black;
     text-align: center;
     

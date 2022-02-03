@@ -100,15 +100,13 @@ const PriorityPage = () => {
     if (!user) return null;
     return (
         <div className="main-content">
-            <PageTitle title="My Simple Priorities" />
             <div id="PriorityContent" className="div-card">
-                <div>
-                    <p className="display-inline-block">My Priorities</p>
-                    <button className="display-inline-block margin-x-1" onClick={() => { userSignOut(); }} >Sign Out</button>
-                </div>
+                <PageTitle title="My Simple Priorities" />
                 <form onSubmit={addPriority}>
                     <input value={priorityInput} onChange={field => onPriorityInputChange(field.target.value)} type="text" id="priority_field" />
                     <button id="PriorityButton" onClick={addPriority}>Add priority!</button>
+                    <p className="display-inline-block margin-x-1">Or <a onClick={() => { userSignOut(); }} >Sign Out</a></p>
+
                 </form>
                 <div id="priorities-container">
                     {priorityList.map((priorityTitle, index) => < PriorityCard title={priorityTitle} key={index + "" + priorityTitle} priorityIndex={index} movePriority={movePriority} deletePriority={deletePriority} updatePriority={updatePriority} />)}
