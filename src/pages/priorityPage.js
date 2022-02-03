@@ -26,6 +26,10 @@ const PriorityPage = () => {
                 setUser(userResult);
                 onValue(ref(database, 'users/' + userResult.uid + '/priorities'), (snapshot) => {
                     const data = snapshot.val();
+                    if (data == null) {
+                        console.log("An error occurred.");
+                        return;
+                    }
                     console.log("Loaded prio data: " + data);
                     setPriorityList(data);
                 });
