@@ -52,7 +52,8 @@ const PriorityPage = () => {
         });
     }
 
-    function addPriority() {
+    function addPriority(event) {
+        event.preventDefault();
         if (priorityInput.length == 0) {
             return;
         }
@@ -101,10 +102,14 @@ const PriorityPage = () => {
         <div className="main-content">
             <PageTitle title="My Simple Priorities" />
             <div id="PriorityContent" className="div-card">
-                <p>My Priorities</p>
-                <button onClick={() => { userSignOut(); }} >Sign Out</button>
-                <input value={priorityInput} onChange={field => onPriorityInputChange(field.target.value)} type="text" id="priority_field" />
-                <button id="PriorityButton" onClick={() => addPriority()}>Add priority!</button>
+                <div>
+                    <p className="display-inline-block">My Priorities</p>
+                    <button className="display-inline-block margin-x-1" onClick={() => { userSignOut(); }} >Sign Out</button>
+                </div>
+                <form onSubmit={addPriority}>
+                    <input value={priorityInput} onChange={field => onPriorityInputChange(field.target.value)} type="text" id="priority_field" />
+                    <button id="PriorityButton" onClick={addPriority}>Add priority!</button>
+                </form>
                 <div id="priorities-container">
                     {priorityList.map((priorityTitle, index) => < PriorityCard title={priorityTitle} key={index + "" + priorityTitle} priorityIndex={index} movePriority={movePriority} deletePriority={deletePriority} updatePriority={updatePriority} />)}
                 </div>

@@ -56,6 +56,10 @@ button:hover {
     box-shadow: 0 2px 4px 0 black;
 }
 
+.float-right {
+    float: right;
+}
+
 .text-center {
     text-align: center;
 }
@@ -75,6 +79,11 @@ button:hover {
 .margin-y-1 {
     margin-top: 1rem;
     margin-bottom: 1rem;
+}
+
+.margin-x-1 {
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
 /* Priority Page */
