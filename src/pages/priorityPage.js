@@ -67,7 +67,6 @@ const PriorityPage = () => {
     }
 
     function movePriority(fromIndex, toIndex) {
-        console.log("moving priority");
         if (fromIndex < 0 || toIndex < 0 || fromIndex > priorityList.length || toIndex > priorityList.length) {
             console.log("An error occurred (" + fromIndex + " " + toIndex + " " + priorityList + ")");
             return;
@@ -97,27 +96,23 @@ const PriorityPage = () => {
         setPriorityList(workingList);
         writePriorities(workingList);
     }
-
-    if (user) {
-        return (
-            <div className="main-content">
-                <PageTitle title="My Simple Priorities" />
-                <div id="PriorityContent" className="div-card">
-                    <p>My Priorities</p>
-                    <button onClick={() => { userSignOut(); }} >Sign Out</button>
-                    <input value={priorityInput} onChange={field => onPriorityInputChange(field.target.value)} type="text" id="priority_field" />
-                    <button id="PriorityButton" onClick={() => addPriority()}>Add priority!</button>
-                    {
-                        priorityList.map((priorityTitle, index) => <PriorityCard title={priorityTitle} key={index} priorityIndex={index} movePriority={movePriority} deletePriority={deletePriority} updatePriority={updatePriority} />)
-                    }
+    if (!user) return null;
+    return (
+        <div className="main-content">
+            <PageTitle title="My Simple Priorities" />
+            <div id="PriorityContent" className="div-card">
+                <p>My Priorities</p>
+                <button onClick={() => { userSignOut(); }} >Sign Out</button>
+                <input value={priorityInput} onChange={field => onPriorityInputChange(field.target.value)} type="text" id="priority_field" />
+                <button id="PriorityButton" onClick={() => addPriority()}>Add priority!</button>
+                <div id="priorities-container">
+                    {priorityList.map((priorityTitle, index) => < PriorityCard title={priorityTitle} key={index + "" + priorityTitle} priorityIndex={index} movePriority={movePriority} deletePriority={deletePriority} updatePriority={updatePriority} />)}
                 </div>
-                <Description />
-                <Footer />
-            </div >
-        );
-    } else {
-        return null;
-    }
+            </div>
+            <Description />
+            <Footer />
+        </div >
+    );
 };
 
 export default PriorityPage;
