@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import '../firebaseConfig';
+
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 //Components
@@ -7,11 +9,11 @@ import PageTitle from '../components/PageTitle';
 import Description from '../components/Description';
 import Footer from '../components/Footer';
 
+const auth = getAuth();
+
 const SignupPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-    const auth = getAuth();
 
     function prepareCreateAccount() {
         createUserWithEmailAndPassword(auth, email, password)
