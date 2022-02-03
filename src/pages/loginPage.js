@@ -11,15 +11,13 @@ import Footer from '../components/Footer';
 
 const auth = getAuth();
 
-const LoginPage = (props) => {
+const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     function prepareSignIn() {
-        console.log("Starting signin");
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                console.log("Auth success");
                 window.location = "/";
             })
             .catch((error) => {

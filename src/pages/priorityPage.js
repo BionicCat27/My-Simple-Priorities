@@ -22,7 +22,6 @@ const PriorityPage = () => {
     useEffect(() => {
         onAuthStateChanged(auth, (userResult) => {
             if (userResult) {
-                console.log("User found");
                 setUser(userResult);
                 onValue(ref(database, 'users/' + userResult.uid + '/priorities'), (snapshot) => {
                     const data = snapshot.val();
@@ -30,11 +29,9 @@ const PriorityPage = () => {
                         console.log("An error occurred.");
                         return;
                     }
-                    console.log("Loaded prio data: " + data);
                     setPriorityList(data);
                 });
             } else {
-                console.log("User not found");
                 setUser(undefined);
                 window.location = "/login";
             }
@@ -42,14 +39,8 @@ const PriorityPage = () => {
     }, [auth]);
 
     function writePriorities(list_of_priorities) {
-        console.log("Writing! " + priorityList);
         set(ref(database, 'users/' + user.uid), {
             priorities: list_of_priorities
-        });
-        console.log("Wrote!");
-        onValue(ref(database, 'users/' + user.uid + '/priorities'), (snapshot) => {
-            const data = snapshot.val();
-            console.log("Read: " + data + " " + list_of_priorities);
         });
     }
 
@@ -106,8 +97,6 @@ const PriorityPage = () => {
         setPriorityList(workingList);
         writePriorities(workingList);
     }
-
-    console.log("Rendering");
 
     if (user) {
         return (

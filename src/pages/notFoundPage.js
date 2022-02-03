@@ -9,7 +9,7 @@ const NotFoundPage = () => {
                 <p>Try <a href="/login">logging</a> in!</p>
             </div>
         </div >
-    )
-}
+    );
+};
 
 export default NotFoundPage;

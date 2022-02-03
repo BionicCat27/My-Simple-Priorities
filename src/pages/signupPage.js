@@ -18,7 +18,6 @@ const SignupPage = () => {
     function prepareCreateAccount() {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                console.log("Auth success");
                 window.location = "/";
             })
             .catch((error) => {
