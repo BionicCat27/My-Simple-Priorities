@@ -33,7 +33,7 @@ const LoginPage = () => {
         <div className="main-content">
             <div className="text-center div-card vertical-center">
                 <PageTitle title="Login" />
-                <form id="loginForm">
+                <form id="loginForm" onSubmit={prepareSignIn}>
                     <input id="loginFormEmail" className="loginFormElement" type="email" value={email} onChange={field => setEmail(field.target.value)}></input>
                     <input id="loginFormPassword" className="loginFormElement" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
                     <button onClick={prepareSignIn}>Login</button>

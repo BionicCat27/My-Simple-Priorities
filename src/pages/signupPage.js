@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import './signupPage.css';
+
 import '../firebaseConfig';
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
@@ -28,13 +30,14 @@ const SignupPage = () => {
     }
     return (
         <div className="main-content">
-            <PageTitle title="Signup" />
-            <div className="text-center div-card">
-                <input id="em" type="email" value={email} onChange={field => setEmail(field.target.value)}></input>
-                <input id="pass" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
-                <button onClick={prepareCreateAccount}>Create Account</button>
+            <div className="text-center div-card vertical-center">
+                <PageTitle title="Signup" />
+                <form id="signupForm" onSubmit={prepareCreateAccount}>
+                    <input id="signupFormEmail" className="signupFormElement" type="email" value={email} onChange={field => setEmail(field.target.value)}></input>
+                    <input id="signupFormPassword" className="signupFormElement" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
+                    <button onClick={prepareCreateAccount}>Create Account</button>
+                </form>
             </div>
-            <Description />
             <Footer />
         </div>
     );
