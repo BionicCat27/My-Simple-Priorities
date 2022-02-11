@@ -1,0 +1,23 @@
+#credit-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: black;
+    text-align: center;
+    
+    padding: 0.5rem;
+
+    background-color: white;
+}
+
+#githubLogo {
+    vertical-align: middle;
+    display:inline;
+    width: 4em;
+}
+#linkedinLogo {
+    vertical-align: middle;
+    display:inline;
+    width: 5em;
+}

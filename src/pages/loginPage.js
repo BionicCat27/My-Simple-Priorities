@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import './priorityPage.css';
+
 import '../firebaseConfig';
 
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";

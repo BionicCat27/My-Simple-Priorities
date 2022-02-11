@@ -12,7 +12,6 @@ body {
     font-size: 1rem;
 }
 
-
 input {
     font-family: 'Arial', sans-serif;
     font-family: 'Urbanist', sans-serif;
@@ -42,11 +41,6 @@ button:hover {
     background-color: lightblue;
 }
 
-.page-title {
-    text-align: center;
-    color: black;
-}
-
 .main-content {
     margin-left:35%;
     margin-right: 35%;
@@ -69,7 +63,7 @@ button:hover {
 }
 
 .display-inline-block {
-    display:inline-block;
+    display: inline-block;
 }
 
 .display-none {
@@ -97,77 +91,6 @@ button:hover {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-}
-
-#loginForm {
-    padding: 1rem;
-}
-
-.loginFormElement{
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 1rem;
-    display: block;
-}
-
-/* Priority Page */
-#priority_field {
-    margin-right: 0.2rem;
-    line-height: 1rem;
-    font-size: .8rem;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-}
-
-#priorityContainer {
-    display: inline-block;
-    overflow: hidden;
-}
-
-#priorityButtonContainer {
-    float: right;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    overflow: hidden;
-}
-
-.priority-card {
-    background-color: white;
-    padding: 1rem;
-    margin-top: 1rem;
-    border-radius: 0.2rem;
-    border: 1px solid lightgray;
-}
-
-.priority-card:hover {
-    box-shadow: 0 2px 4px 0 grey;
-}
-
-/* Priority Card Buttons */
-.priority-button {
-    margin-right: 0.2rem;
-}
-
-/* Footer Content*/
-#credit-footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    color: black;
-    text-align: center;
-    
-    padding: 0.5rem;
-}
-#github-logo {
-    vertical-align: middle;
-    display:inline;
-    width: 4em;
-}
-#linkedin-logo {
-    vertical-align: middle;
-    display:inline;
-    width: 5em;
 }
 
 /* Responsive page width media queries*/

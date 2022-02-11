@@ -1,0 +1,45 @@
+#sidebar {
+    text-align: center;
+    width: 12rem;
+    height:100%;
+    position:fixed;
+    top: 0;
+    left:0;
+    background-color: #6E8EFF;
+}
+
+#sidebarCreditContainer {
+    position: fixed;
+    display: block;
+    bottom: 0;
+    margin: 1rem;
+    width: 10rem;
+}
+#sidebarLinksContainer {
+    width: 100%;
+    display:block;
+}
+
+#sidebarLinksContainer a {
+    padding: 1rem;
+    display:block;
+    text-decoration: none;
+}
+
+#sidebarLinksContainer a:hover {
+    padding: 1rem;
+    display:block;
+    color: white;
+    background-color: #374780;
+}
+
+#githubLogo {
+    vertical-align: middle;
+    display:inline;
+    width: 4em;
+}
+#linkedinLogo {
+    vertical-align: middle;
+    display:inline;
+    width: 5em;
+}

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import './priorityPage.css';
+
 import '../firebaseConfig';
 
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
@@ -8,8 +10,9 @@ import { getDatabase, ref, set, onValue } from "firebase/database";
 //Components
 import PageTitle from '../components/PageTitle';
 import Description from '../components/Description';
-import Footer from '../components/Footer';
 import PriorityCard from "../components/PriorityCard";
+import Sidebar from '../components/Sidebar';
+import Footer from '../components/Footer';
 
 const auth = getAuth();
 const database = getDatabase();
@@ -99,9 +102,9 @@ const PriorityPage = () => {
     }
     if (!user) return null;
     return (
-        <div className="main-content">
-            <div id="PriorityContent" className="div-card">
-                <PageTitle title="My Simple Priorities" />
+        <div>
+            <PageTitle title="My Simple Priorities" />
+            <div id="PriorityContent" className="div-card main-content">
                 <form onSubmit={addPriority}>
                     <input value={priorityInput} onChange={field => onPriorityInputChange(field.target.value)} type="text" id="priority_field" />
                     <button id="PriorityButton" onClick={addPriority}>Add priority!</button>
@@ -113,7 +116,7 @@ const PriorityPage = () => {
                 </div>
             </div>
             <Description />
-            <Footer />
+            <Sidebar />
         </div >
     );
 };

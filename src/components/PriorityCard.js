@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import './PriorityCard.css';
+
 const PriorityCard = (props) => {
     const [showButtons, setShowButtons] = useState(false);
     const [editingPriority, setEditingPriority] = useState(false);
@@ -31,7 +33,7 @@ const PriorityCard = (props) => {
     }
 
     return (
-        <div className="priority-card" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
+        <div id="priorityCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
             <div id="priorityContainer">
                 {editingPriority
                     ? <input className="margin-y-1" onChange={field => updatePriorityInput(field.target.value)} value={priorityInputValue}></input>
