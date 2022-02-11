@@ -5,7 +5,7 @@ import './priorityPage.css';
 import '../firebaseConfig';
 
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, update, onValue } from "firebase/database";
 
 //Components
 import PageTitle from '../components/PageTitle';
@@ -41,7 +41,7 @@ const PriorityPage = () => {
     }, [auth]);
 
     function writePriorities(list_of_priorities) {
-        set(ref(database, 'users/' + user.uid), {
+        update(ref(database, 'users/' + user.uid), {
             priorities: list_of_priorities
         });
     }
