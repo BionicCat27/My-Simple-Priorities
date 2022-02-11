@@ -3,11 +3,11 @@
     padding: 1rem;
     margin-top: 1rem;
     border-radius: 0.2rem;
-    border: 1px solid lightgray;
+    border: 1px solid gray;
 }
 
 #priorityCard:hover {
-    box-shadow: 0 2px 4px 0 grey;
+    box-shadow: 0 2px 4px 0 lightgray;
 }
 
 #priorityContainer {

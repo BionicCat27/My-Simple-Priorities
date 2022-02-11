@@ -41,13 +41,12 @@ button:hover {
 }
 
 .main-content {
-    margin: 2rem 2rem;
+    margin: 1rem 1rem;
 }
 
 .div-card {
     background-color: white;
     padding: 1rem;
-    box-shadow: 0 2px 4px 0 black;
     width: 50%;
 }
 

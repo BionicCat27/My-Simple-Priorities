@@ -104,7 +104,6 @@ const PriorityPage = () => {
                     {priorityList.map((priorityTitle, index) => < PriorityCard title={priorityTitle} key={index + "" + priorityTitle} priorityIndex={index} movePriority={movePriority} deletePriority={deletePriority} updatePriority={updatePriority} />)}
                 </div>
             </div>
-            <Description />
             <Sidebar />
         </div >
     );
