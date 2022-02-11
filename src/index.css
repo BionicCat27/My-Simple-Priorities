@@ -6,10 +6,9 @@ body {
     font-family: 'Arial', sans-serif;
     font-family: 'Urbanist', sans-serif;
 
-    padding-bottom: 5rem;
-
     color: black;
     font-size: 1rem;
+    margin: 0;
 }
 
 input {
@@ -42,16 +41,14 @@ button:hover {
 }
 
 .main-content {
-    margin-left:35%;
-    margin-right: 35%;
+    margin: 2rem 2rem;
 }
 
 .div-card {
     background-color: white;
     padding: 1rem;
-    margin-top: 1rem;
-    border-radius: 0.2rem;
     box-shadow: 0 2px 4px 0 black;
+    width: 50%;
 }
 
 .float-right {
@@ -93,31 +90,10 @@ button:hover {
     transform: translate(-50%, -50%);
 }
 
-/* Responsive page width media queries*/
-@media (max-width: 1400px) {
-    .main-content {
-        margin-left: 25%;
-        margin-right: 25%;
-    }
-}
-
-@media (max-width: 960px) {
-    .main-content {
-        margin-left:10%;
-        margin-right: 10%;
-    }
-}
-
-@media (max-width: 720px) {
-    .main-content {
-        margin-left:10%;
-        margin-right: 10%;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-content {
-        margin-left:10%;
-        margin-right: 10%;
-    }
+#testClass {
+    color: #F5EE69;
+    color:#FCA360;
+    color: #E664DA;
+    color: #6E8EFF;
+    color: #69F5AE;
 }

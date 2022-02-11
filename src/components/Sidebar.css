@@ -2,7 +2,7 @@
     text-align: center;
     width: 12rem;
     height:100%;
-    position:fixed;
+    position: fixed;
     top: 0;
     left:0;
     background-color: #6E8EFF;
@@ -15,6 +15,7 @@
     margin: 1rem;
     width: 10rem;
 }
+
 #sidebarLinksContainer {
     width: 100%;
     display:block;
@@ -31,7 +32,16 @@
     display:block;
     color: white;
     background-color: #374780;
+    cursor: pointer;
 }
+
+/* Sidebar padding */
+
+body {
+    padding-left: 12rem;
+}
+
+/* Logo sizing */
 
 #githubLogo {
     vertical-align: middle;

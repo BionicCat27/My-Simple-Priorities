@@ -12,7 +12,6 @@ import PageTitle from '../components/PageTitle';
 import Description from '../components/Description';
 import PriorityCard from "../components/PriorityCard";
 import Sidebar from '../components/Sidebar';
-import Footer from '../components/Footer';
 
 const auth = getAuth();
 const database = getDatabase();
@@ -44,14 +43,6 @@ const PriorityPage = () => {
     function writePriorities(list_of_priorities) {
         set(ref(database, 'users/' + user.uid), {
             priorities: list_of_priorities
-        });
-    }
-
-    function userSignOut() {
-        signOut(auth).then(() => {
-            window.location = " /login";
-        }).catch((error) => {
-            console.log("An error occurred during signout: " + error);
         });
     }
 
@@ -102,14 +93,12 @@ const PriorityPage = () => {
     }
     if (!user) return null;
     return (
-        <div>
+        <div id="priorityPage">
             <PageTitle title="My Simple Priorities" />
-            <div id="PriorityContent" className="div-card main-content">
+            <div id="PriorityContent" className="main-content div-card">
                 <form onSubmit={addPriority}>
                     <input value={priorityInput} onChange={field => onPriorityInputChange(field.target.value)} type="text" id="priority_field" />
                     <button id="PriorityButton" onClick={addPriority}>Add priority!</button>
-                    <p className="display-inline-block margin-x-1">Or <a onClick={() => { userSignOut(); }} >Sign Out</a></p>
-
                 </form>
                 <div id="priorities-container">
                     {priorityList.map((priorityTitle, index) => < PriorityCard title={priorityTitle} key={index + "" + priorityTitle} priorityIndex={index} movePriority={movePriority} deletePriority={deletePriority} updatePriority={updatePriority} />)}

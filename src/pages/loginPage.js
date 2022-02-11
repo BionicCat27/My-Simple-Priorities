@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import './priorityPage.css';
+import './loginPage.css';
 
 import '../firebaseConfig';
 
@@ -8,7 +8,6 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 //Components
 import PageTitle from '../components/PageTitle';
-import Description from '../components/Description';
 import Footer from '../components/Footer';
 
 const auth = getAuth();

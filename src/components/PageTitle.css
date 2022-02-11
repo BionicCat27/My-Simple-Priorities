@@ -1,5 +1,7 @@
 #pageTitle {
-    width: 100%;
-    text-align: center;
+    text-align: left;
     color: black;
+    background-color: #FCA360;
+    padding: 2rem 2rem;
+    margin: 0;
 }
