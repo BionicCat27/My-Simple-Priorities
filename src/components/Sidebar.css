@@ -35,10 +35,36 @@
     cursor: pointer;
 }
 
+@media (max-width: 720px) {
+    #sidebar {
+        position: relative;
+        left: 0;
+        bottom: 0;
+        text-align: center;
+        width: 100%;
+        background-color: #6E8EFF;
+    }
+
+    #sidebarCreditContainer {
+        float: center;
+        position: relative;
+        display: block;
+        bottom: 0;
+        width: 10rem;
+        margin: auto;
+    }
+}
+
 /* Sidebar padding */
 
 body {
     padding-left: 12rem;
+}
+
+@media (max-width: 720px) {
+    body {
+        padding-left: 0;
+    }
 }
 
 /* Logo sizing */

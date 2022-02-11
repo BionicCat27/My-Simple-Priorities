@@ -50,6 +50,12 @@ button:hover {
     width: 50%;
 }
 
+@media (max-width: 720px) {
+    .div-card {
+        width: auto;
+    }
+}
+
 .float-right {
     float: right;
 }
