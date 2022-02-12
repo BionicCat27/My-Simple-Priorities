@@ -37,6 +37,7 @@ const SignupPage = () => {
                     <input id="signupFormPassword" className="signupFormElement" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
                     <button onClick={prepareCreateAccount}>Create Account</button>
                 </form>
+                <p>Or <a href="/login">Login</a></p>
             </div>
             <Footer />
         </div>

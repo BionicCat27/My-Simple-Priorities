@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-// import './todoPage.css';
+import './todoPage.css';
 
 import '../firebaseConfig';
 

@@ -4,7 +4,7 @@ import './loginPage.css';
 
 import '../firebaseConfig';
 
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 
 //Components
 import PageTitle from '../components/PageTitle';
@@ -15,6 +15,12 @@ const auth = getAuth();
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    onAuthStateChanged(auth, (userResult) => {
+        if (userResult) {
+            window.location = "/";
+        }
+    });
 
     function prepareSignIn(event) {
         event.preventDefault();
@@ -38,6 +44,7 @@ const LoginPage = () => {
                     <input id="loginFormPassword" className="loginFormElement" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
                     <button onClick={prepareSignIn}>Login</button>
                 </form>
+                <p>Or <a href="/signup">Signup</a></p>
             </div>
             <Footer />
         </div>
