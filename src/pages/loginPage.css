@@ -1,0 +1,10 @@
+#loginForm {
+    padding: 1rem;
+}
+
+.loginFormElement{
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1rem;
+    display: block;
+}

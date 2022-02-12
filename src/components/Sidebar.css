@@ -1,0 +1,81 @@
+#sidebar {
+    text-align: center;
+    width: 12rem;
+    height:100%;
+    position: fixed;
+    top: 0;
+    left:0;
+    background-color: #6E8EFF;
+}
+
+#sidebarCreditContainer {
+    position: fixed;
+    display: block;
+    bottom: 0;
+    margin: 1rem;
+    width: 10rem;
+}
+
+#sidebarLinksContainer {
+    width: 100%;
+    display:block;
+}
+
+#sidebarLinksContainer a {
+    padding: 1rem;
+    display:block;
+    text-decoration: none;
+}
+
+#sidebarLinksContainer a:hover {
+    padding: 1rem;
+    display:block;
+    color: white;
+    background-color: #374780;
+    cursor: pointer;
+}
+
+@media (max-width: 720px) {
+    #sidebar {
+        position: relative;
+        left: 0;
+        bottom: 0;
+        text-align: center;
+        width: 100%;
+        background-color: #6E8EFF;
+    }
+
+    #sidebarCreditContainer {
+        float: center;
+        position: relative;
+        display: block;
+        bottom: 0;
+        width: 10rem;
+        margin: auto;
+    }
+}
+
+/* Sidebar padding */
+
+body {
+    padding-left: 12rem;
+}
+
+@media (max-width: 720px) {
+    body {
+        padding-left: 0;
+    }
+}
+
+/* Logo sizing */
+
+#githubLogo {
+    vertical-align: middle;
+    display:inline;
+    width: 4em;
+}
+#linkedinLogo {
+    vertical-align: middle;
+    display:inline;
+    width: 5em;
+}

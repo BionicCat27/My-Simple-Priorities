@@ -1,0 +1,104 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    font-family: 'Urbanist', sans-serif;
+
+    color: black;
+    font-size: 1rem;
+    margin: 0;
+}
+
+input {
+    font-family: 'Arial', sans-serif;
+    font-family: 'Urbanist', sans-serif;
+}
+
+button {
+    line-height: 1rem;
+    font-size: .8rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    background-color: white;
+    border: none;
+    border: 1.5px solid #555555;
+    border-radius: 2px;
+    display:inline-block;
+    font-family: 'Arial', sans-serif;
+    font-family: 'Urbanist', sans-serif;
+}
+
+a {
+    color: black;
+}
+
+button:hover {
+    background-color: lightblue;
+}
+
+.main-content {
+    margin: 1rem 1rem;
+}
+
+.div-card {
+    background-color: white;
+    padding: 1rem;
+    width: 50%;
+}
+
+@media (max-width: 720px) {
+    .div-card {
+        width: auto;
+    }
+}
+
+.float-right {
+    float: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.display-inline-block {
+    display: inline-block;
+}
+
+.display-none {
+    display: none;
+}
+
+.margin-top-1 {
+    margin-top: 1rem;
+}
+
+.margin-y-1 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.margin-x-1 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#testClass {
+    color: #F5EE69;
+    color:#FCA360;
+    color: #E664DA;
+    color: #6E8EFF;
+    color: #69F5AE;
+}
