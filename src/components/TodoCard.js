@@ -1,59 +1,98 @@
 import React, { useState } from "react";
 
-import './PriorityCard.css';
+import './TodoCard.css';
 
-const PriorityCard = (props) => {
+const TodoCard = (props) => {
     const [showButtons, setShowButtons] = useState(false);
-    const [editingPriority, setEditingPriority] = useState(false);
-    const [priorityValue, setPriorityValue] = useState(props.title);
-    const [priorityInputValue, setPriorityInputValue] = useState(props.title);
+    const [editingTodo, setEditingTodo] = useState(false);
+    const [todoTitleValue, setTodoTitleValue] = useState(props.title);
+    const [todoDescriptionValue, setTodoDescriptionValue] = useState(props.description);
+    const [todoTitleInputValue, setTodoTitleInputValue] = useState(props.title);
+    const [todoDescriptionInputValue, setTodoDescriptionInputValue] = useState(props.description);
 
-    function movePriorityUp() {
-        let currentIndex = props.priorityIndex;
-        props.movePriority(currentIndex, currentIndex - 1);
+    function moveTodoUp() {
+        let currentIndex = props.todoIndex;
+        props.moveTodo(currentIndex, currentIndex - 1);
     }
 
-    function movePriorityDown() {
-        let currentIndex = props.priorityIndex;
-        props.movePriority(currentIndex, currentIndex + 1);
+    function moveTodoDown() {
+        let currentIndex = props.todoIndex;
+        props.moveTodo(currentIndex, currentIndex + 1);
     }
 
-    function deletePriority() {
-        props.deletePriority(props.priorityIndex);
+    function deleteTodo() {
+        props.deleteTodo(props.todoIndex);
     }
 
-    function updatePriorityInput(value) {
-        setPriorityInputValue(value);
+    function updateTodoTitleInput(value) {
+        setTodoTitleInputValue(value);
     }
 
-    function updatePriority() {
-        setPriorityValue(priorityInputValue);
-        setEditingPriority(false);
-        props.updatePriority(props.priorityIndex, priorityInputValue);
+    function updateTodoDescriptionInput(value) {
+        setTodoDescriptionInputValue(value);
     }
 
-    return (
-        <div id="priorityCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
-            <div id="priorityContainer">
-                {editingPriority
-                    ? <input className="margin-y-1" onChange={field => updatePriorityInput(field.target.value)} value={priorityInputValue}></input>
-                    : <h3 onClick={() => setEditingPriority(true)}>{priorityValue}</h3>}
-            </div>
-            {showButtons &&
-                <div id="priorityButtonContainer" className="button-block">
-                    {editingPriority
-                        ? <button id="edit_priority" className="priority-button" onClick={updatePriority}>Done</button>
-                        : <div>
-                            <button id="edit_priority" className="priority-button" onClick={() => setEditingPriority(true)}>Edit</button>
-                            <button id="moveup_priority" className="priority-button" onClick={movePriorityUp}>Up</button>
-                            <button id="movedown_priority" className="priority-button" onClick={movePriorityDown}>Down</button>
-                            <button id="delete_priority" className="priority-button" onClick={deletePriority}>Delete</button>
-                        </div>
-                    }
+    function updateTodo() {
+        validateValues();
+        setTodoTitleValue(todoTitleInputValue);
+        setTodoDescriptionValue(todoDescriptionInputValue);
+        setEditingTodo(false);
+        props.updateTodo(props.todoIndex, todoTitleInputValue, todoDescriptionInputValue);
+    }
+
+    function validateValues() {
+        if (todoTitleValue == undefined) {
+            setTodoTitleValue("");
+        }
+        if (todoDescriptionValue == undefined) {
+            setTodoDescriptionValue("");
+        }
+        if (todoTitleInputValue == undefined) {
+            setTodoTitleInputValue("");
+        }
+        if (todoDescriptionInputValue == undefined) {
+            setTodoDescriptionInputValue("");
+        }
+    }
+
+    validateValues();
+
+    if (editingTodo) {
+        return (
+            <div id="todoCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
+                <div id="todoContainer">
+                    <label htmlFor="todoTitleInputValue">Title</label>
+                    <input id="todoTitleInputValue" className="margin-y-1" onChange={field => updateTodoTitleInput(field.target.value)} value={todoTitleInputValue}></input>
+                    <label htmlFor="todoDescriptionInputValue">Description</label>
+                    <input id="todoDescriptionInputValue" className="margin-y-1" onChange={field => updateTodoDescriptionInput(field.target.value)} value={todoDescriptionInputValue}></input>
                 </div>
-            }
-        </div >
-    );
+                <div id="todoButtonContainer" className="button-block">
+                    <button className="todo-button" onClick={updateTodo}>Done</button>
+                </div>
+            </div>
+        );
+    } else {
+        return (
+            <div id="todoCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
+                <div id="todoContainer">
+                    <h3 onClick={() => setEditingTodo(true)}>{todoTitleValue}</h3>
+                </div>
+                {showButtons &&
+                    <div id="todoButtonContainer" className="button-block">
+                        {editingTodo
+                            ? <button className="todo-button" onClick={updateTodo}>Done</button>
+                            : <div>
+                                <button className="todo-button" onClick={() => setEditingTodo(true)}>Edit</button>
+                                <button className="todo-button" onClick={moveTodoUp}>Up</button>
+                                <button className="todo-button" onClick={moveTodoDown}>Down</button>
+                                <button className="todo-button" onClick={deleteTodo}>Delete</button>
+                            </div>
+                        }
+                    </div>
+                }
+            </div >
+        );
+    }
 };
 
-export default PriorityCard;
+export default TodoCard;

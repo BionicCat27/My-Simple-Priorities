@@ -8,7 +8,6 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 //Components
 import PageTitle from '../components/PageTitle';
-import Description from '../components/Description';
 import Footer from '../components/Footer';
 
 const auth = getAuth();
@@ -16,6 +15,12 @@ const auth = getAuth();
 const SignupPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    onAuthStateChanged(auth, (userResult) => {
+        if (userResult) {
+            window.location = "/";
+        }
+    });
 
     function prepareCreateAccount() {
         createUserWithEmailAndPassword(auth, email, password)
@@ -28,6 +33,7 @@ const SignupPage = () => {
                 console.log("Authentication Error: " + errorCode + " - " + errorMessage);
             });
     }
+
     return (
         <div className="main-content">
             <div className="text-center div-card vertical-center">

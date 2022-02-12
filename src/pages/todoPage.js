@@ -9,8 +9,7 @@ import { getDatabase, ref, onValue, update } from "firebase/database";
 
 //Components
 import PageTitle from '../components/PageTitle';
-import Description from '../components/Description';
-import TodoCard from "../components/PriorityCard";
+import TodoCard from "../components/TodoCard";
 import Sidebar from '../components/Sidebar';
 
 const auth = getAuth();
@@ -42,7 +41,7 @@ const TodoPage = () => {
 
     function writeTodo(list_of_todo) {
         update(ref(database, 'users/' + user.uid), {
-            todo: list_of_todo
+            todo: list_of_todo,
         });
     }
 
@@ -51,7 +50,10 @@ const TodoPage = () => {
         if (todoInput.length == 0) {
             return;
         }
-        let concatList = [todoInput].concat(todoList);
+        let concatList = [{
+            title: todoInput,
+            description: ""
+        }].concat(todoList);
         setTodoList(concatList);
         setTodoInput("");
         writeTodo(concatList);
@@ -85,12 +87,16 @@ const TodoPage = () => {
         writeTodo(workingList);
     }
 
-    function updateTodo(index, value) {
+    function updateTodo(index, title, description) {
         let workingList = todoList.slice();
-        workingList[index] = value;
+        workingList[index] = {
+            title: title,
+            description: description
+        };
         setTodoList(workingList);
         writeTodo(workingList);
     }
+
     if (!user) return null;
     return (
         <div id="todoPage">
@@ -101,7 +107,7 @@ const TodoPage = () => {
                     <button id="TodoButton" onClick={addTodo}>Add todo!</button>
                 </form>
                 <div id="todo-container">
-                    {todoList.map((todoTitle, index) => < TodoCard title={todoTitle} key={index + "" + todoTitle} priorityIndex={index} movePriority={moveTodo} deletePriority={deleteTodo} updatePriority={updateTodo} />)}
+                    {todoList.map((todo, index) => < TodoCard title={todo.title} description={todo.description} key={index + "" + todo.title} todoIndex={index} moveTodo={moveTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />)}
                 </div>
             </div>
             <Sidebar />
