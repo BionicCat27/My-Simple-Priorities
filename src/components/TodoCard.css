@@ -15,7 +15,7 @@
     overflow: hidden;
 }
 
-#todoContainer input {
+#todoContainer input, #todoContainer textarea {
     display: block;
 }
 

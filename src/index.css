@@ -3,15 +3,12 @@ html {
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    font-family: 'Urbanist', sans-serif;
-
     color: black;
     font-size: 1rem;
     margin: 0;
 }
 
-input {
+body, input, textarea, button {
     font-family: 'Arial', sans-serif;
     font-family: 'Urbanist', sans-serif;
 }
@@ -28,8 +25,6 @@ button {
     border: 1.5px solid #555555;
     border-radius: 2px;
     display:inline-block;
-    font-family: 'Arial', sans-serif;
-    font-family: 'Urbanist', sans-serif;
 }
 
 a {

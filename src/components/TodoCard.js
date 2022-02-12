@@ -64,7 +64,7 @@ const TodoCard = (props) => {
                     <label htmlFor="todoTitleInputValue">Title</label>
                     <input id="todoTitleInputValue" className="margin-y-1" onChange={field => updateTodoTitleInput(field.target.value)} value={todoTitleInputValue}></input>
                     <label htmlFor="todoDescriptionInputValue">Description</label>
-                    <input id="todoDescriptionInputValue" className="margin-y-1" onChange={field => updateTodoDescriptionInput(field.target.value)} value={todoDescriptionInputValue}></input>
+                    <textarea id="todoDescriptionInputValue" className="margin-y-1" onChange={field => updateTodoDescriptionInput(field.target.value)} value={todoDescriptionInputValue}></textarea>
                 </div>
                 <div id="todoButtonContainer" className="button-block">
                     <button className="todo-button" onClick={updateTodo}>Done</button>
@@ -76,6 +76,8 @@ const TodoCard = (props) => {
             <div id="todoCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
                 <div id="todoContainer">
                     <h3 onClick={() => setEditingTodo(true)}>{todoTitleValue}</h3>
+                    {todoDescriptionValue && <p>{todoDescriptionValue}</p>}
+
                 </div>
                 {showButtons &&
                     <div id="todoButtonContainer" className="button-block">
