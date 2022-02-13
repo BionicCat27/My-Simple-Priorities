@@ -22,7 +22,6 @@ const Sidebar = () => {
         <div id="sidebar">
             <div id="sidebarLinksContainer">
                 <a href="/">Home</a>
-                <a href="/todo">Todo</a>
                 <a onClick={userSignOut}>Logout</a>
             </div>
             <div id="sidebarCreditContainer">

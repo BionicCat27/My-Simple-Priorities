@@ -1,4 +1,4 @@
-#priority_field {
+#contentField {
     margin-right: 0.2rem;
     line-height: 1rem;
     font-size: .8rem;
@@ -6,6 +6,6 @@
     padding-bottom: 0.25rem;
 }
 
-.priority-button {
+.content-button {
     margin-right: 0.2rem;
 }

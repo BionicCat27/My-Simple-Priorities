@@ -37,7 +37,11 @@ const TodoCard = (props) => {
         setTodoTitleValue(todoTitleInputValue);
         setTodoDescriptionValue(todoDescriptionInputValue);
         setEditingTodo(false);
-        props.updateTodo(props.todoIndex, todoTitleInputValue, todoDescriptionInputValue);
+        let value = {
+            title: todoTitleInputValue,
+            description: todoDescriptionInputValue
+        };
+        props.updateTodo(props.todoIndex, value);
     }
 
     function validateValues() {
