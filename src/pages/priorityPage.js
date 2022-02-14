@@ -21,36 +21,71 @@ const PriorityPage = () => {
     const [contentType, setContentType] = useState("priorities");
     const [contentList, setContentList] = useState([]);
     const [contentInput, setContentInput] = useState("");
-    const [user, setUser] = useState(undefined);
-
-    const renderedContent = generateRenderedContent(contentType);
+    const [loggedInUser, setUser] = useState(undefined);
+    const [renderedContent, setRenderedContent] = useState(null);
 
     const contentTypeTitle = contentType.charAt(0).toUpperCase() + contentType.slice(1);
 
-    function generateRenderedContent(newType) {
-        if (newType == "priorities") {
-            return contentList.map((priorityTitle, index) => < PriorityCard title={priorityTitle} key={index + "" + priorityTitle} priorityIndex={index} movePriority={moveContent} deletePriority={deleteContent} updatePriority={updateContent} />);
-        } else if (newType == "todo") {
-            return contentList.map((todo, index) => < TodoCard title={todo.title} description={todo.description} key={index + "" + todo.title} todoIndex={index} moveTodo={moveContent} deleteTodo={deleteContent} updateTodo={updateContent} />);
-        } else {
-            return null;
-        }
+    function onContentInputChange(value) {
+        setContentInput(value);
     }
+
+    useEffect(() => {
+        loadData();
+    }, [contentType]);
+
+    useEffect(() => {
+        if (contentList == null) return null;
+        if (contentType == "priorities") {
+            setRenderedContent(contentList.map((priority, index) => < PriorityCard title={priority.title} key={index + "" + priority.title} priorityIndex={index} movePriority={moveContent} deletePriority={deleteContent} updatePriority={updateContent} />));
+        } else if (contentType == "todo") {
+            setRenderedContent(contentList.map((todo, index) => < TodoCard title={todo.title} description={todo.description} key={index + "" + todo.title} todoIndex={index} moveTodo={moveContent} deleteTodo={deleteContent} updateTodo={updateContent} />));
+        } else {
+            setRenderedContent(null);
+        }
+        writeContent();
+    }, [contentList]);
 
     useEffect(() => {
         onAuthStateChanged(auth, (userResult) => {
             if (userResult) {
                 setUser(userResult);
-                loadData(userResult, contentType);
+                loadData();
+                console.log("Logged in");
             } else {
+                console.log("Not logged in");
                 setUser(undefined);
                 window.location = "/login";
             }
         });
     }, [auth]);
 
-    function loadData(inputUser, inputContentType) {
-        onValue(ref(database, `users/${inputUser.uid}/${inputContentType}`), (snapshot) => {
+    function writeContent() {
+        if (!loggedInUser) {
+            const auth2 = getAuth();
+            auth2.onAuthStateChanged((userResult) => {
+                console.log("in write: " + userResult);
+            });
+            console.log("Can't write content - no user found: " + loggedInUser);
+            return;
+        }
+        if (contentType == "priorities") {
+            update(ref(database, 'users/' + loggedInUser.uid), {
+                priorities: contentList
+            });
+        } else if (contentType == "todo") {
+            update(ref(database, 'users/' + loggedInUser.uid), {
+                todo: contentList
+            });
+        }
+    };
+
+    function loadData() {
+        if (!loggedInUser) {
+            console.log("Can't load content - no user found.");
+            return;
+        }
+        onValue(ref(database, `users/${loggedInUser.uid}/${contentType}`), (snapshot) => {
             const data = snapshot.val();
             if (data == null) {
                 console.log("An error occurred.");
@@ -61,23 +96,6 @@ const PriorityPage = () => {
         });
     }
 
-    function changeContentType(newType) {
-        setContentType(newType);
-        loadData(user, newType);
-    }
-
-    function writeContent(list_of_content) {
-        if (contentType == "priorities") {
-            update(ref(database, 'users/' + user.uid), {
-                priorities: list_of_content
-            });
-        } else if (contentType == "todo") {
-            update(ref(database, 'users/' + user.uid), {
-                todo: list_of_content
-            });
-        }
-    };
-
     function addContent(event) {
         event.preventDefault();
         if (contentInput.length == 0) {
@@ -85,7 +103,10 @@ const PriorityPage = () => {
         }
         let concatList;
         if (contentType == "priorities") {
-            concatList = [contentInput].concat(contentList);
+            concatList = [{
+                title: contentInput,
+                description: ""
+            }].concat(contentList);
         } else if (contentType == "todo") {
             concatList = [{
                 title: contentInput,
@@ -95,11 +116,6 @@ const PriorityPage = () => {
 
         setContentList(concatList);
         setContentInput("");
-        writeContent(concatList);
-    }
-
-    function onContentInputChange(value) {
-        setContentInput(value);
     }
 
     function moveContent(fromIndex, toIndex) {
@@ -112,7 +128,6 @@ const PriorityPage = () => {
         workingList.splice(fromIndex, 1);
         workingList.splice(toIndex, 0, element);
         setContentList(workingList);
-        writeContent(workingList);
     }
 
     function deleteContent(index) {
@@ -123,23 +138,26 @@ const PriorityPage = () => {
         let workingList = contentList.slice();
         workingList.splice(index, 1);
         setContentList(workingList);
-        writeContent(workingList);
     }
 
     function updateContent(index, value) {
+        if (index < 0 || index > contentList.length) {
+            console.log("An error occurred (" + index + " " + contentList + ")");
+        }
         let workingList = contentList.slice();
         workingList[index] = value;
         setContentList(workingList);
-        writeContent(workingList);
     }
 
-    if (!user) return null;
+    if (!loggedInUser) return null;
     return (
         <div id="contentPage">
             <PageTitle title={`My Simple ${contentTypeTitle}`} />
             <div id="pageContent" className="main-content div-card">
-                <button onClick={() => { changeContentType("priorities"); }}>Load priorities</button>
-                <button onClick={() => { changeContentType("todo"); }}>Load todo</button>
+                <div id="contentTypeContainer">
+                    <button className="content-type-button" onClick={() => { setContentType("priorities"); }}>Load priorities</button>
+                    <button className="content-type-button" onClick={() => { setContentType("todo"); }}>Load todo</button>
+                </div>
                 <form onSubmit={addContent}>
                     <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" id="contentField" />
                     <button id="addContentButton" onClick={addContent}>Add {contentType}!</button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import './PriorityCard.css';
 
@@ -7,6 +7,18 @@ const PriorityCard = (props) => {
     const [editingPriority, setEditingPriority] = useState(false);
     const [priorityValue, setPriorityValue] = useState(props.title);
     const [priorityInputValue, setPriorityInputValue] = useState(props.title);
+
+    useEffect(() => {
+        let priorityTitleOutput = priorityValue;
+        if (!priorityTitleOutput) {
+            priorityTitleOutput = "";
+        }
+        let output = {
+            title: priorityValue,
+            description: ""
+        };
+        props.updatePriority(props.priorityIndex, output);
+    }, [priorityValue]);
 
     function movePriorityUp() {
         let currentIndex = props.priorityIndex;
@@ -29,7 +41,6 @@ const PriorityCard = (props) => {
     function updatePriority() {
         setPriorityValue(priorityInputValue);
         setEditingPriority(false);
-        props.updatePriority(props.priorityIndex, priorityInputValue);
     }
 
     return (
