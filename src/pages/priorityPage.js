@@ -5,7 +5,7 @@ import './priorityPage.css';
 import '../firebaseConfig';
 
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { getDatabase, ref, update, onValue } from "firebase/database";
+import { getDatabase, ref, update, onValue, off } from "firebase/database";
 
 //Components
 import PageTitle from '../components/PageTitle';
@@ -26,15 +26,25 @@ const PriorityPage = () => {
     const [loggedInUser, setUser] = useState(undefined);
     const [renderedContent, setRenderedContent] = useState(null);
     const [contentTypeTitle, setContentTypeTitle] = useState(DEFAULT_CONTENT_TYPE);
+    const [dbRef, setDbRef] = useState(undefined);
 
     function onContentInputChange(value) {
         setContentInput(value);
     }
 
     useEffect(() => {
+        if (loggedInUser && contentType) {
+            if (dbRef) {
+                off(dbRef);
+            }
+            setDbRef(ref(database, `users/${loggedInUser.uid}/${contentType}`));
+        }
         setContentTypeTitle(contentType.charAt(0).toUpperCase() + contentType.slice(1));
-        loadData();
     }, [contentType, loggedInUser]);
+
+    useEffect(() => {
+        loadData();
+    }, [dbRef]);
 
     useEffect(() => {
         if (contentList == null) return null;
@@ -78,12 +88,17 @@ const PriorityPage = () => {
     };
 
     function loadData() {
+        if (!dbRef) {
+            console.log("Not logged in/no type");
+            return;
+        }
         if (!loggedInUser) {
             console.log("Can't load content - no user found.");
             return;
         }
-        onValue(ref(database, `users/${loggedInUser.uid}/${contentType}`), (snapshot) => {
+        onValue(dbRef, (snapshot) => {
             const data = snapshot.val();
+            //console.log(`Reading from ${contentType}: ${JSON.stringify(data)}`);
             if (data == null) {
                 console.log("An error occurred.");
                 setContentList([]);
