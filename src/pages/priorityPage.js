@@ -18,21 +18,23 @@ const database = getDatabase();
 
 const PriorityPage = () => {
 
-    const [contentType, setContentType] = useState("priorities");
+    const DEFAULT_CONTENT_TYPE = "priorities";
+
+    const [contentType, setContentType] = useState(DEFAULT_CONTENT_TYPE);
     const [contentList, setContentList] = useState([]);
     const [contentInput, setContentInput] = useState("");
     const [loggedInUser, setUser] = useState(undefined);
     const [renderedContent, setRenderedContent] = useState(null);
-
-    const contentTypeTitle = contentType.charAt(0).toUpperCase() + contentType.slice(1);
+    const [contentTypeTitle, setContentTypeTitle] = useState(DEFAULT_CONTENT_TYPE);
 
     function onContentInputChange(value) {
         setContentInput(value);
     }
 
     useEffect(() => {
+        setContentTypeTitle(contentType.charAt(0).toUpperCase() + contentType.slice(1));
         loadData();
-    }, [contentType]);
+    }, [contentType, loggedInUser]);
 
     useEffect(() => {
         if (contentList == null) return null;
@@ -50,7 +52,6 @@ const PriorityPage = () => {
         onAuthStateChanged(auth, (userResult) => {
             if (userResult) {
                 setUser(userResult);
-                loadData();
                 console.log("Logged in");
             } else {
                 console.log("Not logged in");
@@ -62,10 +63,6 @@ const PriorityPage = () => {
 
     function writeContent() {
         if (!loggedInUser) {
-            const auth2 = getAuth();
-            auth2.onAuthStateChanged((userResult) => {
-                console.log("in write: " + userResult);
-            });
             console.log("Can't write content - no user found: " + loggedInUser);
             return;
         }
