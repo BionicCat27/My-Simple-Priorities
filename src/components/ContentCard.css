@@ -10,9 +10,13 @@
     box-shadow: 0 2px 4px 0 lightgray;
 }
 
-#contentContawdainer {
+#contentContainer {
     display: inline-block;
     overflow: hidden;
+}
+
+#contentContainer > textarea, #contentContainer > label, #contentContainer > input {
+    display: block;
 }
 
 #contentButtonContainer {
