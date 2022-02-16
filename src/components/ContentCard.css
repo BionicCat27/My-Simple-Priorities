@@ -1,21 +1,21 @@
 
-#priorityCard {
+#contentCard {
     padding: 1rem;
     margin-top: 1rem;
     border-radius: 0.2rem;
     border: 1px solid gray;
 }
 
-#priorityCard:hover {
+#contentCard:hover {
     box-shadow: 0 2px 4px 0 lightgray;
 }
 
-#priorityContainer {
+#contentContawdainer {
     display: inline-block;
     overflow: hidden;
 }
 
-#priorityButtonContainer {
+#contentButtonContainer {
     float: right;
     margin-top: 1rem;
     margin-bottom: 1rem;
