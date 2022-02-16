@@ -47,7 +47,7 @@ const ReviewCard = (props) => {
         let value = {
             title: reviewTitleInputValue,
             description: reviewDescriptionInputValue,
-            progress: [reviewProgressValue]
+            progress: reviewProgressValue
         };
         props.updateReview(props.reviewIndex, value);
     }
@@ -74,6 +74,7 @@ const ReviewCard = (props) => {
     }
 
     validateValues();
+    //console.log(`${reviewTitleValue}: (${reviewProgressValue}) == ${reviewProgressValue.length}`);
 
     if (editingReview) {
         return (
@@ -84,37 +85,36 @@ const ReviewCard = (props) => {
                     <label htmlFor="reviewDescriptionInputValue">Description</label>
                     <textarea id="reviewDescriptionInputValue" className="margin-y-1" onChange={field => updateReviewDescriptionInput(field.target.value)} value={reviewDescriptionInputValue}></textarea>
                     <label htmlFor="reviewProgressInputValue">Progress</label>
-                    <input id="reviewProgressInputValue" className="margin-y-1" type="number" onChange={field => updateReviewProgressInput(field.target.value)} value={reviewProgressInputValue}></input>
+                    <input id="reviewProgressInputValue" className="margin-y-1" type="number" max="100" onChange={field => updateReviewProgressInput(field.target.value)} value={reviewProgressInputValue}></input>
                 </div>
                 <div id="reviewButtonContainer" className="button-block">
                     <button className="review-button" onClick={updateReview}>Done</button>
                 </div>
             </div>
         );
-    } else {
-        return (
-            <div id="reviewCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
-                <div id="reviewContainer">
-                    <h3 onClick={() => setEditingReview(true)}>{reviewTitleValue}</h3>
-                    {reviewDescriptionValue && <p>{reviewDescriptionValue}</p>}
-                    {reviewProgressValue && <p>{reviewProgressValue}</p>}
-                </div>
-                {showButtons &&
-                    <div id="reviewButtonContainer" className="button-block">
-                        {editingReview
-                            ? <button className="review-button" onClick={updateReview}>Done</button>
-                            : <div>
-                                <button className="review-button" onClick={() => setEditingReview(true)}>Edit</button>
-                                <button className="review-button" onClick={moveReviewUp}>Up</button>
-                                <button className="review-button" onClick={moveReviewDown}>Down</button>
-                                <button className="review-button" onClick={deleteReview}>Delete</button>
-                            </div>
-                        }
-                    </div>
-                }
-            </div >
-        );
     }
+    return (
+        <div id="reviewCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
+            <div id="reviewContainer">
+                <h3 onClick={() => setEditingReview(true)}>{reviewTitleValue}</h3>
+                {reviewDescriptionValue && <p>{reviewDescriptionValue}</p>}
+                {reviewProgressValue > 0 && <p>{reviewProgressValue}%</p>}
+            </div>
+            {showButtons &&
+                <div id="reviewButtonContainer" className="button-block">
+                    {editingReview
+                        ? <button className="review-button" onClick={updateReview}>Done</button>
+                        : <div>
+                            <button className="review-button" onClick={() => setEditingReview(true)}>Edit</button>
+                            <button className="review-button" onClick={moveReviewUp}>Up</button>
+                            <button className="review-button" onClick={moveReviewDown}>Down</button>
+                            <button className="review-button" onClick={deleteReview}>Delete</button>
+                        </div>
+                    }
+                </div>
+            }
+        </div >
+    );
 };
 
 export default ReviewCard;
