@@ -1,0 +1,23 @@
+
+#reviewCard {
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 0.2rem;
+    border: 1px solid gray;
+}
+
+#reviewCard:hover {
+    box-shadow: 0 2px 4px 0 lightgray;
+}
+
+#reviewContainer {
+    display: inline-block;
+    overflow: hidden;
+}
+
+#reviewButtonContainer {
+    float: right;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
