@@ -50,7 +50,7 @@ const PriorityPage = () => {
     useEffect(() => {
         if (contentList == null) return null;
         if (contentType == "priorities") {
-            setRenderedContent(contentList.map((priority, index) => < PriorityCard title={priority.title} key={index + "" + priority.title} priorityIndex={index} movePriority={moveContent} deletePriority={deleteContent} updatePriority={updateContent} />));
+            setRenderedContent(contentList.map((priority, index) => < PriorityCard title={priority.title} description={priority.description} key={index + "" + priority.title} priorityIndex={index} movePriority={moveContent} deletePriority={deleteContent} updatePriority={updateContent} />));
         } else if (contentType == "todo") {
             setRenderedContent(contentList.map((todo, index) => < TodoCard title={todo.title} description={todo.description} key={index + "" + todo.title} todoIndex={index} moveTodo={moveContent} deleteTodo={deleteContent} updateTodo={updateContent} />));
         } else if (contentType == "review") {
