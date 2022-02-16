@@ -9,9 +9,7 @@ import { getDatabase, ref, update, onValue, off } from "firebase/database";
 
 //Components
 import PageTitle from '../components/PageTitle';
-import PriorityCard from "../components/PriorityCard";
-import TodoCard from "../components/TodoCard";
-import ReviewCard from "../components/ReviewCard";
+import ContentCard from "../components/ContentCard";
 import Sidebar from '../components/Sidebar';
 
 const auth = getAuth();
@@ -50,11 +48,11 @@ const PriorityPage = () => {
     useEffect(() => {
         if (contentList == null) return null;
         if (contentType == "priorities") {
-            setRenderedContent(contentList.map((priority, index) => < PriorityCard title={priority.title} description={priority.description} key={index + "" + priority.title} priorityIndex={index} movePriority={moveContent} deletePriority={deleteContent} updatePriority={updateContent} />));
+            setRenderedContent(contentList.map((priority, index) => < ContentCard cardType={"priority"} title={priority.title} description={priority.description} key={index + "" + priority.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} />));
         } else if (contentType == "todo") {
-            setRenderedContent(contentList.map((todo, index) => < TodoCard title={todo.title} description={todo.description} key={index + "" + todo.title} todoIndex={index} moveTodo={moveContent} deleteTodo={deleteContent} updateTodo={updateContent} />));
+            setRenderedContent(contentList.map((todo, index) => < ContentCard cardType={"todo"} title={todo.title} description={todo.description} key={index + "" + todo.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} />));
         } else if (contentType == "review") {
-            setRenderedContent(contentList.map((review, index) => < ReviewCard title={review.title} description={review.description} progress={review.progress} key={index + "" + review.title} reviewIndex={index} moveReview={moveContent} deleteReview={deleteContent} updateReview={updateContent} />));
+            setRenderedContent(contentList.map((review, index) => < ContentCard cardType={"review"} title={review.title} description={review.description} progress={review.progress} key={index + "" + review.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} />));
         } else {
             setRenderedContent(null);
         }
