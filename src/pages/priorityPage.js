@@ -11,6 +11,7 @@ import { getDatabase, ref, update, onValue, off } from "firebase/database";
 import PageTitle from '../components/PageTitle';
 import PriorityCard from "../components/PriorityCard";
 import TodoCard from "../components/TodoCard";
+import ReviewCard from "../components/ReviewCard";
 import Sidebar from '../components/Sidebar';
 
 const auth = getAuth();
@@ -52,6 +53,8 @@ const PriorityPage = () => {
             setRenderedContent(contentList.map((priority, index) => < PriorityCard title={priority.title} key={index + "" + priority.title} priorityIndex={index} movePriority={moveContent} deletePriority={deleteContent} updatePriority={updateContent} />));
         } else if (contentType == "todo") {
             setRenderedContent(contentList.map((todo, index) => < TodoCard title={todo.title} description={todo.description} key={index + "" + todo.title} todoIndex={index} moveTodo={moveContent} deleteTodo={deleteContent} updateTodo={updateContent} />));
+        } else if (contentType == "review") {
+            setRenderedContent(contentList.map((review, index) => < ReviewCard title={review.title} description={review.description} progress={review.progress} key={index + "" + review.title} reviewIndex={index} moveReview={moveContent} deleteReview={deleteContent} updateReview={updateContent} />));
         } else {
             setRenderedContent(null);
         }
@@ -83,6 +86,10 @@ const PriorityPage = () => {
         } else if (contentType == "todo") {
             update(ref(database, 'users/' + loggedInUser.uid), {
                 todo: contentList
+            });
+        } else if (contentType == "review") {
+            update(ref(database, 'users/' + loggedInUser.uid), {
+                review: contentList
             });
         }
     };
@@ -123,6 +130,12 @@ const PriorityPage = () => {
             concatList = [{
                 title: contentInput,
                 description: ""
+            }].concat(contentList);
+        } else if (contentType == "review") {
+            concatList = [{
+                title: contentInput,
+                description: "",
+                progress: []
             }].concat(contentList);
         }
 
@@ -169,6 +182,7 @@ const PriorityPage = () => {
                 <div id="contentTypeContainer">
                     <button className="content-type-button" onClick={() => { setContentType("priorities"); }}>Load priorities</button>
                     <button className="content-type-button" onClick={() => { setContentType("todo"); }}>Load todo</button>
+                    <button className="content-type-button" onClick={() => { setContentType("review"); }}>Load review</button>
                 </div>
                 <form onSubmit={addContent}>
                     <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" id="contentField" />
