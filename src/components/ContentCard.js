@@ -77,9 +77,9 @@ const ContentCard = (props) => {
                             <label htmlFor="contentProgressInput">Progress</label>
                             <input id="contentProgressInput" className="margin-y-1" type="number" max="100" onChange={field => setProgressInput(field.target.value)} value={progressInput}></input>
                         </>}
-                </div>
-                <div id="contentButtonContainer">
-                    <button onClick={updateContent}>Done</button>
+                    <div id="contentButtonContainer">
+                        <button onClick={updateContent}>Done</button>
+                    </div>
                 </div>
             </div>
         );
@@ -94,17 +94,17 @@ const ContentCard = (props) => {
                     </>}
                 {(isReviewCard) && progress > 0 &&
                     <p>{progress}%</p>}
-            </div>
-            {showButtons &&
-                <div id="contentButtonContainer">
-                    <div>
-                        <button onClick={() => setEditing(true)}>Edit</button>
-                        <button onClick={() => props.moveCard(props.index, props.index - 1)}>Up</button>
-                        <button onClick={() => props.moveCard(props.index, props.index + 1)}>Down</button>
-                        <button onClick={() => props.deleteCard(props.index)}>Delete</button>
+                {showButtons &&
+                    <div id="contentButtonContainer">
+                        <div>
+                            <button onClick={() => setEditing(true)}>Edit</button>
+                            <button onClick={() => props.moveCard(props.index, props.index - 1)}>Up</button>
+                            <button onClick={() => props.moveCard(props.index, props.index + 1)}>Down</button>
+                            <button onClick={() => props.deleteCard(props.index)}>Delete</button>
+                        </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div >
     );
 };

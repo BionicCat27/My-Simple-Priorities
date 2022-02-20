@@ -1,5 +1,6 @@
 
 #contentCard {
+    width: auto;
     padding: 1rem;
     margin-top: 1rem;
     border-radius: 0.2rem;
@@ -20,7 +21,6 @@
 }
 
 #contentButtonContainer {
-    float: right;
     margin-top: 1rem;
     margin-bottom: 1rem;
     overflow: hidden;
