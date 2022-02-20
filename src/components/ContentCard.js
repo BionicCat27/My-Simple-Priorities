@@ -3,17 +3,25 @@ import React, { useEffect, useState } from "react";
 import './ContentCard.css';
 
 const ContentCard = (props) => {
+
+    const initialTitle = props.title || "";
+    const initialDescription = props.description || "";
+    const initialProgress = props.progress || "";
+    const initialTotal = props.total || "";
+
     const [showButtons, setShowButtons] = useState(false);
     const [isEditing, setEditing] = useState(false);
     const [cardType, setCardType] = useState(props.cardType);
 
-    const [title, setTitle] = useState(props.title);
-    const [description, setDescription] = useState(props.description);
-    const [progress, setProgress] = useState(props.progress);
+    const [title, setTitle] = useState(initialTitle);
+    const [description, setDescription] = useState(initialDescription);
+    const [progress, setProgress] = useState(initialProgress);
+    const [total, setTotal] = useState(initialTotal);
 
-    const [titleInput, setTitleInput] = useState(props.title);
-    const [descriptionInput, setDescriptionInput] = useState(props.description);
-    const [progressInput, setProgressInput] = useState(props.progress);
+    const [titleInput, setTitleInput] = useState(initialTitle);
+    const [descriptionInput, setDescriptionInput] = useState(initialDescription);
+    const [progressInput, setProgressInput] = useState(initialProgress);
+    const [totalInput, setTotalInput] = useState(initialTotal);
 
     const isPriorityCard = (cardType == "priority");
     const isTodoCard = (cardType == "todo");
@@ -33,6 +41,11 @@ const ContentCard = (props) => {
             setProgressInput();
         }
 
+        if (total == undefined) {
+            setTotal([]);
+            setTotalInput();
+        }
+
         let value;
         if (cardType == "priority") {
             value = {
@@ -48,16 +61,18 @@ const ContentCard = (props) => {
             value = {
                 title: titleInput,
                 description: descriptionInput,
-                progress: progressInput
+                progress: [progressInput],
+                total: [totalInput]
             };
         }
         props.updateCard(props.index, value);
-    }, [title, description, progress]);
+    }, [title, description, progress, total]);
 
     function updateContent() {
         setTitle(titleInput);
         setDescription(descriptionInput);
         setProgress([progressInput]);
+        setTotal([totalInput]);
         setEditing(false);
     }
 
@@ -76,6 +91,8 @@ const ContentCard = (props) => {
                         <>
                             <label htmlFor="contentProgressInput">Progress</label>
                             <input id="contentProgressInput" className="margin-y-1" type="number" max="100" onChange={field => setProgressInput(field.target.value)} value={progressInput}></input>
+                            <label htmlFor="contentTotalInput">Total</label>
+                            <input id="contentTotalInput" className="margin-y-1" type="number" max="100" onChange={field => setTotalInput(field.target.value)} value={totalInput}></input>
                         </>}
                     <div id="contentButtonContainer">
                         <button onClick={updateContent}>Done</button>
@@ -92,8 +109,8 @@ const ContentCard = (props) => {
                         <h3 onClick={() => setEditing(true)}>{title}</h3>
                         <p>{description}</p>
                     </>}
-                {(isReviewCard) && progress > 0 &&
-                    <p>{progress}%</p>}
+                {(isReviewCard) && progress && total &&
+                    <p>{((progress[0] / total[0]) * 100).toFixed(2)}%</p>}
                 {showButtons &&
                     <div id="contentButtonContainer">
                         <div>

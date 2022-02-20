@@ -51,7 +51,7 @@ const ContentPage = (props) => {
         } else if (contentType == "todo") {
             setRenderedContent(contentList.map((todo, index) => < ContentCard cardType={"todo"} title={todo.title} description={todo.description} key={index + "" + todo.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} />));
         } else if (contentType == "review") {
-            setRenderedContent(contentList.map((review, index) => < ContentCard cardType={"review"} title={review.title} description={review.description} progress={review.progress} key={index + "" + review.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} />));
+            setRenderedContent(contentList.map((review, index) => < ContentCard cardType={"review"} title={review.title} description={review.description} progress={review.progress} total={review.total} key={index + "" + review.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} />));
         } else {
             setRenderedContent(null);
         }
@@ -131,7 +131,8 @@ const ContentPage = (props) => {
             concatList = [{
                 title: contentInput,
                 description: "",
-                progress: []
+                progress: [],
+                total: []
             }].concat(contentList);
         }
 
