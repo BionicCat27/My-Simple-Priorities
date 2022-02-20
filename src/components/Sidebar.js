@@ -8,7 +8,7 @@ import { getAuth, signOut } from "firebase/auth";
 
 const auth = getAuth();
 
-const Sidebar = () => {
+const Sidebar = (props) => {
 
     function userSignOut() {
         signOut(auth).then(() => {
@@ -21,7 +21,10 @@ const Sidebar = () => {
     return (
         <div id="sidebar">
             <div id="sidebarLinksContainer">
-                <a href="/">Home</a>
+                <h2 id="sidebarTitle">My Simple<br />{props.title}</h2>
+                <a href="#priorities" onClick={() => props.setContentType("priorities")}>Priorities</a>
+                <a href="#todo" onClick={() => props.setContentType("todo")}>Todo</a>
+                <a href="#review" onClick={() => props.setContentType("review")}>Review</a>
                 <a onClick={userSignOut}>Logout</a>
             </div>
             <div id="sidebarCreditContainer">
@@ -34,7 +37,7 @@ const Sidebar = () => {
                     <img id="linkedinLogo" src="/resources/LI-Logo.png" />
                 </a>
             </div>
-        </div>
+        </div >
     );
 };
 

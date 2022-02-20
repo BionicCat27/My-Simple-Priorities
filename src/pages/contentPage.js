@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import './priorityPage.css';
+import './contentPage.css';
 
 import '../firebaseConfig';
 
@@ -8,14 +8,13 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getDatabase, ref, update, onValue, off } from "firebase/database";
 
 //Components
-import PageTitle from '../components/PageTitle';
 import ContentCard from "../components/ContentCard";
 import Sidebar from '../components/Sidebar';
 
 const auth = getAuth();
 const database = getDatabase();
 
-const PriorityPage = () => {
+const ContentPage = (props) => {
 
     const DEFAULT_CONTENT_TYPE = "priorities";
 
@@ -103,7 +102,6 @@ const PriorityPage = () => {
         }
         onValue(dbRef, (snapshot) => {
             const data = snapshot.val();
-            //console.log(`Reading from ${contentType}: ${JSON.stringify(data)}`);
             if (data == null) {
                 console.log("An error occurred.");
                 setContentList([]);
@@ -175,13 +173,7 @@ const PriorityPage = () => {
     if (!loggedInUser) return null;
     return (
         <div id="contentPage">
-            <PageTitle title={`My Simple ${contentTypeTitle}`} />
             <div id="pageContent" className="main-content div-card">
-                <div id="contentTypeContainer">
-                    <button className="content-type-button" onClick={() => { setContentType("priorities"); }}>Load priorities</button>
-                    <button className="content-type-button" onClick={() => { setContentType("todo"); }}>Load todo</button>
-                    <button className="content-type-button" onClick={() => { setContentType("review"); }}>Load review</button>
-                </div>
                 <form onSubmit={addContent}>
                     <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" id="contentField" />
                     <button id="addContentButton" onClick={addContent}>Add {contentType}!</button>
@@ -190,9 +182,9 @@ const PriorityPage = () => {
                     {renderedContent}
                 </div>
             </div>
-            <Sidebar />
+            <Sidebar title={contentTypeTitle} setContentType={setContentType} />
         </div >
     );
 };
 
-export default PriorityPage;
+export default ContentPage;

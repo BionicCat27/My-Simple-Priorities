@@ -8,6 +8,12 @@
     background-color: #6E8EFF;
 }
 
+#sidebarTitle {
+    margin: 0 !important;
+    padding: 1rem;
+    background-color: #FCA360;
+}
+
 #sidebarCreditContainer {
     position: fixed;
     display: block;
