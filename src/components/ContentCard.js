@@ -115,7 +115,7 @@ const ContentCard = (props) => {
         <div id="contentCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
             {(isPriorityCard || isTodoCard || isReviewCard) &&
                 <>
-                    <h3 onClick={() => setEditing(true)}>{title}</h3>
+                    <h3>{title}</h3>
                     <p>{description}</p>
                 </>}
             {(isReviewCard) && progress && total &&
