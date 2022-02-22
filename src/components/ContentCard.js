@@ -76,52 +76,57 @@ const ContentCard = (props) => {
         setEditing(false);
     }
 
+    function deleteCard() {
+        let result = confirm(`Delete \"${title}\"?`);
+        if (result) {
+            props.deleteCard(props.index);
+            setEditing(false);
+        } else {
+            console.log("Not deleting");
+        }
+
+    }
+
     if (isEditing) {
         return (
             <div id="contentCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
-                <div id="contentContainer">
-                    {(isPriorityCard || isTodoCard || isReviewCard) &&
-                        <>
-                            <label htmlFor="contentTitleInput">Title</label>
-                            <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
-                            <label htmlFor="contentDescriptionInput">Description</label>
-                            <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
-                        </>}
-                    {(isReviewCard) &&
-                        <>
-                            <label htmlFor="contentProgressInput">Progress</label>
-                            <input id="contentProgressInput" className="margin-y-1" type="number" max="100" onChange={field => setProgressInput(field.target.value)} value={progressInput}></input>
-                            <label htmlFor="contentTotalInput">Total</label>
-                            <input id="contentTotalInput" className="margin-y-1" type="number" max="100" onChange={field => setTotalInput(field.target.value)} value={totalInput}></input>
-                        </>}
-                    <div id="contentButtonContainer">
-                        <button onClick={updateContent}>Done</button>
-                    </div>
+                {(isPriorityCard || isTodoCard || isReviewCard) &&
+                    <>
+                        <label htmlFor="contentTitleInput">Title</label>
+                        <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
+                        <label htmlFor="contentDescriptionInput">Description</label>
+                        <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
+                    </>}
+                {(isReviewCard) &&
+                    <>
+                        <label htmlFor="contentProgressInput">Progress</label>
+                        <input id="contentProgressInput" className="margin-y-1" type="number" max="100" onChange={field => setProgressInput(field.target.value)} value={progressInput}></input>
+                        <label htmlFor="contentTotalInput">Total</label>
+                        <input id="contentTotalInput" className="margin-y-1" type="number" max="100" onChange={field => setTotalInput(field.target.value)} value={totalInput}></input>
+                    </>}
+                <div id="contentButtonContainer">
+                    <button onClick={updateContent}>Done</button>
+                    <a id="deleteButton" onClick={deleteCard}>Delete</a>
                 </div>
-            </div>
+            </div >
         );
     }
     return (
         <div id="contentCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
-            <div id="contentContainer">
-                {(isPriorityCard || isTodoCard || isReviewCard) &&
-                    <>
-                        <h3 onClick={() => setEditing(true)}>{title}</h3>
-                        <p>{description}</p>
-                    </>}
-                {(isReviewCard) && progress && total &&
-                    <p>{((progress[0] / total[0]) * 100).toFixed(2)}%</p>}
-                {showButtons &&
-                    <div id="contentButtonContainer">
-                        <div>
-                            <button onClick={() => setEditing(true)}>Edit</button>
-                            <button onClick={() => props.moveCard(props.index, props.index - 1)}>Up</button>
-                            <button onClick={() => props.moveCard(props.index, props.index + 1)}>Down</button>
-                            <button onClick={() => props.deleteCard(props.index)}>Delete</button>
-                        </div>
-                    </div>
-                }
-            </div>
+            {(isPriorityCard || isTodoCard || isReviewCard) &&
+                <>
+                    <h3 onClick={() => setEditing(true)}>{title}</h3>
+                    <p>{description}</p>
+                </>}
+            {(isReviewCard) && progress && total &&
+                <p>{((progress[0] / total[0]) * 100).toFixed(2)}%</p>}
+            {showButtons &&
+                <div id="contentButtonContainer">
+                    <button onClick={() => setEditing(true)}>Edit</button>
+                    <button onClick={() => props.moveCard(props.index, props.index - 1)}>Up</button>
+                    <button onClick={() => props.moveCard(props.index, props.index + 1)}>Down</button>
+                </div>
+            }
         </div >
     );
 };

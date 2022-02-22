@@ -1,6 +1,5 @@
 
 #contentCard {
-    width: auto;
     padding: 1rem;
     margin-top: 1rem;
     border-radius: 0.2rem;
@@ -13,10 +12,13 @@
 
 #contentContainer {
     display: inline-block;
-    overflow: hidden;
 }
 
-#contentContainer > textarea, #contentContainer > label, #contentContainer > input {
+#cardContentContainer {
+    display: inline-block;
+}
+
+#contentCard textarea, #contentCard label, #contentCard input {
     display: block;
 }
 
@@ -24,4 +26,8 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
     overflow: hidden;
+}
+
+#contentButtonContainer button {
+    margin-right: 0.2rem;
 }

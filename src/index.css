@@ -42,7 +42,7 @@ button:hover {
 .div-card {
     background-color: white;
     padding: 1rem;
-    width: 50%;
+    width: 100%;
 }
 
 @media (max-width: 720px) {

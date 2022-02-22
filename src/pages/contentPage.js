@@ -173,18 +173,18 @@ const ContentPage = (props) => {
 
     if (!loggedInUser) return null;
     return (
-        <div id="contentPage">
-            <div id="pageContent" className="main-content div-card">
+        <>
+            <div id="pageContent">
                 <form onSubmit={addContent}>
                     <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" id="contentField" />
                     <button id="addContentButton" onClick={addContent}>Add {contentType}!</button>
                 </form>
-                <div id="contentContainer">
+                <div id="cardsContainer">
                     {renderedContent}
                 </div>
             </div>
             <Sidebar title={contentTypeTitle} setContentType={setContentType} />
-        </div >
+        </>
     );
 };
 
