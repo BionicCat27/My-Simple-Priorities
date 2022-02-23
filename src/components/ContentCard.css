@@ -31,3 +31,8 @@
 #contentButtonContainer button {
     margin-right: 0.2rem;
 }
+
+.inlineContainer {
+    margin-right: 0.2rem;
+    display: inline-block;
+}

@@ -6,8 +6,7 @@ const ContentCard = (props) => {
 
     const initialTitle = props.title || "";
     const initialDescription = props.description || "";
-    const initialProgress = props.progress || "";
-    const initialTotal = props.total || "";
+    const initialProgress = props.progress || [];
 
     const [showButtons, setShowButtons] = useState(false);
     const [isEditing, setEditing] = useState(false);
@@ -16,12 +15,11 @@ const ContentCard = (props) => {
     const [title, setTitle] = useState(initialTitle);
     const [description, setDescription] = useState(initialDescription);
     const [progress, setProgress] = useState(initialProgress);
-    const [total, setTotal] = useState(initialTotal);
 
     const [titleInput, setTitleInput] = useState(initialTitle);
     const [descriptionInput, setDescriptionInput] = useState(initialDescription);
     const [progressInput, setProgressInput] = useState(initialProgress);
-    const [totalInput, setTotalInput] = useState(initialTotal);
+    const [progressValue, setProgressValue] = useState(calculateProgressValue());
 
     const isPriorityCard = (cardType == "priority");
     const isTodoCard = (cardType == "todo");
@@ -36,43 +34,50 @@ const ContentCard = (props) => {
             setDescription("");
             setDescriptionInput("");
         }
-        if (progress == undefined || progress == []) {
-            setProgress([]);
-            setProgressInput();
-        }
-
-        if (total == undefined) {
-            setTotal([]);
-            setTotalInput();
+        if (progress) {
+            setProgressInput(progress);
+            setProgressValue(calculateProgressValue());
         }
 
         let value;
         if (cardType == "priority") {
             value = {
-                title: titleInput,
-                description: descriptionInput,
+                title: title,
+                description: description
             };
         } else if (cardType == "todo") {
             value = {
-                title: titleInput,
-                description: descriptionInput,
+                title: title,
+                description: description
             };
         } else if (cardType == "review") {
             value = {
-                title: titleInput,
-                description: descriptionInput,
-                progress: [progressInput],
-                total: [totalInput]
+                title: title,
+                description: description,
+                progress: progress
             };
         }
         props.updateCard(props.index, value);
-    }, [title, description, progress, total]);
+    }, [title, description, progress]);
+
+    function calculateProgressValue() {
+        if (!progress) {
+            return;
+        }
+
+        let progressVal = progress.reduce((previousValue, currentValue) => {
+            return parseInt(previousValue) + parseInt(currentValue.progress);
+        }, 0);
+        let totalVal = progress.reduce((previousValue, currentValue) => {
+            return parseInt(previousValue) + parseInt(currentValue.total);
+        }, 0);
+        return ((progressVal / totalVal) * 100).toFixed(2);
+    }
 
     function updateContent() {
         setTitle(titleInput);
         setDescription(descriptionInput);
-        setProgress([progressInput]);
-        setTotal([totalInput]);
+        setProgress(progressInput);
         setEditing(false);
     }
 
@@ -84,7 +89,32 @@ const ContentCard = (props) => {
         } else {
             console.log("Not deleting");
         }
+    }
 
+    function handleTotalInput(value, index) {
+        let workingArray = [...progressInput];
+        workingArray[index].total = value;
+        setProgressInput(workingArray);
+    }
+
+    function handleProgressInput(value, index) {
+        let workingArray = [...progressInput];
+        workingArray[index].progress = value;
+        setProgressInput(workingArray);
+    }
+
+    function handleAddStage() {
+        setProgressInput([...progressInput, {
+            progress: 0,
+            total: 100
+        }]);
+    }
+
+    function handleRemoveStage(index) {
+        console.log("Attempting remove stage at: " + index);
+        let workingArray = [...progressInput];
+        workingArray.splice(index, 1);
+        setProgressInput(workingArray);
     }
 
     if (isEditing) {
@@ -99,11 +129,32 @@ const ContentCard = (props) => {
                     </>}
                 {(isReviewCard) &&
                     <>
-                        <label htmlFor="contentProgressInput">Progress</label>
-                        <input id="contentProgressInput" className="margin-y-1" type="number" max="100" onChange={field => setProgressInput(field.target.value)} value={progressInput}></input>
-                        <label htmlFor="contentTotalInput">Total</label>
-                        <input id="contentTotalInput" className="margin-y-1" type="number" max="100" onChange={field => setTotalInput(field.target.value)} value={totalInput}></input>
-                    </>}
+                        {
+                            progressInput.map((progressObject, index) => {
+                                if (!progressObject) {
+                                    console.log("No object, returning");
+                                    return;
+                                }
+                                return (
+                                    <div key={`${index}Container`}>
+                                        <div className="inlineContainer" key={`${index}ProgressContainer`}>
+                                            <label htmlFor="contentProgressInput" key={`${index}ProgressLabel`}>Progress</label>
+                                            <input id="contentProgressInput" className="margin-y-1" type="number" max="100" key={`${index}ProgressInput`} onChange={field => handleProgressInput(field.target.value, index)} value={progressObject.progress}></input>
+                                        </div>
+                                        <div className="inlineContainer" key={`${index}TotalContainer`}>
+                                            <label htmlFor="contentTotalInput" key={`${index}TotalLabel`}>Total</label>
+                                            <input id="contentTotalInput" className="margin-y-1" type="number" max="100" key={`${index}TotalInput`} onChange={field => handleTotalInput(field.target.value, index)} value={progressObject.total}></input>
+                                        </div>
+                                        <div className="inlineContainer" key={`${index}RemoveContainer`}>
+                                            <p onClick={() => handleRemoveStage(index)} >Remove</p>
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        }
+                        <p onClick={handleAddStage}>Add progress stage</p>
+                    </>
+                }
                 <div id="contentButtonContainer">
                     <button onClick={updateContent}>Done</button>
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>
@@ -118,8 +169,8 @@ const ContentCard = (props) => {
                     <h3>{title}</h3>
                     <p>{description}</p>
                 </>}
-            {(isReviewCard) && progress && total &&
-                <p>{((progress[0] / total[0]) * 100).toFixed(2)}%</p>}
+            {(isReviewCard) && progress &&
+                <p>{progressValue}%</p>}
             {showButtons &&
                 <div id="contentButtonContainer">
                     <button onClick={() => setEditing(true)}>Edit</button>
@@ -131,4 +182,4 @@ const ContentCard = (props) => {
     );
 };
 
-export default ContentCard;
+export default ContentCard;;

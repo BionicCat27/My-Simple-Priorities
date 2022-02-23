@@ -14,7 +14,10 @@ const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<ContentPage />} />
+                <Route path="/" element={<ContentPage contentType="priorities" />} />
+                <Route path="/priorities" element={<ContentPage contentType="priorities" />} />
+                <Route path="/todo" element={<ContentPage contentType="todo" />} />
+                <Route path="/review" element={<ContentPage contentType="review" />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="*" element={<NotFoundPage />} />
