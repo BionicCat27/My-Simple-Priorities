@@ -6,13 +6,13 @@ const ContentCard = (props) => {
     const initialTitle = props.title || "";
     const initialDescription = props.description || "";
     const initialProgress = props.progress || [];
-    const initialStatus = props.status || "todo";
+    const initialStatus = props.status || "Todo";
 
     if (
-        (props.cardStatusView == "Planning" && initialStatus == "done")
-        || (props.cardStatusView == "Todo" && (initialStatus == "in_progress" || initialStatus == "done"))
-        || (props.cardStatusView == "In Progress" && (initialStatus == "todo" || initialStatus == "done"))
-        || (props.cardStatusView == "Done" && (initialStatus == "todo" || initialStatus == "in_progress"))
+        (props.cardStatusView == "Planning" && initialStatus == "Done")
+        || (props.cardStatusView == "Todo" && (initialStatus == "In Progress" || initialStatus == "Done"))
+        || (props.cardStatusView == "In Progress" && (initialStatus == "Todo" || initialStatus == "Done"))
+        || (props.cardStatusView == "Done" && (initialStatus == "Todo" || initialStatus == "In Progress"))
     ) return null;
 
     const [showButtons, setShowButtons] = useState(false);
@@ -175,12 +175,16 @@ const ContentCard = (props) => {
                         <p onClick={handleAddStage}>Add progress stage</p>
                     </>
                 }
-                {statusInput && <p>Status: {statusInput}</p>}
-                <div id="formButtonContainer">
-                    <button onClick={() => { setStatusInput("todo"); }}>Todo</button>
-                    <button onClick={() => { setStatusInput("in_progress"); }}>In Progress</button>
-                    <button onClick={() => { setStatusInput("done"); }}>Done</button>
-                </div>
+                {!isPriorityCard && status &&
+                    <>
+                        <p>Status: {statusInput}</p>
+                        <div id="formButtonContainer">
+                            <button onClick={() => { setStatusInput("Todo"); }}>Todo</button>
+                            <button onClick={() => { setStatusInput("In Progress"); }}>In Progress</button>
+                            <button onClick={() => { setStatusInput("Done"); }}>Done</button>
+                        </div>
+                    </>
+                }
                 <div id="formButtonContainer">
                     <button onClick={updateContent}>Save</button>
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>

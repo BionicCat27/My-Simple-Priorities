@@ -58,7 +58,7 @@ const ContentPage = (props) => {
     function generateCards() {
         if (contentList == null) return null;
         if (contentType == "priorities") {
-            setRenderedContent(contentList.map((priority, index) => < ContentCard cardType={"priority"} title={priority.title} description={priority.description} status={priority.status} key={index + "" + priority.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardSizeView={cardSizeView} />));
+            setRenderedContent(contentList.map((priority, index) => < ContentCard cardType={"priority"} title={priority.title} description={priority.description} key={index + "" + priority.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardSizeView={cardSizeView} />));
         } else if (contentType == "todo") {
             setRenderedContent(contentList.map((todo, index) => < ContentCard cardType={"todo"} title={todo.title} description={todo.description} status={todo.status} key={index + "" + todo.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardSizeView={cardSizeView} cardStatusView={cardStatusView} />));
         } else if (contentType == "review") {
@@ -136,14 +136,14 @@ const ContentPage = (props) => {
             concatList = [{
                 title: contentInput,
                 description: "",
-                status: "todo"
+                status: "Todo"
             }].concat(contentList);
         } else if (contentType == "review") {
             concatList = [{
                 title: contentInput,
                 description: "",
                 progress: [],
-                status: "todo"
+                status: "Todo"
             }].concat(contentList);
         }
 
