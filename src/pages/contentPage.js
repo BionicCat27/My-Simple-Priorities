@@ -17,6 +17,7 @@ const database = getDatabase();
 const ContentPage = (props) => {
 
     const DEFAULT_CONTENT_TYPE = props.contentType;
+    const DEFAULT_STATUS_VIEW = "In Progress";
 
     const [contentType, setContentType] = useState(DEFAULT_CONTENT_TYPE);
     const [contentList, setContentList] = useState([]);
@@ -26,7 +27,7 @@ const ContentPage = (props) => {
     const [contentTypeTitle, setContentTypeTitle] = useState(DEFAULT_CONTENT_TYPE);
     const [dbRef, setDbRef] = useState(undefined);
     const [cardSizeView, setCardSizeView] = useState("default");
-    const [cardStatusView, setCardStatusView] = useState("In Progress");
+    const [cardStatusView, setCardStatusView] = useState(DEFAULT_STATUS_VIEW);
 
     function onContentInputChange(value) {
         setContentInput(value);
@@ -38,70 +39,18 @@ const ContentPage = (props) => {
                 off(dbRef);
             }
             setDbRef(ref(database, `users/${loggedInUser.uid}/${contentType}`));
+            setRenderedContent(null);
+            setContentList([]);
+            setCardStatusView(DEFAULT_STATUS_VIEW);
         }
         setContentTypeTitle(contentType.charAt(0).toUpperCase() + contentType.slice(1));
     }, [contentType, loggedInUser]);
 
     useEffect(() => {
-        loadData();
-    }, [dbRef]);
-
-    useEffect(() => {
         generateCards();
-    }, [cardSizeView, cardStatusView]);
+    }, [contentList, cardSizeView, cardStatusView]);
 
     useEffect(() => {
-        generateCards();
-        writeContent();
-    }, [contentList]);
-
-    function generateCards() {
-        if (contentList == null) return null;
-        if (contentType == "priorities") {
-            setRenderedContent(contentList.map((priority, index) => < ContentCard cardType={"priority"} title={priority.title} description={priority.description} key={index + "" + priority.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardSizeView={cardSizeView} />));
-        } else if (contentType == "todo") {
-            setRenderedContent(contentList.map((todo, index) => < ContentCard cardType={"todo"} title={todo.title} description={todo.description} status={todo.status} key={index + "" + todo.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardSizeView={cardSizeView} cardStatusView={cardStatusView} />));
-        } else if (contentType == "review") {
-            setRenderedContent(contentList.map((review, index) => < ContentCard cardType={"review"} title={review.title} description={review.description} progress={review.progress} status={review.status} key={index + "" + review.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardSizeView={cardSizeView} cardStatusView={cardStatusView} />));
-        } else {
-            setRenderedContent(null);
-        }
-    }
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (userResult) => {
-            if (userResult) {
-                setUser(userResult);
-                console.log("Logged in");
-            } else {
-                console.log("Not logged in");
-                setUser(undefined);
-                window.location = "/login";
-            }
-        });
-    }, [auth]);
-
-    function writeContent() {
-        if (!loggedInUser) {
-            console.log("Can't write content - no user found: " + loggedInUser);
-            return;
-        }
-        if (contentType == "priorities") {
-            update(ref(database, 'users/' + loggedInUser.uid), {
-                priorities: contentList
-            });
-        } else if (contentType == "todo") {
-            update(ref(database, 'users/' + loggedInUser.uid), {
-                todo: contentList
-            });
-        } else if (contentType == "review") {
-            update(ref(database, 'users/' + loggedInUser.uid), {
-                review: contentList
-            });
-        }
-    };
-
-    function loadData() {
         if (!dbRef) {
             console.log("Not logged in/no type");
             return;
@@ -119,35 +68,76 @@ const ContentPage = (props) => {
             }
             setContentList(data);
         });
+    }, [dbRef]);
+
+    function generateCards() {
+        if (!contentList | !contentType) setRenderedContent(null);
+        setRenderedContent(contentList.map(
+            (card, index) =>
+                <ContentCard
+                    cardType={contentType}
+                    title={card.title}
+                    description={card.description}
+                    progress={card.progress}
+                    status={card.status}
+                    key={`${index}${card.title}`}
+                    index={index}
+                    moveCard={moveContent}
+                    deleteCard={deleteContent}
+                    updateCard={updateContent}
+                    cardSizeView={cardSizeView}
+                    cardStatusView={cardStatusView}
+                />)
+        );
     }
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (userResult) => {
+            if (userResult) {
+                setUser(userResult);
+                console.log("Logged in");
+            } else {
+                console.log("Not logged in");
+                setUser(undefined);
+                window.location = "/login";
+            }
+        });
+    }, [auth]);
+
+    function writeContent(content) {
+        if (!loggedInUser) {
+            console.log("Can't write content - no user found: " + loggedInUser);
+            return;
+        }
+        update(ref(database, 'users/' + loggedInUser.uid), {
+            [contentType]: content
+        });
+    };
 
     function addContent(event) {
         event.preventDefault();
         if (contentInput.length == 0) {
             return;
         }
-        let concatList;
         if (contentType == "priorities") {
-            concatList = [{
+            writeContent([{
                 title: contentInput,
                 description: ""
-            }].concat(contentList);
+            }, ...contentList]);
         } else if (contentType == "todo") {
-            concatList = [{
+            writeContent([{
                 title: contentInput,
                 description: "",
                 status: "Todo"
-            }].concat(contentList);
+            }, ...contentList]);
         } else if (contentType == "review") {
-            concatList = [{
+            writeContent([{
                 title: contentInput,
                 description: "",
                 progress: [],
                 status: "Todo"
-            }].concat(contentList);
+            }, ...contentList]);
         }
-
-        setContentList(concatList);
         setContentInput("");
     }
 
@@ -168,7 +158,7 @@ const ContentPage = (props) => {
         var element = workingList[fromIndex];
         workingList.splice(fromIndex, 1);
         workingList.splice(toIndex, 0, element);
-        setContentList(workingList);
+        writeContent(workingList);
     }
 
     function deleteContent(index) {
@@ -178,7 +168,7 @@ const ContentPage = (props) => {
         }
         let workingList = contentList.slice();
         workingList.splice(index, 1);
-        setContentList(workingList);
+        writeContent(workingList);
     }
 
     function updateContent(index, value) {
@@ -187,7 +177,7 @@ const ContentPage = (props) => {
         }
         let workingList = contentList.slice();
         workingList[index] = value;
-        setContentList(workingList);
+        writeContent(workingList);
     }
 
     if (!loggedInUser) return null;

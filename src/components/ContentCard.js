@@ -17,7 +17,7 @@ const ContentCard = (props) => {
 
     const [showButtons, setShowButtons] = useState(false);
     const [isEditing, setEditing] = useState(false);
-    const [cardType, setCardType] = useState(props.cardType);
+    const cardType = props.cardType;
 
     const [title, setTitle] = useState(initialTitle);
     const [description, setDescription] = useState(initialDescription);
@@ -30,53 +30,28 @@ const ContentCard = (props) => {
     const [progressValue, setProgressValue] = useState(calculateProgressValue());
     const [statusInput, setStatusInput] = useState(initialStatus);
 
-
-    const isPriorityCard = (cardType == "priority");
-    const isTodoCard = (cardType == "todo");
-    const isReviewCard = (cardType == "review");
-
     const isCondensed = (props.cardSizeView == "condensed");
 
     useEffect(() => {
-        if (title == undefined) {
-            setTitle("");
-            setTitleInput("");
-        }
-        if (description == undefined) {
-            setDescription("");
-            setDescriptionInput("");
-        }
-
-        if (progress) {
-            setProgressInput(progress);
-            setProgressValue(calculateProgressValue());
-        }
-
-        if (status) {
-            setStatusInput(status);
-        }
-
-        let value;
         if (cardType == "priority") {
-            value = {
+            props.updateCard(props.index, {
                 title: title,
                 description: description,
-            };
+            });
         } else if (cardType == "todo") {
-            value = {
+            props.updateCard(props.index, {
                 title: title,
                 description: description,
                 status: status
-            };
+            });
         } else if (cardType == "review") {
-            value = {
+            props.updateCard(props.index, {
                 title: title,
                 description: description,
                 progress: progress,
                 status: status
-            };
+            });
         }
-        props.updateCard(props.index, value);
     }, [title, description, progress, status]);
 
     function calculateProgressValue() {
@@ -140,14 +115,14 @@ const ContentCard = (props) => {
     if (isEditing) {
         return (
             <div className={isCondensed ? "condensed_card" : "content_card"} onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
-                {(isPriorityCard || isTodoCard || isReviewCard) &&
+                {((cardType == "priority") || (cardType == "todo") || (cardType == "review")) &&
                     <>
                         <label htmlFor="contentTitleInput">Title</label>
                         <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
                         <label htmlFor="contentDescriptionInput">Description</label>
                         <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
                     </>}
-                {(isReviewCard) &&
+                {((cardType == "review")) &&
                     <>
                         {
                             progressInput.map((progressObject, index) => {
@@ -175,7 +150,7 @@ const ContentCard = (props) => {
                         <p onClick={handleAddStage}>Add progress stage</p>
                     </>
                 }
-                {!isPriorityCard && status &&
+                {!(cardType == "priority") && status &&
                     <>
                         <p>Status: {statusInput}</p>
                         <div id="formButtonContainer">
@@ -194,12 +169,12 @@ const ContentCard = (props) => {
     }
     return (
         <div className={isCondensed ? "condensed_card" : "content_card"} onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
-            {(isPriorityCard || isTodoCard || isReviewCard) &&
+            {((cardType == "priority") || (cardType == "todo") || (cardType == "review")) &&
                 <>
                     {!isCondensed ? <h3>{title}</h3> : <h3>{title}</h3>}
                     {!isCondensed && <p>{description}</p>}
                 </>}
-            {(isReviewCard) && progress &&
+            {(cardType == "review") && progress &&
                 <p>{progressValue}%</p>}
             {showButtons &&
                 <div id="contentButtonContainer">
