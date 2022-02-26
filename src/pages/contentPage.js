@@ -4,7 +4,7 @@ import './contentPage.css';
 
 import '../firebaseConfig';
 
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, update, onValue, off } from "firebase/database";
 
 //Components
@@ -25,7 +25,8 @@ const ContentPage = (props) => {
     const [renderedContent, setRenderedContent] = useState(null);
     const [contentTypeTitle, setContentTypeTitle] = useState(DEFAULT_CONTENT_TYPE);
     const [dbRef, setDbRef] = useState(undefined);
-    const [cardView, setCardView] = useState("default");
+    const [cardSizeView, setCardSizeView] = useState("default");
+    const [cardStatusView, setCardStatusView] = useState("In Progress");
 
     function onContentInputChange(value) {
         setContentInput(value);
@@ -47,7 +48,7 @@ const ContentPage = (props) => {
 
     useEffect(() => {
         generateCards();
-    }, [cardView]);
+    }, [cardSizeView, cardStatusView]);
 
     useEffect(() => {
         generateCards();
@@ -57,11 +58,11 @@ const ContentPage = (props) => {
     function generateCards() {
         if (contentList == null) return null;
         if (contentType == "priorities") {
-            setRenderedContent(contentList.map((priority, index) => < ContentCard cardType={"priority"} title={priority.title} description={priority.description} key={index + "" + priority.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardView={cardView} />));
+            setRenderedContent(contentList.map((priority, index) => < ContentCard cardType={"priority"} title={priority.title} description={priority.description} status={priority.status} key={index + "" + priority.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardSizeView={cardSizeView} />));
         } else if (contentType == "todo") {
-            setRenderedContent(contentList.map((todo, index) => < ContentCard cardType={"todo"} title={todo.title} description={todo.description} key={index + "" + todo.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardView={cardView} />));
+            setRenderedContent(contentList.map((todo, index) => < ContentCard cardType={"todo"} title={todo.title} description={todo.description} status={todo.status} key={index + "" + todo.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardSizeView={cardSizeView} cardStatusView={cardStatusView} />));
         } else if (contentType == "review") {
-            setRenderedContent(contentList.map((review, index) => < ContentCard cardType={"review"} title={review.title} description={review.description} progress={review.progress} key={index + "" + review.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardView={cardView} />));
+            setRenderedContent(contentList.map((review, index) => < ContentCard cardType={"review"} title={review.title} description={review.description} progress={review.progress} status={review.status} key={index + "" + review.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardSizeView={cardSizeView} cardStatusView={cardStatusView} />));
         } else {
             setRenderedContent(null);
         }
@@ -134,13 +135,15 @@ const ContentPage = (props) => {
         } else if (contentType == "todo") {
             concatList = [{
                 title: contentInput,
-                description: ""
+                description: "",
+                status: "todo"
             }].concat(contentList);
         } else if (contentType == "review") {
             concatList = [{
                 title: contentInput,
                 description: "",
-                progress: []
+                progress: [],
+                status: "todo"
             }].concat(contentList);
         }
 
@@ -149,10 +152,10 @@ const ContentPage = (props) => {
     }
 
     function toggleCondensedView() {
-        if (cardView == "default") {
-            setCardView("condensed");
+        if (cardSizeView == "default") {
+            setCardSizeView("condensed");
         } else {
-            setCardView("default");
+            setCardSizeView("default");
         }
     }
 
@@ -194,7 +197,16 @@ const ContentPage = (props) => {
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add {contentType}!</button>
-                    <button id="toggleCondensedView" onClick={toggleCondensedView}>Toggle View</button>
+                    <button id="toggleCondensedView" onClick={toggleCondensedView}>Toggle Condensed</button>
+                    {(contentType == "todo" || contentType == "review") &&
+                        <select onChange={field => setCardStatusView(field.target.value)} value={cardStatusView}>
+                            <option>All</option>
+                            <option>Planning</option>
+                            <option>Todo</option>
+                            <option>In Progress</option>
+                            <option>Done</option>
+                        </select>
+                    }
                 </form>
                 <div className="cards_container">
                     {renderedContent}

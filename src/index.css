@@ -8,12 +8,12 @@ body {
     margin: 0;
 }
 
-body, input, textarea, button {
+body, input, textarea, button, select, option {
     font-family: 'Arial', sans-serif;
     font-family: 'Urbanist', sans-serif;
 }
 
-button {
+button, select {
     line-height: 1rem;
     font-size: .8rem;
     padding-left: 1rem;

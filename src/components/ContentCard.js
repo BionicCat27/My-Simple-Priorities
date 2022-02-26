@@ -3,10 +3,17 @@ import React, { useEffect, useState } from "react";
 import './ContentCard.css';
 
 const ContentCard = (props) => {
-
     const initialTitle = props.title || "";
     const initialDescription = props.description || "";
     const initialProgress = props.progress || [];
+    const initialStatus = props.status || "todo";
+
+    if (
+        (props.cardStatusView == "Planning" && initialStatus == "done")
+        || (props.cardStatusView == "Todo" && (initialStatus == "in_progress" || initialStatus == "done"))
+        || (props.cardStatusView == "In Progress" && (initialStatus == "todo" || initialStatus == "done"))
+        || (props.cardStatusView == "Done" && (initialStatus == "todo" || initialStatus == "in_progress"))
+    ) return null;
 
     const [showButtons, setShowButtons] = useState(false);
     const [isEditing, setEditing] = useState(false);
@@ -15,17 +22,20 @@ const ContentCard = (props) => {
     const [title, setTitle] = useState(initialTitle);
     const [description, setDescription] = useState(initialDescription);
     const [progress, setProgress] = useState(initialProgress);
+    const [status, setStatus] = useState(initialStatus);
 
     const [titleInput, setTitleInput] = useState(initialTitle);
     const [descriptionInput, setDescriptionInput] = useState(initialDescription);
     const [progressInput, setProgressInput] = useState(initialProgress);
     const [progressValue, setProgressValue] = useState(calculateProgressValue());
+    const [statusInput, setStatusInput] = useState(initialStatus);
+
 
     const isPriorityCard = (cardType == "priority");
     const isTodoCard = (cardType == "todo");
     const isReviewCard = (cardType == "review");
 
-    const isCondensed = (props.cardView == "condensed");
+    const isCondensed = (props.cardSizeView == "condensed");
 
     useEffect(() => {
         if (title == undefined) {
@@ -36,31 +46,38 @@ const ContentCard = (props) => {
             setDescription("");
             setDescriptionInput("");
         }
+
         if (progress) {
             setProgressInput(progress);
             setProgressValue(calculateProgressValue());
+        }
+
+        if (status) {
+            setStatusInput(status);
         }
 
         let value;
         if (cardType == "priority") {
             value = {
                 title: title,
-                description: description
+                description: description,
             };
         } else if (cardType == "todo") {
             value = {
                 title: title,
-                description: description
+                description: description,
+                status: status
             };
         } else if (cardType == "review") {
             value = {
                 title: title,
                 description: description,
-                progress: progress
+                progress: progress,
+                status: status
             };
         }
         props.updateCard(props.index, value);
-    }, [title, description, progress]);
+    }, [title, description, progress, status]);
 
     function calculateProgressValue() {
         if (!progress) {
@@ -80,6 +97,7 @@ const ContentCard = (props) => {
         setTitle(titleInput);
         setDescription(descriptionInput);
         setProgress(progressInput);
+        setStatus(statusInput);
         setEditing(false);
     }
 
@@ -157,8 +175,14 @@ const ContentCard = (props) => {
                         <p onClick={handleAddStage}>Add progress stage</p>
                     </>
                 }
+                {statusInput && <p>Status: {statusInput}</p>}
                 <div id="formButtonContainer">
-                    <button onClick={updateContent}>Done</button>
+                    <button onClick={() => { setStatusInput("todo"); }}>Todo</button>
+                    <button onClick={() => { setStatusInput("in_progress"); }}>In Progress</button>
+                    <button onClick={() => { setStatusInput("done"); }}>Done</button>
+                </div>
+                <div id="formButtonContainer">
+                    <button onClick={updateContent}>Save</button>
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>
                 </div>
             </div >

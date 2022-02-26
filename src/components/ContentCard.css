@@ -68,3 +68,7 @@
     margin-bottom: 1rem;
     overflow: hidden;
 }
+
+#formButtonContainer button {
+    margin-right: 0.2rem;
+}
