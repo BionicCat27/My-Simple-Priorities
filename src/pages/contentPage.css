@@ -2,12 +2,16 @@
     padding: 1rem;
 }
 
-#contentField {
-    margin-right: 0.2rem;
+.content_field {
+    
     line-height: 1rem;
     font-size: .8rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
+}
+
+#contentForm input, #contentForm button {
+    margin-right: 0.2rem;
 }
 
 .content-button {

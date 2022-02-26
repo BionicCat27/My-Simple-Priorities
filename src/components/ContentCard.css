@@ -1,13 +1,34 @@
 
-#contentCard {
+.content_card {
+    position: relative;
     padding: 1rem;
     margin-top: 1rem;
     border-radius: 0.2rem;
     border: 1px solid gray;
 }
 
-#contentCard:hover {
+.content_card:hover {
     box-shadow: 0 2px 4px 0 lightgray;
+}
+
+.content_card textarea, .content_card label, .content_card input {
+    display: block;
+}
+
+.condensed_card {
+    position: relative;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    border-radius: 0;
+    border: 1px solid gray;
+}
+
+.condensed_card:hover {
+    box-shadow: 0 2px 4px 0 lightgray;
+}
+
+.condensed_card textarea, .condensed_card label, .condensed_card input {
+    display: block;
 }
 
 #contentContainer {
@@ -18,14 +39,11 @@
     display: inline-block;
 }
 
-#contentCard textarea, #contentCard label, #contentCard input {
-    display: block;
-}
-
 #contentButtonContainer {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    overflow: hidden;
+    padding: 1rem;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 #contentButtonContainer button {
@@ -35,4 +53,10 @@
 .inlineContainer {
     margin-right: 0.2rem;
     display: inline-block;
+}
+
+#formButtonContainer {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
 }

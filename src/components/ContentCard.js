@@ -25,6 +25,8 @@ const ContentCard = (props) => {
     const isTodoCard = (cardType == "todo");
     const isReviewCard = (cardType == "review");
 
+    const isCondensed = (props.cardView == "condensed");
+
     useEffect(() => {
         if (title == undefined) {
             setTitle("");
@@ -119,7 +121,7 @@ const ContentCard = (props) => {
 
     if (isEditing) {
         return (
-            <div id="contentCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
+            <div className={isCondensed ? "condensed_card" : "content_card"} onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
                 {(isPriorityCard || isTodoCard || isReviewCard) &&
                     <>
                         <label htmlFor="contentTitleInput">Title</label>
@@ -155,7 +157,7 @@ const ContentCard = (props) => {
                         <p onClick={handleAddStage}>Add progress stage</p>
                     </>
                 }
-                <div id="contentButtonContainer">
+                <div id="formButtonContainer">
                     <button onClick={updateContent}>Done</button>
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>
                 </div>
@@ -163,11 +165,11 @@ const ContentCard = (props) => {
         );
     }
     return (
-        <div id="contentCard" onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
+        <div className={isCondensed ? "condensed_card" : "content_card"} onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
             {(isPriorityCard || isTodoCard || isReviewCard) &&
                 <>
-                    <h3>{title}</h3>
-                    <p>{description}</p>
+                    {!isCondensed ? <h3>{title}</h3> : <h3>{title}</h3>}
+                    {!isCondensed && <p>{description}</p>}
                 </>}
             {(isReviewCard) && progress &&
                 <p>{progressValue}%</p>}
@@ -182,4 +184,4 @@ const ContentCard = (props) => {
     );
 };
 
-export default ContentCard;;
+export default ContentCard;

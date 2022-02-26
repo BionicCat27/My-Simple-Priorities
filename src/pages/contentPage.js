@@ -25,6 +25,7 @@ const ContentPage = (props) => {
     const [renderedContent, setRenderedContent] = useState(null);
     const [contentTypeTitle, setContentTypeTitle] = useState(DEFAULT_CONTENT_TYPE);
     const [dbRef, setDbRef] = useState(undefined);
+    const [cardView, setCardView] = useState("default");
 
     function onContentInputChange(value) {
         setContentInput(value);
@@ -45,18 +46,26 @@ const ContentPage = (props) => {
     }, [dbRef]);
 
     useEffect(() => {
+        generateCards();
+    }, [cardView]);
+
+    useEffect(() => {
+        generateCards();
+        writeContent();
+    }, [contentList]);
+
+    function generateCards() {
         if (contentList == null) return null;
         if (contentType == "priorities") {
-            setRenderedContent(contentList.map((priority, index) => < ContentCard cardType={"priority"} title={priority.title} description={priority.description} key={index + "" + priority.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} />));
+            setRenderedContent(contentList.map((priority, index) => < ContentCard cardType={"priority"} title={priority.title} description={priority.description} key={index + "" + priority.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardView={cardView} />));
         } else if (contentType == "todo") {
-            setRenderedContent(contentList.map((todo, index) => < ContentCard cardType={"todo"} title={todo.title} description={todo.description} key={index + "" + todo.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} />));
+            setRenderedContent(contentList.map((todo, index) => < ContentCard cardType={"todo"} title={todo.title} description={todo.description} key={index + "" + todo.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardView={cardView} />));
         } else if (contentType == "review") {
-            setRenderedContent(contentList.map((review, index) => < ContentCard cardType={"review"} title={review.title} description={review.description} progress={review.progress} key={index + "" + review.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} />));
+            setRenderedContent(contentList.map((review, index) => < ContentCard cardType={"review"} title={review.title} description={review.description} progress={review.progress} key={index + "" + review.title} index={index} moveCard={moveContent} deleteCard={deleteContent} updateCard={updateContent} cardView={cardView} />));
         } else {
             setRenderedContent(null);
         }
-        writeContent();
-    }, [contentList]);
+    }
 
     useEffect(() => {
         onAuthStateChanged(auth, (userResult) => {
@@ -139,6 +148,14 @@ const ContentPage = (props) => {
         setContentInput("");
     }
 
+    function toggleCondensedView() {
+        if (cardView == "default") {
+            setCardView("condensed");
+        } else {
+            setCardView("default");
+        }
+    }
+
     function moveContent(fromIndex, toIndex) {
         if (fromIndex < 0 || toIndex < 0 || fromIndex > contentList.length || toIndex > contentList.length) {
             console.log("An error occurred (" + fromIndex + " " + toIndex + " " + contentList + ")");
@@ -174,9 +191,10 @@ const ContentPage = (props) => {
     return (
         <>
             <div id="pageContent">
-                <form onSubmit={addContent}>
-                    <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" id="contentField" />
+                <form onSubmit={addContent} id="contentForm">
+                    <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add {contentType}!</button>
+                    <button id="toggleCondensedView" onClick={toggleCondensedView}>Toggle View</button>
                 </form>
                 <div id="cardsContainer">
                     {renderedContent}
