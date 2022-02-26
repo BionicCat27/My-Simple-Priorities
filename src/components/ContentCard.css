@@ -17,7 +17,7 @@
 
 .condensed_card {
     position: relative;
-    padding: 0.5rem;
+    padding: 1rem;
     margin-top: 0.5rem;
     border-radius: 0;
     border: 1px solid gray;
@@ -25,6 +25,10 @@
 
 .condensed_card:hover {
     box-shadow: 0 2px 4px 0 lightgray;
+}
+
+.condensed_card h3 {
+    margin: 0;
 }
 
 .condensed_card textarea, .condensed_card label, .condensed_card input {
