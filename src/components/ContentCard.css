@@ -31,6 +31,10 @@
     margin: 0;
 }
 
+.condensed_card p {
+    margin-bottom: 0;
+}
+
 .condensed_card textarea, .condensed_card label, .condensed_card input {
     display: block;
 }

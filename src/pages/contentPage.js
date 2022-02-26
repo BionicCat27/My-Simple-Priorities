@@ -196,7 +196,7 @@ const ContentPage = (props) => {
                     <button id="addContentButton" onClick={addContent}>Add {contentType}!</button>
                     <button id="toggleCondensedView" onClick={toggleCondensedView}>Toggle View</button>
                 </form>
-                <div id="cardsContainer">
+                <div className="cards_container">
                     {renderedContent}
                 </div>
             </div>
