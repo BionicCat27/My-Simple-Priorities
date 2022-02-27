@@ -8,11 +8,13 @@ const ContentCard = (props) => {
     const initialProgress = props.progress || [];
     const initialStatus = props.status || "Todo";
 
-    if (
-        (props.cardStatusView == "Planning" && initialStatus == "Done")
-        || (props.cardStatusView == "Todo" && (initialStatus == "In Progress" || initialStatus == "Done"))
-        || (props.cardStatusView == "In Progress" && (initialStatus == "Todo" || initialStatus == "Done"))
-        || (props.cardStatusView == "Done" && (initialStatus == "Todo" || initialStatus == "In Progress"))
+    if ((props.cardType != "priorities") &&
+        (
+            (props.cardStatusView == "Planning" && initialStatus == "Done")
+            || (props.cardStatusView == "Todo" && (initialStatus == "In Progress" || initialStatus == "Done"))
+            || (props.cardStatusView == "In Progress" && (initialStatus == "Todo" || initialStatus == "Done"))
+            || (props.cardStatusView == "Done" && (initialStatus == "Todo" || initialStatus == "In Progress"))
+        )
     ) return null;
 
     const [showButtons, setShowButtons] = useState(false);
@@ -33,7 +35,7 @@ const ContentCard = (props) => {
     const isCondensed = (props.cardSizeView == "condensed");
 
     useEffect(() => {
-        if (cardType == "priority") {
+        if (cardType == "priorities") {
             props.updateCard(props.index, {
                 title: title,
                 description: description,
@@ -55,9 +57,7 @@ const ContentCard = (props) => {
     }, [title, description, progress, status]);
 
     function calculateProgressValue() {
-        if (!progress) {
-            return;
-        }
+        if (!progress) return;
 
         let progressVal = progress.reduce((previousValue, currentValue) => {
             return parseInt(previousValue) + parseInt(currentValue.progress);
@@ -77,8 +77,7 @@ const ContentCard = (props) => {
     }
 
     function deleteCard() {
-        let result = confirm(`Delete \"${title}\"?`);
-        if (result) {
+        if (confirm(`Delete \"${title}\"?`)) {
             props.deleteCard(props.index);
             setEditing(false);
         } else {
@@ -115,7 +114,7 @@ const ContentCard = (props) => {
     if (isEditing) {
         return (
             <div className={isCondensed ? "condensed_card" : "content_card"} onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
-                {((cardType == "priority") || (cardType == "todo") || (cardType == "review")) &&
+                {((cardType == "priorities") || (cardType == "todo") || (cardType == "review")) &&
                     <>
                         <label htmlFor="contentTitleInput">Title</label>
                         <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
@@ -150,7 +149,7 @@ const ContentCard = (props) => {
                         <p onClick={handleAddStage}>Add progress stage</p>
                     </>
                 }
-                {!(cardType == "priority") && status &&
+                {!(cardType == "priorities") && status &&
                     <>
                         <p>Status: {statusInput}</p>
                         <div id="formButtonContainer">

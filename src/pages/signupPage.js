@@ -4,7 +4,7 @@ import './signupPage.css';
 
 import '../firebaseConfig';
 
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 
 //Components
 import PageTitle from '../components/PageTitle';
@@ -22,7 +22,8 @@ const SignupPage = () => {
         }
     });
 
-    function prepareCreateAccount() {
+    function prepareCreateAccount(event) {
+        event.preventDefault();
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 window.location = "/";
