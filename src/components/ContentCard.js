@@ -168,7 +168,7 @@ const ContentCard = (props) => {
     }
     return (
         <div className={isCondensed ? "condensed_card" : "content_card"} onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
-            {((cardType == "priority") || (cardType == "todo") || (cardType == "review")) &&
+            {((cardType == "priorities") || (cardType == "todo") || (cardType == "review")) &&
                 <>
                     {!isCondensed ? <h3>{title}</h3> : <h3>{title}</h3>}
                     {!isCondensed && <p>{description}</p>}
