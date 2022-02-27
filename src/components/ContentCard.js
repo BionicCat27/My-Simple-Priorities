@@ -54,6 +54,8 @@ const ContentCard = (props) => {
                 status: status
             });
         }
+
+        setProgressValue(calculateProgressValue());
     }, [title, description, progress, status]);
 
     function calculateProgressValue() {
@@ -170,7 +172,7 @@ const ContentCard = (props) => {
         <div className={isCondensed ? "condensed_card" : "content_card"} onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
             {((cardType == "priorities") || (cardType == "todo") || (cardType == "review")) &&
                 <>
-                    {!isCondensed ? <h3>{title}</h3> : <h3>{title}</h3>}
+                    {!isCondensed && <h3>{title}</h3>}
                     {!isCondensed && <p>{description}</p>}
                 </>}
             {(cardType == "review") && progress &&
