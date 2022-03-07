@@ -4,13 +4,16 @@ import './signupPage.css';
 
 import '../firebaseConfig';
 
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
 
 //Components
 import PageTitle from '../components/PageTitle';
 import Footer from '../components/Footer';
 
 const auth = getAuth();
+if (location.hostname === "localhost" && location.port === "5001") {
+    connectAuthEmulator(auth, "http://localhost:9099");
+}
 
 const SignupPage = () => {
     const [email, setEmail] = useState("");

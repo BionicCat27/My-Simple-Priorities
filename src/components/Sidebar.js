@@ -4,9 +4,12 @@ import './Sidebar.css';
 
 import '../firebaseConfig';
 
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth, signOut, connectAuthEmulator } from "firebase/auth";
 
 const auth = getAuth();
+if (location.hostname === "localhost" && location.port === "5001") {
+    connectAuthEmulator(auth, "http://localhost:9099");
+}
 
 const Sidebar = (props) => {
 

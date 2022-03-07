@@ -4,8 +4,8 @@ import './contentPage.css';
 
 import '../firebaseConfig';
 
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, update, onValue, off } from "firebase/database";
+import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
+import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
 
 //Components
 import ContentCard from "../components/ContentCard";
@@ -13,6 +13,11 @@ import Sidebar from '../components/Sidebar';
 
 const auth = getAuth();
 const database = getDatabase();
+
+if (location.hostname === "localhost" && location.port === "5001") {
+    connectDatabaseEmulator(database, "localhost", 9000);
+    connectAuthEmulator(auth, "http://localhost:9099");
+}
 
 const ContentPage = (props) => {
 
