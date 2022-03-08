@@ -20,6 +20,7 @@ const ContentCard = (props) => {
     const [showButtons, setShowButtons] = useState(false);
     const [isEditing, setEditing] = useState(false);
     const cardType = props.cardType;
+    const cardSizeView = props.cardSizeView;
 
     const [title, setTitle] = useState(initialTitle);
     const [description, setDescription] = useState(initialDescription);
@@ -32,7 +33,7 @@ const ContentCard = (props) => {
     const [progressValue, setProgressValue] = useState(calculateProgressValue());
     const [statusInput, setStatusInput] = useState(initialStatus);
 
-    const isCondensed = (props.cardSizeView == "condensed");
+    const isDefault = (cardSizeView == "Default");
 
     useEffect(() => {
         if (cardType == "priorities") {
@@ -59,15 +60,15 @@ const ContentCard = (props) => {
     }, [title, description, progress, status]);
 
     function calculateProgressValue() {
-        if (!progress) return;
+        if (!progress || progress.length == 0) return;
 
-        let progressVal = progress.reduce((previousValue, currentValue) => {
-            return parseInt(previousValue) + parseInt(currentValue.progress);
-        }, 0);
-        let totalVal = progress.reduce((previousValue, currentValue) => {
-            return parseInt(previousValue) + parseInt(currentValue.total);
-        }, 0);
-        return ((progressVal / totalVal) * 100).toFixed(2);
+        let value = progress.reduce((previousValue, currentValue) => {
+            return {
+                progress: (parseInt(previousValue.progress) + parseInt(currentValue.progress)),
+                total: (parseInt(previousValue.total) + parseInt(currentValue.total)),
+            };
+        });
+        return ((value.progress / value.total) * 100).toFixed(2);
     }
 
     function updateContent() {
@@ -76,6 +77,7 @@ const ContentCard = (props) => {
         setProgress(progressInput);
         setStatus(statusInput);
         setEditing(false);
+        setShowButtons(false);
     }
 
     function deleteCard() {
@@ -113,77 +115,70 @@ const ContentCard = (props) => {
         setProgressInput(workingArray);
     }
 
-    if (isEditing) {
-        return (
-            <div className={isCondensed ? "condensed_card" : "content_card"} onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
-                {((cardType == "priorities") || (cardType == "todo") || (cardType == "review")) &&
-                    <>
-                        <label htmlFor="contentTitleInput">Title</label>
-                        <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
-                        <label htmlFor="contentDescriptionInput">Description</label>
-                        <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
-                    </>}
-                {((cardType == "review")) &&
-                    <>
-                        {
-                            progressInput.map((progressObject, index) => {
-                                if (!progressObject) {
-                                    console.log("No object, returning");
-                                    return;
-                                }
-                                return (
-                                    <div key={`${index}Container`}>
-                                        <div className="inlineContainer" key={`${index}ProgressContainer`}>
-                                            <label htmlFor="contentProgressInput" key={`${index}ProgressLabel`}>Progress</label>
-                                            <input id="contentProgressInput" className="margin-y-1" type="number" max="100" key={`${index}ProgressInput`} onChange={field => handleProgressInput(field.target.value, index)} value={progressObject.progress}></input>
-                                        </div>
-                                        <div className="inlineContainer" key={`${index}TotalContainer`}>
-                                            <label htmlFor="contentTotalInput" key={`${index}TotalLabel`}>Total</label>
-                                            <input id="contentTotalInput" className="margin-y-1" type="number" max="100" key={`${index}TotalInput`} onChange={field => handleTotalInput(field.target.value, index)} value={progressObject.total}></input>
-                                        </div>
-                                        <div className="inlineContainer" key={`${index}RemoveContainer`}>
-                                            <p onClick={() => handleRemoveStage(index)} >Remove</p>
-                                        </div>
-                                    </div>
-                                );
-                            })
-                        }
-                        <p onClick={handleAddStage}>Add progress stage</p>
-                    </>
-                }
-                {!(cardType == "priorities") && status &&
-                    <>
-                        <p>Status: {statusInput}</p>
-                        <div id="formButtonContainer">
-                            <button onClick={() => { setStatusInput("Todo"); }}>Todo</button>
-                            <button onClick={() => { setStatusInput("In Progress"); }}>In Progress</button>
-                            <button onClick={() => { setStatusInput("Done"); }}>Done</button>
+    function generateCardContent() {
+        if (isEditing) {
+            return (<>
+                {((cardType == "priorities") || (cardType == "todo") || (cardType == "review")) && <>
+                    <label htmlFor="contentTitleInput">Title</label>
+                    <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
+                    <label htmlFor="contentDescriptionInput">Description</label>
+                    <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
+                </>}
+                {((cardType == "review")) && <>
+                    {progressInput.map((progressObject, index) => (
+                        <div key={`${index}Container`}>
+                            <div className="inlineContainer" key={`${index}ProgressContainer`}>
+                                <label htmlFor="contentProgressInput" key={`${index}ProgressLabel`}>Progress</label>
+                                <input id="contentProgressInput" className="margin-y-1" type="number" max="100" key={`${index}ProgressInput`} onChange={field => handleProgressInput(field.target.value, index)} value={progressObject.progress}></input>
+                            </div>
+                            <div className="inlineContainer" key={`${index}TotalContainer`}>
+                                <label htmlFor="contentTotalInput" key={`${index}TotalLabel`}>Total</label>
+                                <input id="contentTotalInput" className="margin-y-1" type="number" max="100" key={`${index}TotalInput`} onChange={field => handleTotalInput(field.target.value, index)} value={progressObject.total}></input>
+                            </div>
+                            <div className="inlineContainer" key={`${index}RemoveContainer`}>
+                                <p onClick={() => handleRemoveStage(index)} >Remove</p>
+                            </div>
                         </div>
-                    </>
-                }
+                    ))}
+                    <p onClick={handleAddStage}>Add progress stage</p>
+                </>}
+                {!(cardType == "priorities") && status && <>
+                    <p>Status: {statusInput}</p>
+                    <div id="formButtonContainer">
+                        <button onClick={() => { setStatusInput("Todo"); }}>Todo</button>
+                        <button onClick={() => { setStatusInput("In Progress"); }}>In Progress</button>
+                        <button onClick={() => { setStatusInput("Done"); }}>Done</button>
+                    </div>
+                </>}
                 <div id="formButtonContainer">
                     <button onClick={updateContent}>Save</button>
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>
                 </div>
-            </div >
-        );
+            </>);
+        } else {
+            return (<>
+                {((cardType == "priorities") || (cardType == "todo") || (cardType == "review")) &&
+                    <>
+                        <h3>{title}</h3>
+                        {!isDefault && <p>{description}</p>}
+                    </>}
+                {(cardType == "review") && progress &&
+                    <>
+                        <p>{progressValue}%</p>
+                    </>}
+                {showButtons &&
+                    <div id="contentButtonContainer">
+                        <button onClick={() => setEditing(true)}>Edit</button>
+                        <button onClick={() => props.moveCard(props.index, props.index - 1)}>Up</button>
+                        <button onClick={() => props.moveCard(props.index, props.index + 1)}>Down</button>
+                    </div>
+                }
+            </>);
+        }
     }
     return (
-        <div className={isCondensed ? "condensed_card" : "content_card"} onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
-            {((cardType == "priorities") || (cardType == "todo") || (cardType == "review")) &&
-                <>
-                    <h3>{title}</h3>
-                    {!isCondensed && <p>{description}</p>}
-                </>}
-            {(cardType == "review") && progress &&
-                <p>{progressValue}%</p>}
-            {showButtons &&
-                <div id="contentButtonContainer">
-                    <button onClick={() => setEditing(true)}>Edit</button>
-                    <button onClick={() => props.moveCard(props.index, props.index - 1)}>Up</button>
-                    <button onClick={() => props.moveCard(props.index, props.index + 1)}>Down</button>
-                </div>
-            }
+        <div className={isDefault ? "condensed_card" : "content_card"} onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
+            {generateCardContent()}
         </div >
     );
 };

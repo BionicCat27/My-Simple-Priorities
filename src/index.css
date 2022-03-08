@@ -20,6 +20,7 @@ button, select {
     padding-right: 1rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
+    margin-right: 0.2rem;
     background-color: white;
     color: black;
     border: none;

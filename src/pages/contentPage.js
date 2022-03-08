@@ -23,6 +23,7 @@ const ContentPage = (props) => {
 
     const DEFAULT_CONTENT_TYPE = props.contentType;
     const DEFAULT_STATUS_VIEW = "In Progress";
+    const DEFAULT_SIZE_VIEW = "Default";
 
     const [contentType, setContentType] = useState(DEFAULT_CONTENT_TYPE);
     const [contentList, setContentList] = useState([]);
@@ -31,7 +32,7 @@ const ContentPage = (props) => {
     const [renderedContent, setRenderedContent] = useState(null);
     const [contentTypeTitle, setContentTypeTitle] = useState(DEFAULT_CONTENT_TYPE);
     const [dbRef, setDbRef] = useState(undefined);
-    const [cardSizeView, setCardSizeView] = useState("default");
+    const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
     const [cardStatusView, setCardStatusView] = useState(DEFAULT_STATUS_VIEW);
 
     function onContentInputChange(value) {
@@ -146,14 +147,6 @@ const ContentPage = (props) => {
         setContentInput("");
     }
 
-    function toggleCondensedView() {
-        if (cardSizeView == "default") {
-            setCardSizeView("condensed");
-        } else {
-            setCardSizeView("default");
-        }
-    }
-
     function moveContent(fromIndex, toIndex) {
         if (fromIndex < 0 || toIndex < 0 || fromIndex > contentList.length || toIndex > contentList.length) {
             console.log("An error occurred (" + fromIndex + " " + toIndex + " " + contentList + ")");
@@ -192,7 +185,11 @@ const ContentPage = (props) => {
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add {contentType}!</button>
-                    <button id="toggleCondensedView" onClick={toggleCondensedView}>Toggle Condensed</button>
+                    <select onChange={field => setCardSizeView(field.target.value)} value={cardSizeView}>
+                        <option>Default</option>
+                        <option>Expanded</option>
+                        <option>List</option>
+                    </select>
                     {(contentType == "todo" || contentType == "review") &&
                         <select onChange={field => setCardStatusView(field.target.value)} value={cardStatusView}>
                             <option>All</option>
