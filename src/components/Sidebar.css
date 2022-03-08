@@ -5,13 +5,11 @@
     position: fixed;
     top: 0;
     left:0;
-    background-color: #6E8EFF;
 }
 
 #sidebarTitle {
     margin: 0 !important;
     padding: 1rem;
-    background-color: #FCA360;
 }
 
 #sidebarCreditContainer {
@@ -48,7 +46,6 @@
         bottom: 0;
         text-align: center;
         width: 100%;
-        background-color: #6E8EFF;
     }
 
     #sidebarCreditContainer {
