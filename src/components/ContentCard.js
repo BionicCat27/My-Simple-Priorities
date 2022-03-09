@@ -35,6 +35,9 @@ const ContentCard = (props) => {
 
     const isDefault = (cardSizeView == "Default");
 
+    const [draggedOver, setDraggedOver] = useState(false);
+    const [dragging, setDragging] = useState(false);
+
     useEffect(() => {
         if (cardType == "priorities") {
             props.updateCard(props.index, {
@@ -166,18 +169,43 @@ const ContentCard = (props) => {
                     <>
                         <p>{progressValue}%</p>
                     </>}
-                {showButtons &&
-                    <div id="contentButtonContainer">
-                        <button onClick={() => setEditing(true)}>Edit</button>
-                        <button onClick={() => props.moveCard(props.index, props.index - 1)}>Up</button>
-                        <button onClick={() => props.moveCard(props.index, props.index + 1)}>Down</button>
-                    </div>
-                }
             </>);
         }
     }
+
+    function handleDrop(e, index) {
+        let targetIndex = e.dataTransfer.getData("index");
+        props.moveCard(targetIndex, index);
+        setDraggedOver(false);
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        setDraggedOver(true);
+    }
+
+    function handleDragLeave(e) {
+        setDraggedOver(false);
+    }
+
+    function handleDragStart(e, index) {
+        e.dataTransfer.setData("index", index);
+        setDragging(true);
+    }
+
+    function handleDragEnd(e) {
+        setDragging(false);
+    }
     return (
-        <div className={isDefault ? "condensed_card" : "content_card"} onMouseEnter={() => setShowButtons(true)} onMouseLeave={() => setShowButtons(false)}>
+        <div draggable className={(isDefault ? "condensed_card " : "content_card ") + (draggedOver ? "brdr-blue " : " ")}
+            onMouseEnter={() => setShowButtons(true)}
+            onMouseLeave={() => setShowButtons(false)}
+            onClick={() => (!isEditing && setEditing(true))}
+            onDrop={(e) => { handleDrop(e, props.index); }}
+            onDragStart={(e) => { handleDragStart(e, props.index); }}
+            onDragEnd={(e) => { handleDragEnd(e); }}
+            onDragOver={(e) => { handleDragOver(e); }}
+            onDragLeave={(e) => { handleDragLeave(e); }}>
             {generateCardContent()}
         </div >
     );
