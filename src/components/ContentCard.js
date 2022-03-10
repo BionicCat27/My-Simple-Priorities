@@ -197,7 +197,7 @@ const ContentCard = (props) => {
         setDragging(false);
     }
     return (
-        <div draggable className={(isDefault ? "condensed_card " : "content_card ") + (draggedOver ? "brdr-blue " : " ")}
+        <div draggable className={(isDefault ? "condensed_card " : "content_card ") + (dragging ? "brdr-red " : " ") + (draggedOver ? "brdr-blue " : " ")}
             onMouseEnter={() => setShowButtons(true)}
             onMouseLeave={() => setShowButtons(false)}
             onClick={() => (!isEditing && setEditing(true))}
@@ -205,7 +205,9 @@ const ContentCard = (props) => {
             onDragStart={(e) => { handleDragStart(e, props.index); }}
             onDragEnd={(e) => { handleDragEnd(e); }}
             onDragOver={(e) => { handleDragOver(e); }}
-            onDragLeave={(e) => { handleDragLeave(e); }}>
+            onDragLeave={(e) => { handleDragLeave(e); }}
+            onTouchMove={(e) => { handleDragStart(e, props.index); }}
+            onTouchEnd={(e) => { handleDragEnd(e); }}>
             {generateCardContent()}
         </div >
     );
