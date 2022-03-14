@@ -72,3 +72,11 @@
 #formButtonContainer button {
     margin-right: 0.2rem;
 }
+
+.brdr-blue{
+    border-color: blue;
+}
+
+.brdr-red {
+    border-color: red;
+}

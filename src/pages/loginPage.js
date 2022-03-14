@@ -45,7 +45,7 @@ const LoginPage = () => {
                 <form id="loginForm" onSubmit={prepareSignIn}>
                     <input id="loginFormEmail" className="loginFormElement" type="email" value={email} onChange={field => setEmail(field.target.value)}></input>
                     <input id="loginFormPassword" className="loginFormElement" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
-                    <button onClick={prepareSignIn}>Login</button>
+                    <button id="loginButton" onClick={prepareSignIn}>Login</button>
                 </form>
                 <p>Or <a href="/signup">Signup</a></p>
             </div>
