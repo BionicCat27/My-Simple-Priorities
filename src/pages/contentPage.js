@@ -72,13 +72,39 @@ const ContentPage = (props) => {
                 setContentList([]);
                 return;
             }
+            console.log("Surely we can iterate here?? " + data);
+            let filtering = data.forEach((card, index) => {
+                console.log(card + " " + index);
+                card.index = index;
+                console.log("Index: " + card.index);
+                return card;
+            });
+            console.log("Filtering: " + filtering);
             setContentList(data);
         });
     }, [dbRef]);
 
     function generateCards() {
-        if (!contentList | !contentType) setRenderedContent(null);
-        setRenderedContent(contentList.map(
+        console.log(contentList + " " + contentType);
+        if (!contentType || !contentList) {
+            setRenderedContent(null);
+            return;
+        }
+
+        let workingCards = [...contentList];
+        if (workingCards.length == 0) {
+            return;
+        }
+
+        if (contentType === "todo" || contentType === "review") {
+            workingCards = workingCards.filter(card => {
+                if (!statusMatch(card.status, cardStatusView)) return null;
+                return card;
+            });
+        }
+
+        console.log("Is this where we can't iterate from?");
+        setRenderedContent(workingCards.map(
             (card, index) =>
                 <ContentCard
                     cardType={contentType}
@@ -86,13 +112,15 @@ const ContentPage = (props) => {
                     description={card.description}
                     progress={card.progress}
                     status={card.status}
-                    key={`${index}${card.title}`}
-                    index={index}
+                    key={`${card.index}${card.title}`}
+                    index={card.index}
                     moveCard={moveContent}
                     deleteCard={deleteContent}
                     updateCard={updateContent}
                     cardSizeView={cardSizeView}
                     cardStatusView={cardStatusView}
+                    database={database}
+                    user={loggedInUser}
                 />)
         );
     }
@@ -176,6 +204,14 @@ const ContentPage = (props) => {
         let workingList = contentList.slice();
         workingList[index] = value;
         writeContent(workingList);
+    }
+
+    function statusMatch(status, targetstatus) {
+        console.log(status + " " + targetstatus);
+        if (targetstatus === "All") return true;
+        if (targetstatus === "Planning" && (status === "Todo" || status === "In Progress")) return true;
+        if (targetstatus === status) return true;
+        return false;
     }
 
     if (!loggedInUser) return null;

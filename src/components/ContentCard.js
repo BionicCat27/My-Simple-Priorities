@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ref, update, getDatabase } from "firebase/database";
 
 import './ContentCard.css';
 
@@ -39,28 +40,44 @@ const ContentCard = (props) => {
     const [dragging, setDragging] = useState(false);
 
     useEffect(() => {
-        if (cardType == "priorities") {
-            props.updateCard(props.index, {
-                title: title,
-                description: description,
+        if (props.user) {
+            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+                title: title
             });
-        } else if (cardType == "todo") {
-            props.updateCard(props.index, {
-                title: title,
-                description: description,
-                status: status
-            });
-        } else if (cardType == "review") {
-            props.updateCard(props.index, {
-                title: title,
-                description: description,
-                progress: progress,
-                status: status
-            });
+            return;
         }
+        console.log("Bad user!");
+    }, [title]);
 
-        setProgressValue(calculateProgressValue());
-    }, [title, description, progress, status]);
+    useEffect(() => {
+        if (props.user) {
+            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+                description: description
+            });
+            return;
+        }
+        console.log("Bad user!");
+    }, [description]);
+
+    useEffect(() => {
+        if (props.user) {
+            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+                progress: progress
+            });
+            return;
+        }
+        console.log("Bad user!");
+    }, [progress]);
+
+    useEffect(() => {
+        if (props.user) {
+            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+                status: status
+            });
+            return;
+        }
+        console.log("Bad user!");
+    }, [status]);
 
     function calculateProgressValue() {
         if (!progress || progress.length == 0) return;
