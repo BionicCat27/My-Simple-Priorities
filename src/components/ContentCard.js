@@ -129,7 +129,6 @@ const ContentCard = (props) => {
     }
 
     function handleRemoveStage(index) {
-        console.log("Attempting remove stage at: " + index);
         let workingArray = [...progressInput];
         workingArray.splice(index, 1);
         setProgressInput(workingArray);

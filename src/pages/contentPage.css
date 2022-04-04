@@ -3,14 +3,15 @@
 }
 
 .content_field {
-    
+
     line-height: 1rem;
     font-size: .8rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
 
-#contentForm input, #contentForm button {
+#contentForm input,
+#contentForm button {
     margin-right: 0.2rem;
 }
 
@@ -28,4 +29,20 @@
 
 #deleteButton {
     margin-left: 0.5rem;
+}
+
+#leftHalf {
+    margin-right: 1%;
+    display: inline-block;
+    width: 49%;
+    margin-top: 0;
+    vertical-align: top
+}
+
+#rightHalf {
+    margin-left: 1%;
+    display: inline-block;
+    width: 49%;
+    margin-top: 0;
+    vertical-align: top
 }
