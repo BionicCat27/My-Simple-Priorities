@@ -191,7 +191,16 @@ const ContentCard = (props) => {
 
     function handleDrop(e, index) {
         let targetIndex = e.dataTransfer.getData("index");
-        props.moveCard(targetIndex, index);
+        let targetStatus = e.dataTransfer.getData("status");
+
+        if (targetStatus === status) {
+            props.moveCard(targetIndex, index);
+        } else {
+            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + targetIndex), {
+                status: status
+            });
+        }
+
         setDraggedOver(false);
     }
 
@@ -204,25 +213,27 @@ const ContentCard = (props) => {
         setDraggedOver(false);
     }
 
-    function handleDragStart(e, index) {
+    function handleDragStart(e, index, status) {
         e.dataTransfer.setData("index", index);
+        e.dataTransfer.setData("status", status);
         setDragging(true);
     }
 
     function handleDragEnd(e) {
         setDragging(false);
     }
+
     return (
         <div draggable className={(isDefault ? "condensed_card " : "content_card ") + (dragging ? "brdr-red " : " ") + (draggedOver ? "brdr-blue " : " ")}
             onMouseEnter={() => setShowButtons(true)}
             onMouseLeave={() => setShowButtons(false)}
             onClick={() => (!isEditing && setEditing(true))}
             onDrop={(e) => { handleDrop(e, props.index); }}
-            onDragStart={(e) => { handleDragStart(e, props.index); }}
+            onDragStart={(e) => { handleDragStart(e, props.index, props.status); }}
             onDragEnd={(e) => { handleDragEnd(e); }}
             onDragOver={(e) => { handleDragOver(e); }}
             onDragLeave={(e) => { handleDragLeave(e); }}
-            onTouchMove={(e) => { handleDragStart(e, props.index); }}
+            onTouchMove={(e) => { handleDragStart(e, props.index, props.status); }}
             onTouchEnd={(e) => { handleDragEnd(e); }}>
             {generateCardContent()}
         </div >
