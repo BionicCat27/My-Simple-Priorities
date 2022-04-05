@@ -72,29 +72,162 @@ const ContentPage = (props) => {
                 setContentList([]);
                 return;
             }
+            let filtering = data.forEach((card, index) => {
+                card.index = index;
+                return card;
+            });
             setContentList(data);
         });
     }, [dbRef]);
 
     function generateCards() {
-        if (!contentList | !contentType) setRenderedContent(null);
-        setRenderedContent(contentList.map(
-            (card, index) =>
-                <ContentCard
-                    cardType={contentType}
-                    title={card.title}
-                    description={card.description}
-                    progress={card.progress}
-                    status={card.status}
-                    key={`${index}${card.title}`}
-                    index={index}
-                    moveCard={moveContent}
-                    deleteCard={deleteContent}
-                    updateCard={updateContent}
-                    cardSizeView={cardSizeView}
-                    cardStatusView={cardStatusView}
-                />)
-        );
+        if (!contentType || !contentList) {
+            setRenderedContent(null);
+            return;
+        }
+
+        let workingCards = [...contentList];
+        if (workingCards.length == 0) {
+            return;
+        }
+
+        if (cardStatusView == "Planning") {
+            let todoA = workingCards.filter(card => {
+                if (!statusMatch(card.status, "Todo")) return null;
+                return card;
+            });
+            let inprog = workingCards.filter(card => {
+                if (!statusMatch(card.status, "In Progress")) return null;
+                return card;
+            });
+            setRenderedContent(
+                <>
+                    <div id="leftHalf">
+                        <h3>Todo</h3>
+                        {todoA.map(
+                            (card, index) =>
+                                <ContentCard
+                                    cardType={contentType}
+                                    title={card.title}
+                                    description={card.description}
+                                    progress={card.progress}
+                                    status={card.status}
+                                    key={`${card.index}${card.title}`}
+                                    index={card.index}
+                                    moveCard={moveContent}
+                                    deleteCard={deleteContent}
+                                    updateCard={updateContent}
+                                    cardSizeView={cardSizeView}
+                                    cardStatusView={cardStatusView}
+                                    database={database}
+                                    user={loggedInUser}
+                                />)}
+                    </div>
+                    <div id="rightHalf">
+                        <h3>In Progress</h3>
+                        {inprog.map(
+                            (card, index) =>
+                                <ContentCard
+                                    cardType={contentType}
+                                    title={card.title}
+                                    description={card.description}
+                                    progress={card.progress}
+                                    status={card.status}
+                                    key={`${card.index}${card.title}`}
+                                    index={card.index}
+                                    moveCard={moveContent}
+                                    deleteCard={deleteContent}
+                                    updateCard={updateContent}
+                                    cardSizeView={cardSizeView}
+                                    cardStatusView={cardStatusView}
+                                    database={database}
+                                    user={loggedInUser}
+                                />)}
+                    </div>
+                </>
+            );
+        } else if (cardStatusView == "Focus") {
+            let inprog = workingCards.filter(card => {
+                if (!statusMatch(card.status, "In Progress")) return null;
+                return card;
+            });
+            let done = workingCards.filter(card => {
+                if (!statusMatch(card.status, "Done")) return null;
+                return card;
+            });
+            setRenderedContent(
+                <>
+                    <div id="leftHalf">
+                        <h3>In Progress</h3>
+                        {inprog.map(
+                            (card, index) =>
+                                <ContentCard
+                                    cardType={contentType}
+                                    title={card.title}
+                                    description={card.description}
+                                    progress={card.progress}
+                                    status={card.status}
+                                    key={`${card.index}${card.title}`}
+                                    index={card.index}
+                                    moveCard={moveContent}
+                                    deleteCard={deleteContent}
+                                    updateCard={updateContent}
+                                    cardSizeView={cardSizeView}
+                                    cardStatusView={cardStatusView}
+                                    database={database}
+                                    user={loggedInUser}
+                                />)}
+                    </div>
+                    <div id="rightHalf">
+                        <h3>Done</h3>
+                        {done.map(
+                            (card, index) =>
+                                <ContentCard
+                                    cardType={contentType}
+                                    title={card.title}
+                                    description={card.description}
+                                    progress={card.progress}
+                                    status={card.status}
+                                    key={`${card.index}${card.title}`}
+                                    index={card.index}
+                                    moveCard={moveContent}
+                                    deleteCard={deleteContent}
+                                    updateCard={updateContent}
+                                    cardSizeView={cardSizeView}
+                                    cardStatusView={cardStatusView}
+                                    database={database}
+                                    user={loggedInUser}
+                                />)}
+                    </div>
+                </>
+            );
+        } else {
+            if (contentType === "todo" || contentType === "review") {
+                workingCards = workingCards.filter(card => {
+                    if (!statusMatch(card.status, cardStatusView)) return null;
+                    return card;
+                });
+            }
+            setRenderedContent(workingCards.map(
+                (card, index) =>
+                    <ContentCard
+                        cardType={contentType}
+                        title={card.title}
+                        description={card.description}
+                        progress={card.progress}
+                        status={card.status}
+                        key={`${card.index}${card.title}`}
+                        index={card.index}
+                        moveCard={moveContent}
+                        deleteCard={deleteContent}
+                        updateCard={updateContent}
+                        cardSizeView={cardSizeView}
+                        cardStatusView={cardStatusView}
+                        database={database}
+                        user={loggedInUser}
+                    />)
+            );
+        }
     }
 
     useEffect(() => {
@@ -178,6 +311,14 @@ const ContentPage = (props) => {
         writeContent(workingList);
     }
 
+    function statusMatch(status, targetstatus) {
+        if (targetstatus === "All") return true;
+        if (targetstatus === "Planning" && (status === "Todo" || status === "In Progress")) return true;
+        if (targetstatus === "Focus" && (status === "In Progress" || status === "Done")) return true;
+        if (targetstatus === status) return true;
+        return false;
+    }
+
     if (!loggedInUser) return null;
     return (
         <>
@@ -196,6 +337,7 @@ const ContentPage = (props) => {
                             <option>Planning</option>
                             <option>Todo</option>
                             <option>In Progress</option>
+                            <option>Focus</option>
                             <option>Done</option>
                         </select>
                     }

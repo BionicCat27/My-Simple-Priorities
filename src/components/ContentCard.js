@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ref, update, getDatabase } from "firebase/database";
 
 import './ContentCard.css';
 
@@ -39,28 +40,44 @@ const ContentCard = (props) => {
     const [dragging, setDragging] = useState(false);
 
     useEffect(() => {
-        if (cardType == "priorities") {
-            props.updateCard(props.index, {
-                title: title,
-                description: description,
+        if (props.user) {
+            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+                title: title
             });
-        } else if (cardType == "todo") {
-            props.updateCard(props.index, {
-                title: title,
-                description: description,
-                status: status
-            });
-        } else if (cardType == "review") {
-            props.updateCard(props.index, {
-                title: title,
-                description: description,
-                progress: progress,
-                status: status
-            });
+            return;
         }
+        console.log("Bad user!");
+    }, [title]);
 
-        setProgressValue(calculateProgressValue());
-    }, [title, description, progress, status]);
+    useEffect(() => {
+        if (props.user) {
+            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+                description: description
+            });
+            return;
+        }
+        console.log("Bad user!");
+    }, [description]);
+
+    useEffect(() => {
+        if (props.user) {
+            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+                progress: progress
+            });
+            return;
+        }
+        console.log("Bad user!");
+    }, [progress]);
+
+    useEffect(() => {
+        if (props.user) {
+            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+                status: status
+            });
+            return;
+        }
+        console.log("Bad user!");
+    }, [status]);
 
     function calculateProgressValue() {
         if (!progress || progress.length == 0) return;
@@ -112,7 +129,6 @@ const ContentCard = (props) => {
     }
 
     function handleRemoveStage(index) {
-        console.log("Attempting remove stage at: " + index);
         let workingArray = [...progressInput];
         workingArray.splice(index, 1);
         setProgressInput(workingArray);
@@ -175,7 +191,16 @@ const ContentCard = (props) => {
 
     function handleDrop(e, index) {
         let targetIndex = e.dataTransfer.getData("index");
-        props.moveCard(targetIndex, index);
+        let targetStatus = e.dataTransfer.getData("status");
+
+        if (targetStatus === status) {
+            props.moveCard(targetIndex, index);
+        } else {
+            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + targetIndex), {
+                status: status
+            });
+        }
+
         setDraggedOver(false);
     }
 
@@ -188,25 +213,27 @@ const ContentCard = (props) => {
         setDraggedOver(false);
     }
 
-    function handleDragStart(e, index) {
+    function handleDragStart(e, index, status) {
         e.dataTransfer.setData("index", index);
+        e.dataTransfer.setData("status", status);
         setDragging(true);
     }
 
     function handleDragEnd(e) {
         setDragging(false);
     }
+
     return (
         <div draggable className={(isDefault ? "condensed_card " : "content_card ") + (dragging ? "brdr-red " : " ") + (draggedOver ? "brdr-blue " : " ")}
             onMouseEnter={() => setShowButtons(true)}
             onMouseLeave={() => setShowButtons(false)}
             onClick={() => (!isEditing && setEditing(true))}
             onDrop={(e) => { handleDrop(e, props.index); }}
-            onDragStart={(e) => { handleDragStart(e, props.index); }}
+            onDragStart={(e) => { handleDragStart(e, props.index, props.status); }}
             onDragEnd={(e) => { handleDragEnd(e); }}
             onDragOver={(e) => { handleDragOver(e); }}
             onDragLeave={(e) => { handleDragLeave(e); }}
-            onTouchMove={(e) => { handleDragStart(e, props.index); }}
+            onTouchMove={(e) => { handleDragStart(e, props.index, props.status); }}
             onTouchEnd={(e) => { handleDragEnd(e); }}>
             {generateCardContent()}
         </div >
