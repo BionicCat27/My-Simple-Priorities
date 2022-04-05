@@ -33,13 +33,7 @@ const LoginPage = () => {
                 window.location = "/";
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-
-                if (error.code === "auth/user-not-found") {
-                    setErrorMessage("Incorrect username or password.");
-                }
-                console.log("Authentication Error: " + errorCode + " - " + errorMessage);
+                setErrorMessage("Incorrect username or password.");
             });
     }
 
