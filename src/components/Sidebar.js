@@ -15,19 +15,39 @@ const Sidebar = (props) => {
 
     function userSignOut() {
         signOut(auth).then(() => {
-            window.location = " /login";
+            window.location = "/login";
         }).catch((error) => {
             console.log("An error occurred during signout: " + error);
         });
     }
 
+    function generateSidebarLinks() {
+        let pathname = window.location.pathname;
+        if (pathname.startsWith("/timeline")) {
+            return <>
+                <a href="/priorities">Priorities</a>
+                <a href="/todo">Todo</a>
+                <a href="/review">Review</a>
+                <a href="/timeline">Timeline</a>
+            </>
+        } else if(pathname.startsWith("/")) {
+            return <>
+                <a href="#" onClick={() => props.setContentType("priorities")}>Priorities</a>
+                <a href="#" onClick={() => props.setContentType("todo")}>Todo</a>
+                <a href="#" onClick={() => props.setContentType("review")}>Review</a>
+                <a href="/timeline">Timeline</a>
+            </>
+        } else {
+            console.log("MSP: Error occured on " + pathname);
+        }
+    }
+
+    let sidebarLinks = generateSidebarLinks();
     return (
         <div id="sidebar">
             <div id="sidebarLinksContainer">
                 <h2 id="sidebarTitle">My Simple<br />{props.title}</h2>
-                <a href="#" onClick={() => props.setContentType("priorities")}>Priorities</a>
-                <a href="#" onClick={() => props.setContentType("todo")}>Todo</a>
-                <a href="#" onClick={() => props.setContentType("review")}>Review</a>
+                {sidebarLinks}
                 <a onClick={userSignOut}>Logout</a>
             </div>
             <div id="sidebarCreditContainer">
