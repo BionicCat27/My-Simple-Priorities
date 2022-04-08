@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-import './contentPage.css';
+import './timelinePage.css';
 
-import '../firebaseConfig';
+import '../../firebaseConfig';
 
 import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
 import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
 
 //Components
-import ContentCard from "../components/ContentCard";
-import Sidebar from '../components/Sidebar';
+import ContentCard from "../../components/ContentCard";
+import Sidebar from '../../components/Sidebar';
 
 const auth = getAuth();
 const database = getDatabase();
@@ -28,7 +28,7 @@ const TimelinePage = (props) => {
     const [contentInput, setContentInput] = useState("");
     const [startDateInput, setStartDateInput] = useState("");
     const [endDateInput, setEndDateInput] = useState("");
-    
+
     const [renderedContent, setRenderedContent] = useState(null);
 
     useEffect(() => {
@@ -253,7 +253,7 @@ const TimelinePage = (props) => {
         writeContent([{
             title: contentInput,
             description: "",
-            dates: [{startDate: startDateInput, endDate: endDateInput}]
+            dates: [{ startDate: startDateInput, endDate: endDateInput }]
         }, ...contentList]);
         setContentInput("");
     }
@@ -291,8 +291,8 @@ const TimelinePage = (props) => {
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" className="content_field" />
-                    <input value={startDateInput} onChange={field=> onStartDateInputChange(field.target.value)} type="date" className="content_field" />
-                    <input value={endDateInput} onChange={field=> onEndDateInputChange(field.target.value)} type="date" className="content_field" />
+                    <input value={startDateInput} onChange={field => onStartDateInputChange(field.target.value)} type="date" className="content_field" />
+                    <input value={endDateInput} onChange={field => onEndDateInputChange(field.target.value)} type="date" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add Line!</button>
                 </form>
                 <div className="cards_container">

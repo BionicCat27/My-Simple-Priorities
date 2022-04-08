@@ -22,24 +22,12 @@ const Sidebar = (props) => {
     }
 
     function generateSidebarLinks() {
-        let pathname = window.location.pathname;
-        if (pathname.startsWith("/timeline")) {
-            return <>
-                <a href="/priorities">Priorities</a>
-                <a href="/todo">Todo</a>
-                <a href="/review">Review</a>
-                <a href="/timeline">Timeline</a>
-            </>
-        } else if(pathname.startsWith("/")) {
-            return <>
-                <a href="#" onClick={() => props.setContentType("priorities")}>Priorities</a>
-                <a href="#" onClick={() => props.setContentType("todo")}>Todo</a>
-                <a href="#" onClick={() => props.setContentType("review")}>Review</a>
-                <a href="/timeline">Timeline</a>
-            </>
-        } else {
-            console.log("MSP: Error occured on " + pathname);
-        }
+        return <>
+            <a href="/priorities">Priorities</a>
+            <a href="/todo">Todo</a>
+            <a href="/review">Review</a>
+            <a href="/timeline">Timeline</a>
+        </>;
     }
 
     let sidebarLinks = generateSidebarLinks();

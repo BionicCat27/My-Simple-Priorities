@@ -6,10 +6,10 @@ import './firebaseConfig';
 
 //Components
 import ContentPage from './pages/contentPage.js';
-import LoginPage from './pages/loginPage.js';
-import SignupPage from './pages/signupPage.js';
+import LoginPage from './pages/login/loginPage.js';
+import SignupPage from './pages/signup/signupPage.js';
 import NotFoundPage from './pages/notFoundPage.js';
-import TimelinePage from './pages/timelinePage';
+import TimelinePage from './pages/timeline/timelinePage';
 
 const App = () => {
     return (
@@ -19,7 +19,7 @@ const App = () => {
                 <Route path="/priorities" element={<ContentPage contentType="priorities" />} />
                 <Route path="/todo" element={<ContentPage contentType="todo" />} />
                 <Route path="/review" element={<ContentPage contentType="review" />} />
-                <Route path="/timeline" element={<TimelinePage/>} />
+                <Route path="/timeline" element={<TimelinePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="*" element={<NotFoundPage />} />

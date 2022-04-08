@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 
 import './signupPage.css';
 
-import '../firebaseConfig';
+import '../../firebaseConfig';
 
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
 
 //Components
-import PageTitle from '../components/PageTitle';
-import Footer from '../components/Footer';
+import PageTitle from '../../components/PageTitle';
+import Footer from '../../components/Footer';
 
 const auth = getAuth();
 if (location.hostname === "localhost" && location.port === "5001") {
