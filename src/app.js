@@ -6,8 +6,8 @@ import './firebaseConfig';
 
 //Components
 import ContentPage from './pages/contentPage.js';
-import LoginPage from './pages/loginPage.js';
-import SignupPage from './pages/signupPage.js';
+import LoginPage from './pages/login/loginPage.js';
+import SignupPage from './pages/signup/signupPage.js';
 import NotFoundPage from './pages/notFoundPage.js';
 
 const App = () => {
