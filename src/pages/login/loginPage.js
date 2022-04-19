@@ -18,6 +18,7 @@ if (location.hostname === "localhost" && location.port === "5001") {
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     onAuthStateChanged(auth, (userResult) => {
         if (userResult) {
@@ -32,9 +33,7 @@ const LoginPage = () => {
                 window.location = "/";
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log("Authentication Error: " + errorCode + " - " + errorMessage);
+                setErrorMessage("Incorrect username or password.");
             });
     }
 
@@ -47,6 +46,7 @@ const LoginPage = () => {
                     <input id="loginFormPassword" className="loginFormElement" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
                     <button id="loginButton" onClick={prepareSignIn}>Login</button>
                 </form>
+                {errorMessage != null ? <p>{errorMessage}</p> : null}
                 <p>Or <a href="/signup">Signup</a></p>
             </div>
             <Footer />
