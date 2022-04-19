@@ -19,7 +19,7 @@ if (location.hostname === "localhost" && location.port === "5001") {
     connectAuthEmulator(auth, "http://localhost:9099");
 }
 
-const ContentPage = (props) => {
+const PrioritiesPage = (props) => {
 
     const DEFAULT_STATUS_VIEW = "In Progress";
     const DEFAULT_SIZE_VIEW = "Default";
@@ -316,4 +316,4 @@ const ContentPage = (props) => {
     );
 };
 
-export default ContentPage;
+export default PrioritiesPage;
