@@ -26,7 +26,7 @@ const Sidebar = (props) => {
             <div id="sidebarLinksContainer">
                 <h2 id="sidebarTitle">My Simple<br />{props.title}</h2>
                 <a href="#" onClick={() => props.setContentType("priorities")}>Priorities</a>
-                <a href="#" onClick={() => props.setContentType("todo")}>Todo</a>
+                <a href="/todo">Todo</a>
                 <a href="#" onClick={() => props.setContentType("review")}>Review</a>
                 <a onClick={userSignOut}>Logout</a>
             </div>

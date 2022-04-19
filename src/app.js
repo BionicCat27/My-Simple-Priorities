@@ -9,6 +9,7 @@ import ContentPage from './pages/contentPage.js';
 import LoginPage from './pages/login/loginPage.js';
 import SignupPage from './pages/signup/signupPage.js';
 import NotFoundPage from './pages/notFoundPage.js';
+import TodoPage from './pages/todo/todoPage.js';
 
 const App = () => {
     return (
@@ -16,7 +17,7 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<ContentPage contentType="priorities" />} />
                 <Route path="/priorities" element={<ContentPage contentType="priorities" />} />
-                <Route path="/todo" element={<ContentPage contentType="todo" />} />
+                <Route path="/todo" element={<TodoPage />} />
                 <Route path="/review" element={<ContentPage contentType="review" />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-import './contentPage.css';
+import './todoPage.css';
 
-import '../firebaseConfig';
+import '../../firebaseConfig';
 
 import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
 import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
 
 //Components
-import ContentCard from "../components/ContentCard";
-import Sidebar from '../components/Sidebar';
+import ContentCard from "../../components/ContentCard";
+import Sidebar from '../../components/Sidebar';
 
 const auth = getAuth();
 const database = getDatabase();
