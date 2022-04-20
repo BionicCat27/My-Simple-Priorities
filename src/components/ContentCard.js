@@ -60,6 +60,7 @@ const ContentCard = (props) => {
     }, [description]);
 
     useEffect(() => {
+        setProgressValue(calculateProgressValue());
         if (props.user) {
             update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
                 progress: progress
@@ -181,7 +182,7 @@ const ContentCard = (props) => {
                         <h3>{title}</h3>
                         {!isDefault && <p>{description}</p>}
                     </>}
-                {(cardType == "review") && progress &&
+                {(cardType == "review") && progressValue &&
                     <>
                         <p>{progressValue}%</p>
                     </>}
