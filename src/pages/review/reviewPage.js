@@ -8,8 +8,8 @@ import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth"
 import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
 
 //Components
-import ContentCard from "../../components/ContentCard";
 import Sidebar from '../../components/Sidebar';
+import ReviewCard from '../../components/ReviewCard/ReviewCard';
 
 const auth = getAuth();
 const database = getDatabase();
@@ -102,7 +102,7 @@ const ReviewPage = (props) => {
                         <h3>Todo</h3>
                         {todoA.map(
                             (card, index) =>
-                                <ContentCard
+                                <ReviewCard
                                     cardType="review"
                                     title={card.title}
                                     description={card.description}
@@ -123,7 +123,7 @@ const ReviewPage = (props) => {
                         <h3>In Progress</h3>
                         {inprog.map(
                             (card, index) =>
-                                <ContentCard
+                                <ReviewCard
                                     cardType="review"
                                     title={card.title}
                                     description={card.description}
@@ -157,7 +157,7 @@ const ReviewPage = (props) => {
                         <h3>In Progress</h3>
                         {inprog.map(
                             (card, index) =>
-                                <ContentCard
+                                <ReviewCard
                                     cardType="review"
                                     title={card.title}
                                     description={card.description}
@@ -178,7 +178,7 @@ const ReviewPage = (props) => {
                         <h3>Done</h3>
                         {done.map(
                             (card, index) =>
-                                <ContentCard
+                                <ReviewCard
                                     cardType="review"
                                     title={card.title}
                                     description={card.description}
@@ -204,7 +204,7 @@ const ReviewPage = (props) => {
             });
             setRenderedContent(workingCards.map(
                 (card, index) =>
-                    <ContentCard
+                    <ReviewCard
                         cardType="review"
                         title={card.title}
                         description={card.description}
