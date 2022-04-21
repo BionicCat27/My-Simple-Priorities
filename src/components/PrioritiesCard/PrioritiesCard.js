@@ -1,26 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { ref, update, getDatabase } from "firebase/database";
 
-import './ContentCard.css';
+import './PrioritiesCard.css';
 
-const ContentCard = (props) => {
+const PrioritiesCard = (props) => {
     const initialTitle = props.title || "";
     const initialDescription = props.description || "";
     const initialProgress = props.progress || [];
     const initialStatus = props.status || "Todo";
 
-    if ((props.cardType != "priorities") &&
-        (
-            (props.cardStatusView == "Planning" && initialStatus == "Done")
-            || (props.cardStatusView == "Todo" && (initialStatus == "In Progress" || initialStatus == "Done"))
-            || (props.cardStatusView == "In Progress" && (initialStatus == "Todo" || initialStatus == "Done"))
-            || (props.cardStatusView == "Done" && (initialStatus == "Todo" || initialStatus == "In Progress"))
-        )
-    ) return null;
-
     const [showButtons, setShowButtons] = useState(false);
     const [isEditing, setEditing] = useState(false);
-    const cardType = props.cardType;
     const cardSizeView = props.cardSizeView;
 
     const [title, setTitle] = useState(initialTitle);
@@ -41,7 +31,7 @@ const ContentCard = (props) => {
 
     useEffect(() => {
         if (props.user) {
-            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+            update(ref(props.database, 'users/' + props.user.uid + '/priorities/' + props.index), {
                 title: title
             });
             return;
@@ -51,7 +41,7 @@ const ContentCard = (props) => {
 
     useEffect(() => {
         if (props.user) {
-            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+            update(ref(props.database, 'users/' + props.user.uid + '/priorities/' + props.index), {
                 description: description
             });
             return;
@@ -60,9 +50,8 @@ const ContentCard = (props) => {
     }, [description]);
 
     useEffect(() => {
-        setProgressValue(calculateProgressValue());
         if (props.user) {
-            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+            update(ref(props.database, 'users/' + props.user.uid + '/priorities/' + props.index), {
                 progress: progress
             });
             return;
@@ -72,7 +61,7 @@ const ContentCard = (props) => {
 
     useEffect(() => {
         if (props.user) {
-            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + props.index), {
+            update(ref(props.database, 'users/' + props.user.uid + '/priorities/' + props.index), {
                 status: status
             });
             return;
@@ -138,38 +127,10 @@ const ContentCard = (props) => {
     function generateCardContent() {
         if (isEditing) {
             return (<>
-                {((cardType == "priorities") || (cardType == "todo") || (cardType == "review")) && <>
-                    <label htmlFor="contentTitleInput">Title</label>
-                    <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
-                    <label htmlFor="contentDescriptionInput">Description</label>
-                    <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
-                </>}
-                {((cardType == "review")) && <>
-                    {progressInput.map((progressObject, index) => (
-                        <div key={`${index}Container`}>
-                            <div className="inlineContainer" key={`${index}ProgressContainer`}>
-                                <label htmlFor="contentProgressInput" key={`${index}ProgressLabel`}>Progress</label>
-                                <input id="contentProgressInput" className="margin-y-1" type="number" max="100" key={`${index}ProgressInput`} onChange={field => handleProgressInput(field.target.value, index)} value={progressObject.progress}></input>
-                            </div>
-                            <div className="inlineContainer" key={`${index}TotalContainer`}>
-                                <label htmlFor="contentTotalInput" key={`${index}TotalLabel`}>Total</label>
-                                <input id="contentTotalInput" className="margin-y-1" type="number" max="100" key={`${index}TotalInput`} onChange={field => handleTotalInput(field.target.value, index)} value={progressObject.total}></input>
-                            </div>
-                            <div className="inlineContainer" key={`${index}RemoveContainer`}>
-                                <p onClick={() => handleRemoveStage(index)} >Remove</p>
-                            </div>
-                        </div>
-                    ))}
-                    <p onClick={handleAddStage}>Add progress stage</p>
-                </>}
-                {!(cardType == "priorities") && status && <>
-                    <p>Status: {statusInput}</p>
-                    <div id="formButtonContainer">
-                        <button onClick={() => { setStatusInput("Todo"); }}>Todo</button>
-                        <button onClick={() => { setStatusInput("In Progress"); }}>In Progress</button>
-                        <button onClick={() => { setStatusInput("Done"); }}>Done</button>
-                    </div>
-                </>}
+                <label htmlFor="contentTitleInput">Title</label>
+                <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
+                <label htmlFor="contentDescriptionInput">Description</label>
+                <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
                 <div id="formButtonContainer">
                     <button onClick={updateContent}>Save</button>
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>
@@ -177,15 +138,8 @@ const ContentCard = (props) => {
             </>);
         } else {
             return (<>
-                {((cardType == "priorities") || (cardType == "todo") || (cardType == "review")) &&
-                    <>
-                        <h3>{title}</h3>
-                        {!isDefault && <p>{description}</p>}
-                    </>}
-                {(cardType == "review") && progressValue &&
-                    <>
-                        <p>{progressValue}%</p>
-                    </>}
+                <h3>{title}</h3>
+                {!isDefault && <p>{description}</p>}
             </>);
         }
     }
@@ -197,7 +151,7 @@ const ContentCard = (props) => {
         if (targetStatus === status) {
             props.moveCard(targetIndex, index);
         } else {
-            update(ref(props.database, 'users/' + props.user.uid + '/' + cardType + '/' + targetIndex), {
+            update(ref(props.database, 'users/' + props.user.uid + '/priorities/' + targetIndex), {
                 status: status
             });
         }
@@ -241,4 +195,4 @@ const ContentCard = (props) => {
     );
 };
 
-export default ContentCard;
+export default PrioritiesCard;

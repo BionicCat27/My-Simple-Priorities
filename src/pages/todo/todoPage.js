@@ -8,8 +8,8 @@ import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth"
 import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
 
 //Components
-import ContentCard from "../../components/ContentCard";
 import Sidebar from '../../components/Sidebar';
+import TodoCard from '../../components/TodoCard/TodoCard';
 
 const auth = getAuth();
 const database = getDatabase();
@@ -19,7 +19,7 @@ if (location.hostname === "localhost" && location.port === "5001") {
     connectAuthEmulator(auth, "http://localhost:9099");
 }
 
-const ContentPage = (props) => {
+const TodoPage = (props) => {
 
     const DEFAULT_STATUS_VIEW = "In Progress";
     const DEFAULT_SIZE_VIEW = "Default";
@@ -102,7 +102,7 @@ const ContentPage = (props) => {
                         <h3>Todo</h3>
                         {todoA.map(
                             (card, index) =>
-                                <ContentCard
+                                <TodoCard
                                     cardType="todo"
                                     title={card.title}
                                     description={card.description}
@@ -123,7 +123,7 @@ const ContentPage = (props) => {
                         <h3>In Progress</h3>
                         {inprog.map(
                             (card, index) =>
-                                <ContentCard
+                                <TodoCard
                                     cardType="todo"
                                     title={card.title}
                                     description={card.description}
@@ -157,7 +157,7 @@ const ContentPage = (props) => {
                         <h3>In Progress</h3>
                         {inprog.map(
                             (card, index) =>
-                                <ContentCard
+                                <TodoCard
                                     cardType="todo"
                                     title={card.title}
                                     description={card.description}
@@ -178,7 +178,7 @@ const ContentPage = (props) => {
                         <h3>Done</h3>
                         {done.map(
                             (card, index) =>
-                                <ContentCard
+                                <TodoCard
                                     cardType="todo"
                                     title={card.title}
                                     description={card.description}
@@ -204,7 +204,7 @@ const ContentPage = (props) => {
             });
             setRenderedContent(workingCards.map(
                 (card, index) =>
-                    <ContentCard
+                    <TodoCard
                         cardType="todo"
                         title={card.title}
                         description={card.description}
@@ -329,4 +329,4 @@ const ContentPage = (props) => {
     );
 };
 
-export default ContentPage;
+export default TodoPage;
