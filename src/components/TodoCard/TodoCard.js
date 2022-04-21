@@ -59,6 +59,7 @@ const TodoCard = (props) => {
     }, [description]);
 
     useEffect(() => {
+        setProgressValue(calculateProgressValue());
         if (props.user) {
             update(ref(props.database, 'users/' + props.user.uid + '/todo/' + props.index), {
                 status: status
