@@ -124,45 +124,11 @@ const TodoPage = (props) => {
                 <>
                     <div id="leftHalf">
                         <h3>Todo</h3>
-                        {todoA.map(
-                            (card, index) =>
-                                <TodoCard
-                                    cardType="todo"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={loggedInUser}
-                                />)}
+                        {todoA.map(card => generateCard(card))}
                     </div>
                     <div id="rightHalf">
                         <h3>In Progress</h3>
-                        {inprog.map(
-                            (card, index) =>
-                                <TodoCard
-                                    cardType="todo"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={loggedInUser}
-                                />)}
+                        {inprog.map(card => generateCard(card))}
                     </div>
                 </>
             );
@@ -179,45 +145,11 @@ const TodoPage = (props) => {
                 <>
                     <div id="leftHalf">
                         <h3>In Progress</h3>
-                        {inprog.map(
-                            (card, index) =>
-                                <TodoCard
-                                    cardType="todo"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={loggedInUser}
-                                />)}
+                        {inprog.map(card => generateCard(card))}
                     </div>
                     <div id="rightHalf">
                         <h3>Done</h3>
-                        {done.map(
-                            (card, index) =>
-                                <TodoCard
-                                    cardType="todo"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={loggedInUser}
-                                />)}
+                        {done.map(card => generateCard(card))}
                     </div>
                 </>
             );
@@ -227,25 +159,28 @@ const TodoPage = (props) => {
                 return card;
             });
             setRenderedContent(workingCards.map(
-                (card, index) =>
-                    <TodoCard
-                        cardType="todo"
-                        title={card.title}
-                        description={card.description}
-                        progress={card.progress}
-                        status={card.status}
-                        key={`${card.index}${card.title}`}
-                        index={card.index}
-                        moveCard={moveContent}
-                        deleteCard={deleteContent}
-                        updateCard={updateContent}
-                        cardSizeView={cardSizeView}
-                        cardStatusView={cardStatusView}
-                        database={database}
-                        user={loggedInUser}
-                    />)
+                card => generateCard(card))
             );
         }
+    }
+
+    function generateCard(card) {
+        return <TodoCard
+            cardType="todo"
+            title={card.title}
+            description={card.description}
+            progress={card.progress}
+            status={card.status}
+            key={`${card.index}${card.title}`}
+            index={card.index}
+            moveCard={moveContent}
+            deleteCard={deleteContent}
+            updateCard={updateContent}
+            cardSizeView={cardSizeView}
+            cardStatusView={cardStatusView}
+            database={database}
+            user={loggedInUser}
+        />;
     }
 
     useEffect(() => {
