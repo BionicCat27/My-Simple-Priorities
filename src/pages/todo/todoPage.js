@@ -68,8 +68,32 @@ const TodoPage = (props) => {
                 setContentList([]);
                 return;
             }
-            let filtering = data.forEach((card, index) => {
+            //Validate card fields
+            data.forEach((card, index) => {
                 card.index = index;
+                let needsSet = false;
+                if (card.title == undefined) {
+                    card = { ...card, checklist: "" };
+                    needsSet = true;
+                }
+                if (card.description == undefined) {
+                    card = { ...card, description: "" };
+                    needsSet = true;
+                }
+                if (card.status == undefined) {
+                    card = { ...card, status: "" };
+                    needsSet = true;
+                }
+                if (card.checklist == undefined) {
+                    card = { ...card, checklist: "" };
+                    needsSet = true;
+                }
+                //If a field was undefined, write the fully constructed object
+                if (needsSet) {
+                    update(ref(database, 'users/' + loggedInUser.uid + '/todo/' + index), {
+                        ...card
+                    });
+                }
                 return card;
             });
             setContentList(data);
@@ -255,7 +279,8 @@ const TodoPage = (props) => {
         writeContent([{
             title: contentInput,
             description: "",
-            status: "Todo"
+            status: "Todo",
+            checklist: ""
         }, ...contentList]);
         setContentInput("");
     }
