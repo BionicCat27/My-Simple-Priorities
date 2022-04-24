@@ -73,7 +73,8 @@ const TodoPage = (props) => {
                 card.index = index;
                 let needsSet = false;
                 if (card.title == undefined) {
-                    card = { ...card, checklist: "" };
+                    console.log("Title undefined");
+                    card = { ...card, title: "" };
                     needsSet = true;
                 }
                 if (card.description == undefined) {
@@ -90,6 +91,7 @@ const TodoPage = (props) => {
                 }
                 //If a field was undefined, write the fully constructed object
                 if (needsSet) {
+                    console.log("Fixing undefined problem");
                     update(ref(database, 'users/' + loggedInUser.uid + '/todo/' + index), {
                         ...card
                     });

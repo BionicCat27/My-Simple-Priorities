@@ -201,6 +201,11 @@ const TodoCard = (props) => {
         setDragging(false);
     }
 
+    function addChecklistItem() {
+        console.log("ERROR: Not yet implemented");
+    }
+
+
     return (
         <div draggable className={(isDefault ? "condensed_card " : "content_card ") + (dragging ? "brdr-red " : " ") + (draggedOver ? "brdr-blue " : " ")}
             onMouseEnter={() => setShowButtons(true)}
