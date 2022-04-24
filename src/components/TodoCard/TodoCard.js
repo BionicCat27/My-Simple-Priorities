@@ -124,6 +124,19 @@ const TodoCard = (props) => {
         setProgressInput(workingArray);
     }
 
+    function generateChecklistContent() {
+        return <>
+            <div>
+                <input className="inline-input" type="checkbox" />
+                <input className="inline-input" type="text" />
+            </div>
+            <div>
+                <input className="inline-input" type="checkbox" />
+                <input className="inline-input" type="text" />
+            </div>
+        </>;
+    }
+
     function generateCardContent() {
         if (isEditing) {
             return (<>
@@ -132,6 +145,10 @@ const TodoCard = (props) => {
                 <label htmlFor="contentDescriptionInput">Description</label>
                 <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
                 <p>Status: {statusInput}</p>
+                {generateChecklistContent()}
+                <div id="formButtonContainer">
+                    <button onClick={() => { addChecklistItem(); }}>Add Checklist item</button>
+                </div>
                 <div id="formButtonContainer">
                     <button onClick={() => { setStatusInput("Todo"); }}>Todo</button>
                     <button onClick={() => { setStatusInput("In Progress"); }}>In Progress</button>
