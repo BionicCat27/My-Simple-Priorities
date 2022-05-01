@@ -10,10 +10,12 @@ const TodoCard = (props) => {
     const [title, setTitle] = useState(props.title || "");
     const [description, setDescription] = useState(props.description || "");
     const [status, setStatus] = useState(props.status || "Todo");
+    const [checklist, setChecklist] = useState(props.checklist || []);
 
     const [titleInput, setTitleInput] = useState(title);
     const [descriptionInput, setDescriptionInput] = useState(description);
     const [statusInput, setStatusInput] = useState(status);
+    const [checklistInput, setChecklistInput] = useState(checklist);
 
     const isDefault = (cardSizeView == "Default");
 
@@ -50,10 +52,21 @@ const TodoCard = (props) => {
         console.log("Bad user!");
     }, [status]);
 
+    useEffect(() => {
+        if (props.user) {
+            let result = update(ref(props.database, 'users/' + props.user.uid + '/todo/' + props.index), {
+                checklist: checklist
+            });
+            return;
+        }
+        console.log("Bad user!");
+    }, [checklist]);
+
     function updateContent() {
         setTitle(titleInput);
         setDescription(descriptionInput);
         setStatus(statusInput);
+        setChecklist(checklistInput);
         setEditing(false);
     }
 
@@ -66,17 +79,31 @@ const TodoCard = (props) => {
         }
     }
 
+    function handleCheckBox(value, index) {
+        let workingArray = [...checklistInput];
+        workingArray[index].checked = value;
+        setChecklistInput(workingArray);
+    }
+
+    function handleCheckBoxValue(value, index) {
+        let workingArray = [...checklistInput];
+        workingArray[index].value = value;
+        setChecklistInput(workingArray);
+    }
+
     function generateChecklistContent() {
-        return <>
-            <div>
-                <input className="inline-input" type="checkbox" />
-                <input className="inline-input" type="text" />
-            </div>
-            <div>
-                <input className="inline-input" type="checkbox" />
-                <input className="inline-input" type="text" />
-            </div>
+        if (checklistInput.length == 0) {
+            return;
+        }
+        return <>{
+            checklistInput.map((checklistObject, index) => (
+                <div key={`${index}Container`}>
+                    <input className="inline-input" type="checkbox" checked={checklistObject.checked} onChange={field => handleCheckBox(field.target.checked, index)} />
+                    <input className="inline-input" type="text" value={checklistObject.value} onChange={field => handleCheckBoxValue(field.target.value, index)} />
+                </div>
+            ))}
         </>;
+
     }
 
     function generateCardContent() {
@@ -144,7 +171,12 @@ const TodoCard = (props) => {
     }
 
     function addChecklistItem() {
-        console.log("ERROR: Not yet implemented");
+        let workingArray = [...checklistInput];
+        workingArray.push({
+            checked: false,
+            value: ""
+        });
+        setChecklistInput(workingArray);
     }
 
 

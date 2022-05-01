@@ -86,12 +86,12 @@ const TodoPage = (props) => {
                     needsSet = true;
                 }
                 if (card.checklist == undefined) {
-                    card = { ...card, checklist: "" };
+                    card = { ...card, checklist: [] };
                     needsSet = true;
                 }
                 //If a field was undefined, write the fully constructed object
                 if (needsSet) {
-                    console.log("Fixing undefined problem");
+                    console.log("Fixing undefined problem: " + JSON.stringify(card));
                     update(ref(database, 'users/' + loggedInUser.uid + '/todo/' + index), {
                         ...card
                     });
@@ -173,6 +173,7 @@ const TodoPage = (props) => {
             description={card.description}
             progress={card.progress}
             status={card.status}
+            checklist={card.checklist}
             key={`${card.index}${card.title}`}
             index={card.index}
             moveCard={moveContent}
@@ -217,7 +218,7 @@ const TodoPage = (props) => {
             title: contentInput,
             description: "",
             status: "Todo",
-            checklist: ""
+            checklist: []
         }, ...contentList]);
         setContentInput("");
     }
