@@ -85,10 +85,10 @@ const TodoPage = (props) => {
                     card = { ...card, status: "" };
                     needsSet = true;
                 }
-                if (card.checklist == undefined) {
-                    card = { ...card, checklist: [] };
-                    needsSet = true;
-                }
+                // if (card.checklist == undefined) {
+                //     card = { ...card, checklist: [] };
+                //     needsSet = true;
+                // }
                 //If a field was undefined, write the fully constructed object
                 if (needsSet) {
                     console.log("Fixing undefined problem: " + JSON.stringify(card));
