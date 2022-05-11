@@ -325,7 +325,7 @@ const ReviewPage = (props) => {
                     {renderedContent}
                 </div>
             </div>
-            <Sidebar />
+            <Sidebar title="Review" />
         </>
     );
 };
