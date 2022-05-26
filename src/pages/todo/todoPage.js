@@ -8,8 +8,8 @@ import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth"
 import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
 
 //Components
-import ContentCard from "../../components/ContentCard";
 import Sidebar from '../../components/Sidebar';
+import TodoCard from '../../components/TodoCard/TodoCard';
 
 const auth = getAuth();
 const database = getDatabase();
@@ -19,7 +19,7 @@ if (location.hostname === "localhost" && location.port === "5001") {
     connectAuthEmulator(auth, "http://localhost:9099");
 }
 
-const ContentPage = (props) => {
+const TodoPage = (props) => {
 
     const DEFAULT_STATUS_VIEW = "In Progress";
     const DEFAULT_SIZE_VIEW = "Default";
@@ -68,8 +68,34 @@ const ContentPage = (props) => {
                 setContentList([]);
                 return;
             }
-            let filtering = data.forEach((card, index) => {
+            //Validate card fields
+            data.forEach((card, index) => {
                 card.index = index;
+                let needsSet = false;
+                if (card.title == undefined) {
+                    console.log("Title undefined");
+                    card = { ...card, title: "" };
+                    needsSet = true;
+                }
+                if (card.description == undefined) {
+                    card = { ...card, description: "" };
+                    needsSet = true;
+                }
+                if (card.status == undefined) {
+                    card = { ...card, status: "" };
+                    needsSet = true;
+                }
+                // if (card.checklist == undefined) {
+                //     card = { ...card, checklist: [] };
+                //     needsSet = true;
+                // }
+                //If a field was undefined, write the fully constructed object
+                if (needsSet) {
+                    console.log("Fixing undefined problem: " + JSON.stringify(card));
+                    update(ref(database, 'users/' + loggedInUser.uid + '/todo/' + index), {
+                        ...card
+                    });
+                }
                 return card;
             });
             setContentList(data);
@@ -100,45 +126,11 @@ const ContentPage = (props) => {
                 <>
                     <div id="leftHalf">
                         <h3>Todo</h3>
-                        {todoA.map(
-                            (card, index) =>
-                                <ContentCard
-                                    cardType="todo"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={loggedInUser}
-                                />)}
+                        {todoA.map(card => generateCard(card))}
                     </div>
                     <div id="rightHalf">
                         <h3>In Progress</h3>
-                        {inprog.map(
-                            (card, index) =>
-                                <ContentCard
-                                    cardType="todo"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={loggedInUser}
-                                />)}
+                        {inprog.map(card => generateCard(card))}
                     </div>
                 </>
             );
@@ -155,45 +147,11 @@ const ContentPage = (props) => {
                 <>
                     <div id="leftHalf">
                         <h3>In Progress</h3>
-                        {inprog.map(
-                            (card, index) =>
-                                <ContentCard
-                                    cardType="todo"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={loggedInUser}
-                                />)}
+                        {inprog.map(card => generateCard(card))}
                     </div>
                     <div id="rightHalf">
                         <h3>Done</h3>
-                        {done.map(
-                            (card, index) =>
-                                <ContentCard
-                                    cardType="todo"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={loggedInUser}
-                                />)}
+                        {done.map(card => generateCard(card))}
                     </div>
                 </>
             );
@@ -203,25 +161,29 @@ const ContentPage = (props) => {
                 return card;
             });
             setRenderedContent(workingCards.map(
-                (card, index) =>
-                    <ContentCard
-                        cardType="todo"
-                        title={card.title}
-                        description={card.description}
-                        progress={card.progress}
-                        status={card.status}
-                        key={`${card.index}${card.title}`}
-                        index={card.index}
-                        moveCard={moveContent}
-                        deleteCard={deleteContent}
-                        updateCard={updateContent}
-                        cardSizeView={cardSizeView}
-                        cardStatusView={cardStatusView}
-                        database={database}
-                        user={loggedInUser}
-                    />)
+                card => generateCard(card))
             );
         }
+    }
+
+    function generateCard(card) {
+        return <TodoCard
+            cardType="todo"
+            title={card.title}
+            description={card.description}
+            progress={card.progress}
+            status={card.status}
+            checklist={card.checklist}
+            key={`${card.index}${card.title}`}
+            index={card.index}
+            moveCard={moveContent}
+            deleteCard={deleteContent}
+            updateCard={updateContent}
+            cardSizeView={cardSizeView}
+            cardStatusView={cardStatusView}
+            database={database}
+            user={loggedInUser}
+        />;
     }
 
     useEffect(() => {
@@ -255,7 +217,8 @@ const ContentPage = (props) => {
         writeContent([{
             title: contentInput,
             description: "",
-            status: "Todo"
+            status: "Todo",
+            checklist: []
         }, ...contentList]);
         setContentInput("");
     }
@@ -329,4 +292,4 @@ const ContentPage = (props) => {
     );
 };
 
-export default ContentPage;
+export default TodoPage;

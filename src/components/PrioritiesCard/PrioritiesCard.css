@@ -1,4 +1,3 @@
-
 .content_card {
     position: relative;
     padding: 1rem;
@@ -11,7 +10,9 @@
     box-shadow: 0 2px 4px 0 lightgray;
 }
 
-.content_card textarea, .content_card label, .content_card input {
+.content_card textarea,
+.content_card label,
+.content_card input {
     display: block;
 }
 
@@ -35,7 +36,9 @@
     margin-bottom: 0;
 }
 
-.condensed_card textarea, .condensed_card label, .condensed_card input {
+.condensed_card textarea,
+.condensed_card label,
+.condensed_card input {
     display: block;
 }
 
@@ -73,7 +76,7 @@
     margin-right: 0.2rem;
 }
 
-.brdr-blue{
+.brdr-blue {
     border-color: blue;
 }
 
