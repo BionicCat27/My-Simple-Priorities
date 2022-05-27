@@ -107,21 +107,24 @@ const TodoCard = (props) => {
     }
 
     function generateCardContent() {
+        let todoSelected = (statusInput == "Todo" ? "btn-active": "");
+        let inprogSelected = (statusInput == "In Progress" ? "btn-active": "");
+        let doneSelected = (statusInput == "Done" ? "btn-active": "");
+
         if (isEditing) {
             return (<>
                 <label htmlFor="contentTitleInput">Title</label>
                 <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
                 <label htmlFor="contentDescriptionInput">Description</label>
                 <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
-                <p>Status: {statusInput}</p>
                 {generateChecklistContent()}
                 <div id="formButtonContainer">
                     <button onClick={() => { addChecklistItem(); }}>Add Checklist item</button>
                 </div>
                 <div id="formButtonContainer">
-                    <button onClick={() => { setStatusInput("Todo"); }}>Todo</button>
-                    <button onClick={() => { setStatusInput("In Progress"); }}>In Progress</button>
-                    <button onClick={() => { setStatusInput("Done"); }}>Done</button>
+                    <button onClick={() => { setStatusInput("Todo"); }} className={todoSelected}>Todo</button>
+                    <button onClick={() => { setStatusInput("In Progress"); }} className={inprogSelected}>In Progress</button>
+                    <button onClick={() => { setStatusInput("Done"); }} className={doneSelected}>Done</button>
                 </div>
                 <div id="formButtonContainer">
                     <button onClick={updateContent}>Save</button>
