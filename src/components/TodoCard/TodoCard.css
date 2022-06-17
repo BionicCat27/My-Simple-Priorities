@@ -98,3 +98,17 @@
     top: 0;
     float: right;
 }
+
+.pre-today {
+    color: lightblue;
+}
+
+.is-today {
+    color: blue;
+    text-decoration: underline;
+}
+
+.post-today {
+    color: orangered;
+    text-decoration: underline;
+}

@@ -104,6 +104,15 @@ const TodoCard = (props) => {
         setChecklistInput(workingArray);
     }
 
+    function addChecklistItem() {
+        let workingArray = [...checklistInput];
+        workingArray.push({
+            checked: false,
+            value: ""
+        });
+        setChecklistInput(workingArray);
+    }
+
     function generateChecklistContent() {
         if (checklistInput.length == 0) {
             return;
@@ -118,6 +127,21 @@ const TodoCard = (props) => {
         </>;
 
     }
+
+    function generateDatePassed(dateToCheck) {
+        let date = (new Date(dateToCheck)).toDateString();
+        let today = (new Date()).toDateString();
+        if(date < today) {
+            //Day is before today
+            return "pre-today ";
+        } else if(date == today) {
+            //Day is today
+            return "is-today ";
+        } else {
+            //Day is after today
+            return "post-today ";
+        }
+    } 
 
     function generateCardContent() {
         let todoSelected = (statusInput == "Todo" ? "btn-active": "");
@@ -153,7 +177,7 @@ const TodoCard = (props) => {
                     {!isDefault && <p>{description}</p>}
                 </div>
                 <div id="col2">
-                    {dueDate && <p id="dueDateDisplay">{dueDate}</p>}
+                    {dueDate && <p id="dueDateDisplay" className={generateDatePassed(dueDate)} >{dueDate}</p>}
                 </div>
             </div>);
         }
@@ -191,15 +215,6 @@ const TodoCard = (props) => {
 
     function handleDragEnd(e) {
         setDragging(false);
-    }
-
-    function addChecklistItem() {
-        let workingArray = [...checklistInput];
-        workingArray.push({
-            checked: false,
-            value: ""
-        });
-        setChecklistInput(workingArray);
     }
 
 
