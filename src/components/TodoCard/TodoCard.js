@@ -11,11 +11,13 @@ const TodoCard = (props) => {
     const [description, setDescription] = useState(props.description || "");
     const [status, setStatus] = useState(props.status || "Todo");
     const [checklist, setChecklist] = useState(props.checklist || []);
+    const [dueDate, setDueDate] = useState(props.dueDate || "");
 
     const [titleInput, setTitleInput] = useState(title);
     const [descriptionInput, setDescriptionInput] = useState(description);
     const [statusInput, setStatusInput] = useState(status);
     const [checklistInput, setChecklistInput] = useState(checklist);
+    const [dueDateInput, setDueDateInput] = useState(dueDate);
 
     const isDefault = (cardSizeView == "Default");
 
@@ -62,11 +64,22 @@ const TodoCard = (props) => {
         console.log("Bad user!");
     }, [checklist]);
 
+    useEffect(() => {
+        if (props.user) {
+            let result = update(ref(props.database, 'users/' + props.user.uid + '/todo/' + props.index), {
+                dueDate: dueDate
+            });
+            return;
+        }
+        console.log("Bad user!");
+    }, [dueDate]);
+
     function updateContent() {
         setTitle(titleInput);
         setDescription(descriptionInput);
         setStatus(statusInput);
         setChecklist(checklistInput);
+        setDueDate(dueDateInput);
         setEditing(false);
     }
 
@@ -91,6 +104,15 @@ const TodoCard = (props) => {
         setChecklistInput(workingArray);
     }
 
+    function addChecklistItem() {
+        let workingArray = [...checklistInput];
+        workingArray.push({
+            checked: false,
+            value: ""
+        });
+        setChecklistInput(workingArray);
+    }
+
     function generateChecklistContent() {
         if (checklistInput.length == 0) {
             return;
@@ -105,6 +127,21 @@ const TodoCard = (props) => {
         </>;
 
     }
+
+    function generateDatePassed(dateToCheck) {
+        let date = (new Date(dateToCheck)).toDateString();
+        let today = (new Date()).toDateString();
+        if(date < today) {
+            //Day is before today
+            return "pre-today ";
+        } else if(date == today) {
+            //Day is today
+            return "is-today ";
+        } else {
+            //Day is after today
+            return "post-today ";
+        }
+    } 
 
     function generateCardContent() {
         let todoSelected = (statusInput == "Todo" ? "btn-active": "");
@@ -126,16 +163,23 @@ const TodoCard = (props) => {
                     <button onClick={() => { setStatusInput("In Progress"); }} className={inprogSelected}>In Progress</button>
                     <button onClick={() => { setStatusInput("Done"); }} className={doneSelected}>Done</button>
                 </div>
+                <label htmlFor="contentDueDateInput">Due Date</label>
+                <input id="contentDueDateInput" type="date" onChange={field => setDueDateInput(field.target.value)} value={dueDateInput}></input>
                 <div id="formButtonContainer">
                     <button onClick={updateContent}>Save</button>
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>
                 </div>
             </>);
         } else {
-            return (<>
-                <h3>{title}</h3>
-                {!isDefault && <p>{description}</p>}
-            </>);
+            return (<div className="cardContentContainer">
+                <div id="col1">
+                    <h3>{title}</h3>
+                    {!isDefault && <p>{description}</p>}
+                </div>
+                <div id="col2">
+                    {dueDate && <p id="dueDateDisplay" className={generateDatePassed(dueDate)} >{dueDate}</p>}
+                </div>
+            </div>);
         }
     }
 
@@ -171,15 +215,6 @@ const TodoCard = (props) => {
 
     function handleDragEnd(e) {
         setDragging(false);
-    }
-
-    function addChecklistItem() {
-        let workingArray = [...checklistInput];
-        workingArray.push({
-            checked: false,
-            value: ""
-        });
-        setChecklistInput(workingArray);
     }
 
 
