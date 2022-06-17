@@ -99,16 +99,16 @@
     float: right;
 }
 
-.pre-today {
+.date-future {
     color: lightblue;
 }
 
-.is-today {
+.date-today {
     color: blue;
     text-decoration: underline;
 }
 
-.post-today {
+.date-passed {
     color: orangered;
     text-decoration: underline;
 }

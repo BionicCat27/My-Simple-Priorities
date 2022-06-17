@@ -129,17 +129,18 @@ const TodoCard = (props) => {
     }
 
     function generateDatePassed(dateToCheck) {
-        let date = (new Date(dateToCheck)).toDateString();
-        let today = (new Date()).toDateString();
+        let date = new Date(new Date(dateToCheck).toDateString()).getTime();
+        let today = new Date(new Date().toDateString()).getTime();
+        // console.log("Date: " + date + " today: " + today + "(" + (today - date) + ") ");
         if(date < today) {
             //Day is before today
-            return "pre-today ";
+            return "date-passed ";
         } else if(date == today) {
             //Day is today
-            return "is-today ";
+            return "date-today ";
         } else {
             //Day is after today
-            return "post-today ";
+            return "date-future ";
         }
     } 
 
