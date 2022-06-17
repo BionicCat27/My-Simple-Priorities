@@ -174,6 +174,7 @@ const TodoPage = (props) => {
             progress={card.progress}
             status={card.status}
             checklist={card.checklist}
+            dueDate={card.dueDate}
             key={`${card.index}${card.title}`}
             index={card.index}
             moveCard={moveContent}

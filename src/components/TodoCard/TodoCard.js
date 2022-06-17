@@ -11,7 +11,7 @@ const TodoCard = (props) => {
     const [description, setDescription] = useState(props.description || "");
     const [status, setStatus] = useState(props.status || "Todo");
     const [checklist, setChecklist] = useState(props.checklist || []);
-    const [dueDate, setDueDate] = useState(props.dueDate || "12/7");
+    const [dueDate, setDueDate] = useState(props.dueDate || "");
 
     const [titleInput, setTitleInput] = useState(title);
     const [descriptionInput, setDescriptionInput] = useState(description);
@@ -79,6 +79,7 @@ const TodoCard = (props) => {
         setDescription(descriptionInput);
         setStatus(statusInput);
         setChecklist(checklistInput);
+        setDueDate(dueDateInput);
         setEditing(false);
     }
 
@@ -139,7 +140,7 @@ const TodoCard = (props) => {
                     <button onClick={() => { setStatusInput("Done"); }} className={doneSelected}>Done</button>
                 </div>
                 <label htmlFor="contentDueDateInput">Due Date</label>
-                <input id="contentDueDateInput" type="date" onChange={field => setDueDate(field.target.value)} value={dueDateInput}></input>
+                <input id="contentDueDateInput" type="date" onChange={field => setDueDateInput(field.target.value)} value={dueDateInput}></input>
                 <div id="formButtonContainer">
                     <button onClick={updateContent}>Save</button>
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>
