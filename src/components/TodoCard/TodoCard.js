@@ -11,11 +11,13 @@ const TodoCard = (props) => {
     const [description, setDescription] = useState(props.description || "");
     const [status, setStatus] = useState(props.status || "Todo");
     const [checklist, setChecklist] = useState(props.checklist || []);
+    const [dueDate, setDueDate] = useState(props.dueDate || "12/7");
 
     const [titleInput, setTitleInput] = useState(title);
     const [descriptionInput, setDescriptionInput] = useState(description);
     const [statusInput, setStatusInput] = useState(status);
     const [checklistInput, setChecklistInput] = useState(checklist);
+    const [dueDateInput, setDueDateInput] = useState(dueDate);
 
     const isDefault = (cardSizeView == "Default");
 
@@ -61,6 +63,16 @@ const TodoCard = (props) => {
         }
         console.log("Bad user!");
     }, [checklist]);
+
+    useEffect(() => {
+        if (props.user) {
+            let result = update(ref(props.database, 'users/' + props.user.uid + '/todo/' + props.index), {
+                dueDate: dueDate
+            });
+            return;
+        }
+        console.log("Bad user!");
+    }, [dueDate]);
 
     function updateContent() {
         setTitle(titleInput);
@@ -126,16 +138,23 @@ const TodoCard = (props) => {
                     <button onClick={() => { setStatusInput("In Progress"); }} className={inprogSelected}>In Progress</button>
                     <button onClick={() => { setStatusInput("Done"); }} className={doneSelected}>Done</button>
                 </div>
+                <label htmlFor="contentDueDateInput">Due Date</label>
+                <input id="contentDueDateInput" type="date" onChange={field => setDueDate(field.target.value)} value={dueDateInput}></input>
                 <div id="formButtonContainer">
                     <button onClick={updateContent}>Save</button>
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>
                 </div>
             </>);
         } else {
-            return (<>
-                <h3>{title}</h3>
-                {!isDefault && <p>{description}</p>}
-            </>);
+            return (<div className="cardContentContainer">
+                <div id="col1">
+                    <h3>{title}</h3>
+                    {!isDefault && <p>{description}</p>}
+                </div>
+                <div id="col2">
+                    {dueDate && <p id="dueDateDisplay">{dueDate}</p>}
+                </div>
+            </div>);
         }
     }
 
