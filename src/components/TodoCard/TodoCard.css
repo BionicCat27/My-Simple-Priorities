@@ -28,7 +28,8 @@
     box-shadow: 0 1px 2px 0 lightgray;
 }
 
-.condensed_card h3 {
+.condensed_card h3,
+.condensed_card p {
     margin: 0;
 }
 
@@ -86,4 +87,28 @@
 
 .brdr-red {
     border-color: red;
+}
+
+.cardContentContainer {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+#dueDateDisplay {
+    top: 0;
+    float: right;
+}
+
+.date-future {
+    color: lightblue;
+}
+
+.date-today {
+    color: blue;
+    text-decoration: underline;
+}
+
+.date-passed {
+    color: orangered;
+    text-decoration: underline;
 }
