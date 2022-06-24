@@ -13,22 +13,25 @@ import PrioritiesPage from './pages/priorities/prioritiesPage';
 import ReviewPage from './pages/review/reviewPage';
 import TimelinePage from './pages/timeline/timelinePage';
 import { AuthProvider } from './contexts/AuthContext';
+import { DBProvider } from './contexts/DBContext';
 
 const App = () => {
     return (
         <AuthProvider>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<PrioritiesPage />} />
-                    <Route path="/priorities" element={<PrioritiesPage />} />
-                    <Route path="/todo" element={<TodoPage />} />
-                    <Route path="/review" element={<ReviewPage />} />
-                    <Route path="/timeline" element={<TimelinePage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/signup" element={<SignupPage />} />
-                    <Route path="*" element={<NotFoundPage />} />
-                </Routes >
-            </BrowserRouter >
+            <DBProvider>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<PrioritiesPage />} />
+                        <Route path="/priorities" element={<PrioritiesPage />} />
+                        <Route path="/todo" element={<TodoPage />} />
+                        <Route path="/review" element={<ReviewPage />} />
+                        <Route path="/timeline" element={<TimelinePage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/signup" element={<SignupPage />} />
+                        <Route path="*" element={<NotFoundPage />} />
+                    </Routes >
+                </BrowserRouter >
+            </DBProvider>
         </AuthProvider>
     );
 };

@@ -1,26 +1,21 @@
+//React
 import React, { useEffect, useState, useContext } from 'react';
-
-import './prioritiesPage.css';
-
-import '../../firebaseConfig';
-
+//Firebase
+import { ref, update, onValue, off} from "firebase/database";
+//Contexts
 import { AuthContext } from "../../contexts/AuthContext";
-
-import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
-import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
-
+import { DBContext } from '../../contexts/DBContext';
 //Components
 import Sidebar from '../../components/Sidebar';
 import PrioritiesCard from '../../components/PrioritiesCard/PrioritiesCard';
-
-const database = getDatabase();
-
-if (location.hostname === "localhost" && location.port === "5001") {
-    connectDatabaseEmulator(database, "localhost", 9000);
-}
+//Styles
+import './prioritiesPage.css';
+//Config
+import '../../firebaseConfig';
 
 const PrioritiesPage = (props) => {
     const authContext = useContext(AuthContext);
+    const { database } = useContext(DBContext);
     const user = authContext.user;
 
     const DEFAULT_STATUS_VIEW = "In Progress";

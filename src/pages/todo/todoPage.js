@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from 'react';
-
-import './todoPage.css';
-
-import '../../firebaseConfig';
-
-import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
-import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
-
+//React
+import React, { useEffect, useState, useContext } from 'react';
+//Firebase
+import { ref, update, onValue, off } from "firebase/database";
+//Contexts
+import { AuthContext } from "../../contexts/AuthContext";
+import { DBContext } from '../../contexts/DBContext';
 //Components
 import Sidebar from '../../components/Sidebar';
 import TodoCard from '../../components/TodoCard/TodoCard';
-
-const auth = getAuth();
-const database = getDatabase();
-
-if (location.hostname === "localhost" && location.port === "5001") {
-    connectDatabaseEmulator(database, "localhost", 9000);
-    connectAuthEmulator(auth, "http://localhost:9099");
-}
+//Styles
+import './todoPage.css';
+//Config
+import '../../firebaseConfig';
 
 const TodoPage = (props) => {
+    const authContext = useContext(AuthContext);
+    const { database } = useContext(DBContext);
+    const user = authContext.user;
 
     const DEFAULT_STATUS_VIEW = "In Progress";
     const DEFAULT_SIZE_VIEW = "Default";
@@ -186,19 +183,6 @@ const TodoPage = (props) => {
             user={loggedInUser}
         />;
     }
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (userResult) => {
-            if (userResult) {
-                setUser(userResult);
-                console.log("Logged in");
-            } else {
-                console.log("Not logged in");
-                setUser(undefined);
-                window.location = "/login";
-            }
-        });
-    }, [auth]);
 
     function writeContent(content) {
         if (!loggedInUser) {
