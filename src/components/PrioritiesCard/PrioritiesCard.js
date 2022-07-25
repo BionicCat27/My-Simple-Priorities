@@ -8,6 +8,7 @@ const PrioritiesCard = (props) => {
     const initialDescription = props.description || "";
     const initialProgress = props.progress || [];
     const initialStatus = props.status || "Todo";
+    const initialHours = props.hours || 0;
 
     const [showButtons, setShowButtons] = useState(false);
     const [isEditing, setEditing] = useState(false);
@@ -17,12 +18,14 @@ const PrioritiesCard = (props) => {
     const [description, setDescription] = useState(initialDescription);
     const [progress, setProgress] = useState(initialProgress);
     const [status, setStatus] = useState(initialStatus);
+    const [hours, setHours] = useState(initialHours);
 
     const [titleInput, setTitleInput] = useState(initialTitle);
     const [descriptionInput, setDescriptionInput] = useState(initialDescription);
     const [progressInput, setProgressInput] = useState(initialProgress);
     const [progressValue, setProgressValue] = useState(calculateProgressValue());
     const [statusInput, setStatusInput] = useState(initialStatus);
+    const [hoursInput, setHoursInput] = useState(initialHours);
 
     const isDefault = (cardSizeView == "Default");
 
@@ -69,6 +72,18 @@ const PrioritiesCard = (props) => {
         console.log("Bad user!");
     }, [status]);
 
+    useEffect(() => {
+        console.log("Changing hours field: " + hours);
+        if (props.user) {
+            let updateResult = update(ref(props.database, 'users/' + props.user.uid + '/priorities/' + props.index), {
+                hours: hours
+            });
+            console.log(updateResult);
+            return;
+        }
+        console.log("Bad user!");
+    }, [hours]);
+
     function calculateProgressValue() {
         if (!progress || progress.length == 0) return;
 
@@ -86,6 +101,7 @@ const PrioritiesCard = (props) => {
         setDescription(descriptionInput);
         setProgress(progressInput);
         setStatus(statusInput);
+        setHours(hoursInput);
         setEditing(false);
         setShowButtons(false);
     }
@@ -131,6 +147,8 @@ const PrioritiesCard = (props) => {
                 <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
                 <label htmlFor="contentDescriptionInput">Description</label>
                 <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
+                <label htmlFor="contentHoursInput">Hours</label>
+                <input id="contentHoursInput" className="margin-y-1" onChange={field => setHoursInput(field.target.value)} value={hoursInput}></input>
                 <div id="formButtonContainer">
                     <button onClick={updateContent}>Save</button>
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>
