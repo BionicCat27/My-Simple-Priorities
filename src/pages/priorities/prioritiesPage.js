@@ -90,11 +90,7 @@ const PrioritiesPage = (props) => {
         let calcHours = 0;
         workingCards.map((card) => {
             if (card.hours) {
-                console.log("Has hours: " + card.hours);
                 calcHours += parseInt(card.hours);
-                console.log("eH: " + expectedHours);
-            } else {
-                console.log("No hours: " + card.hours);
             }
         });
         setExpectedHours(calcHours);

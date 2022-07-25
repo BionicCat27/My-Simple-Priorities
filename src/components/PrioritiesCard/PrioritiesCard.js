@@ -155,10 +155,15 @@ const PrioritiesCard = (props) => {
                 </div>
             </>);
         } else {
-            return (<>
-                <h3>{title}</h3>
-                {!isDefault && <p>{description}</p>}
-            </>);
+            return (<div className="cardContentContainer">
+                <div id="col1">
+                    <h3>{title}</h3>
+                    {!isDefault && <p>{description}</p>}
+                </div>
+                <div id="col2">
+                    {hours && <p id="hoursDisplay">{hours}</p>}
+                </div>
+            </div>);
         }
     }
 

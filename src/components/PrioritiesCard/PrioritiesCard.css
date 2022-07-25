@@ -83,3 +83,13 @@
 .brdr-red {
     border-color: red;
 }
+
+.cardContentContainer {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+#hoursDisplay {
+    top: 0;
+    float: right;
+}
