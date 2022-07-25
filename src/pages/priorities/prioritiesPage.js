@@ -31,6 +31,7 @@ const PrioritiesPage = (props) => {
     const [dbRef, setDbRef] = useState(undefined);
     const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
     const [cardStatusView, setCardStatusView] = useState(DEFAULT_STATUS_VIEW);
+    const [expectedHours, setExpectedHours] = useState(0);
 
     function onContentInputChange(value) {
         setContentInput(value);
@@ -86,6 +87,13 @@ const PrioritiesPage = (props) => {
         if (workingCards.length == 0) {
             return;
         }
+        let calcHours = 0;
+        workingCards.map((card) => {
+            if (card.hours) {
+                calcHours += parseInt(card.hours);
+            }
+        });
+        setExpectedHours(calcHours);
 
         if (cardStatusView == "Planning") {
             let todoA = workingCards.filter(card => {
@@ -108,6 +116,7 @@ const PrioritiesPage = (props) => {
                                     description={card.description}
                                     progress={card.progress}
                                     status={card.status}
+                                    hours={card.hours}
                                     key={`${card.index}${card.title}`}
                                     index={card.index}
                                     moveCard={moveContent}
@@ -129,6 +138,7 @@ const PrioritiesPage = (props) => {
                                     description={card.description}
                                     progress={card.progress}
                                     status={card.status}
+                                    hours={card.hours}
                                     key={`${card.index}${card.title}`}
                                     index={card.index}
                                     moveCard={moveContent}
@@ -163,6 +173,7 @@ const PrioritiesPage = (props) => {
                                     description={card.description}
                                     progress={card.progress}
                                     status={card.status}
+                                    hours={card.hours}
                                     key={`${card.index}${card.title}`}
                                     index={card.index}
                                     moveCard={moveContent}
@@ -184,6 +195,7 @@ const PrioritiesPage = (props) => {
                                     description={card.description}
                                     progress={card.progress}
                                     status={card.status}
+                                    hours={card.hours}
                                     key={`${card.index}${card.title}`}
                                     index={card.index}
                                     moveCard={moveContent}
@@ -206,6 +218,7 @@ const PrioritiesPage = (props) => {
                         description={card.description}
                         progress={card.progress}
                         status={card.status}
+                        hours={card.hours}
                         key={`${card.index}${card.title}`}
                         index={card.index}
                         moveCard={moveContent}
@@ -306,6 +319,7 @@ const PrioritiesPage = (props) => {
                         <option>Expanded</option>
                         <option>List</option>
                     </select>
+                    <h3>Expected weekly hours: {expectedHours}/168</h3>
                 </form>
                 <div className="cards_container">
                     {renderedContent}
