@@ -7,6 +7,18 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const auth = getAuth();
 
+    function checkLoggedIn(user) {
+        if (!user) {
+            loginRedirectIfRestricted();
+        }
+    }
+
+    function loginRedirectIfRestricted() {
+        if (window.location.pathname != "/login" && window.location.pathname != "/signup" && window.location.pathname != "/notfound") {
+            window.location = "/login";
+        }
+    }
+
     useEffect(() => {
         //Get auth
         if (location.hostname === "localhost" && location.port === "5001") {
@@ -15,11 +27,11 @@ export const AuthProvider = ({ children }) => {
         //Log in 
         onAuthStateChanged(auth, (userResult) => {
             setUser(userResult);
-            console.log((userResult ? "Logged in " : "Not logged in"));
+            checkLoggedIn(userResult);
         });
-    }, [])
+    }, []);
 
     return (
         <AuthContext.Provider value={{ user, auth }}>{children}</AuthContext.Provider>
     );
-}
+};

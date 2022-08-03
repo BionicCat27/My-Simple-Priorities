@@ -11,9 +11,9 @@ export const DBProvider = ({ children }) => {
         if (location.hostname === "localhost" && location.port === "5001") {
             connectDatabaseEmulator(database, "localhost", 9000);
         }
-    }, [])
+    }, []);
 
     return (
         <DBContext.Provider value={{ database }}>{children}</DBContext.Provider>
     );
-}
+};

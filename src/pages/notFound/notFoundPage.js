@@ -1,7 +1,13 @@
 import React from 'react';
-import PageTitle from '../components/PageTitle';
+import PageTitle from '../../components/PageTitle';
 
 const NotFoundPage = () => {
+    if (!window.location.pathname.startsWith("/notfound")) {
+        window.location = "/notfound";
+    } else {
+        console.log("Page not found.");
+    }
+
     return (
         <div className="main-content">
             <div className="div-card text-center vertical-center">

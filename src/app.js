@@ -7,7 +7,7 @@ import './firebaseConfig';
 //Components
 import LoginPage from './pages/login/loginPage.js';
 import SignupPage from './pages/signup/signupPage.js';
-import NotFoundPage from './pages/notFoundPage.js';
+import NotFoundPage from './pages/notFound/notFoundPage.js';
 import TodoPage from './pages/todo/todoPage.js';
 import PrioritiesPage from './pages/priorities/prioritiesPage';
 import ReviewPage from './pages/review/reviewPage';
