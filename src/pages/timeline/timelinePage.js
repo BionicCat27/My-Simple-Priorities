@@ -8,7 +8,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { DBContext } from '../../contexts/DBContext';
 //Components
 import Sidebar from '../../components/Sidebar';
-import TimelineGantt from '../../components/TimelineGantt/TimelineGantt'
+import TimelineGantt from '../../components/TimelineGantt/TimelineGantt';
 //Styles
 import './timelinePage.css';
 //Config
@@ -21,21 +21,17 @@ const TimelinePage = (props) => {
     const [dbRef, setDbRef] = useState(undefined);
 
     const [cards, setCards] = useState([]);
-    const [renderedContent, setRenderedContent] = useState(null);
 
     //Set db ref on user set
-    useEffect(()=>{
+    useEffect(() => {
         if (user) {
             if (dbRef) {
                 off(dbRef);
             }
             setDbRef(ref(database, `users/${user.uid}/todo`));
-            setRenderedContent(null);
             setCards([]);
-        } else {
-            setRenderedContent(<p>Not logged in.</p>)
         }
-    }, [user])
+    }, [user]);
 
     //Retrieve cards on dbref change
     useEffect(() => {
@@ -87,11 +83,10 @@ const TimelinePage = (props) => {
             setCards(data);
         });
     }, [dbRef]);
-
     return (
         <>
             <div id="pageContent">
-                <TimelineGantt cards={cards}/>
+                <TimelineGantt cards={cards} />
             </div>
             <Sidebar title={"Timeline"} />
         </>

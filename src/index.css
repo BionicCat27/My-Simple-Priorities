@@ -8,12 +8,18 @@ body {
     margin: 0;
 }
 
-body, input, textarea, button, select, option {
+body,
+input,
+textarea,
+button,
+select,
+option {
     font-family: 'Arial', sans-serif;
     font-family: 'Lato', sans-serif;
 }
 
-button, select {
+button,
+select {
     line-height: 1rem;
     font-size: .8rem;
     padding-left: 1rem;
@@ -26,7 +32,7 @@ button, select {
     border: none;
     border: 1.5px solid black;
     border-radius: 2px;
-    display:inline-block;
+    display: inline-block;
 }
 
 a {
@@ -101,8 +107,12 @@ button:hover {
 
 #testClass {
     color: #F5EE69;
-    color:#FCA360;
+    color: #FCA360;
     color: #E664DA;
     color: #6E8EFF;
     color: #69F5AE;
+}
+
+.emptyTitle {
+    text-align: center;
 }
