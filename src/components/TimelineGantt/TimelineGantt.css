@@ -1,0 +1,53 @@
+.ganttTableContainer {
+    overflow-x: scroll;
+}
+
+.ganttTable {
+    border-collapse: collapse;
+}
+
+.ganttTable th,
+.ganttTable td {
+    border: 1px solid;
+    min-width: 3em;
+    width: 3em;
+    min-height: 3em;
+    height: 3em;
+}
+
+.ganttBar {
+    background-color: red;
+}
+
+.ganttCardName {
+    text-align: center;
+}
+
+/* .ganttBlock {
+    background-color: red;
+    min-width: 3em;
+    width: 3em;
+    min-height: 3em;
+    height: 3em;
+    display: inline-block;
+    border: 1px solid;
+}
+
+.ganttCardName {
+    display: inline-block;
+    text-align: center;
+    padding-top: auto;
+    padding-bottom: auto;
+}
+
+.ganttTable {
+    white-space: nowrap;
+    border-collapse: collapse;
+    border-spacing: 0 15px;
+
+}
+
+.ganttTableContainer {
+    overflow-x: scroll;
+}
+*/

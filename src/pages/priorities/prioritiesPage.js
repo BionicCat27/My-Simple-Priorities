@@ -1,32 +1,28 @@
-import React, { useEffect, useState } from 'react';
-
-import './prioritiesPage.css';
-
-import '../../firebaseConfig';
-
-import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
-import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
-
+//React
+import React, { useEffect, useState, useContext } from 'react';
+//Firebase
+import { ref, update, onValue, off} from "firebase/database";
+//Contexts
+import { AuthContext } from "../../contexts/AuthContext";
+import { DBContext } from '../../contexts/DBContext';
 //Components
 import Sidebar from '../../components/Sidebar';
 import PrioritiesCard from '../../components/PrioritiesCard/PrioritiesCard';
-
-const auth = getAuth();
-const database = getDatabase();
-
-if (location.hostname === "localhost" && location.port === "5001") {
-    connectDatabaseEmulator(database, "localhost", 9000);
-    connectAuthEmulator(auth, "http://localhost:9099");
-}
+//Styles
+import './prioritiesPage.css';
+//Config
+import '../../firebaseConfig';
 
 const PrioritiesPage = (props) => {
+    const authContext = useContext(AuthContext);
+    const { database } = useContext(DBContext);
+    const user = authContext.user;
 
     const DEFAULT_STATUS_VIEW = "In Progress";
     const DEFAULT_SIZE_VIEW = "Default";
 
     const [contentList, setContentList] = useState([]);
     const [contentInput, setContentInput] = useState("");
-    const [loggedInUser, setUser] = useState(undefined);
     const [renderedContent, setRenderedContent] = useState(null);
     const [dbRef, setDbRef] = useState(undefined);
     const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
@@ -37,17 +33,19 @@ const PrioritiesPage = (props) => {
         setContentInput(value);
     }
 
-    useEffect(() => {
-        if (loggedInUser) {
+    useEffect(()=>{
+        if (user) {
             if (dbRef) {
                 off(dbRef);
             }
-            setDbRef(ref(database, `users/${loggedInUser.uid}/priorities`));
+            setDbRef(ref(database, `users/${user.uid}/priorities`));
             setRenderedContent(null);
             setContentList([]);
             setCardStatusView(DEFAULT_STATUS_VIEW);
+        } else {
+            setRenderedContent(<p>Not logged in.</p>)
         }
-    }, [loggedInUser]);
+    }, [user])
 
     useEffect(() => {
         generateCards();
@@ -58,7 +56,7 @@ const PrioritiesPage = (props) => {
             console.log("Not logged in/no type");
             return;
         }
-        if (!loggedInUser) {
+        if (!user) {
             console.log("Can't load content - no user found.");
             return;
         }
@@ -125,7 +123,7 @@ const PrioritiesPage = (props) => {
                                     cardSizeView={cardSizeView}
                                     cardStatusView={cardStatusView}
                                     database={database}
-                                    user={loggedInUser}
+                                    user={user}
                                 />)}
                     </div>
                     <div id="rightHalf">
@@ -147,7 +145,7 @@ const PrioritiesPage = (props) => {
                                     cardSizeView={cardSizeView}
                                     cardStatusView={cardStatusView}
                                     database={database}
-                                    user={loggedInUser}
+                                    user={user}
                                 />)}
                     </div>
                 </>
@@ -182,7 +180,7 @@ const PrioritiesPage = (props) => {
                                     cardSizeView={cardSizeView}
                                     cardStatusView={cardStatusView}
                                     database={database}
-                                    user={loggedInUser}
+                                    user={user}
                                 />)}
                     </div>
                     <div id="rightHalf">
@@ -204,7 +202,7 @@ const PrioritiesPage = (props) => {
                                     cardSizeView={cardSizeView}
                                     cardStatusView={cardStatusView}
                                     database={database}
-                                    user={loggedInUser}
+                                    user={user}
                                 />)}
                     </div>
                 </>
@@ -227,31 +225,18 @@ const PrioritiesPage = (props) => {
                         cardSizeView={cardSizeView}
                         cardStatusView={cardStatusView}
                         database={database}
-                        user={loggedInUser}
+                        user={user}
                     />)
             );
         }
     }
 
-    useEffect(() => {
-        onAuthStateChanged(auth, (userResult) => {
-            if (userResult) {
-                setUser(userResult);
-                console.log("Logged in");
-            } else {
-                console.log("Not logged in");
-                setUser(undefined);
-                window.location = "/login";
-            }
-        });
-    }, [auth]);
-
     function writeContent(content) {
-        if (!loggedInUser) {
-            console.log("Can't write content - no user found: " + loggedInUser);
+        if (!user) {
+            console.log("Can't write content - no user found: " + user);
             return;
         }
-        update(ref(database, 'users/' + loggedInUser.uid), {
+        update(ref(database, 'users/' + user.uid), {
             priorities: content
         });
     };
@@ -307,7 +292,7 @@ const PrioritiesPage = (props) => {
         return false;
     }
 
-    if (!loggedInUser) return null;
+    if (!user) return null;
     return (
         <>
             <div id="pageContent">

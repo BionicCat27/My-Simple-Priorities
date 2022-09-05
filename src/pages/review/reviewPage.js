@@ -1,32 +1,28 @@
-import React, { useEffect, useState } from 'react';
-
-import './reviewPage.css';
-
-import '../../firebaseConfig';
-
-import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
-import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
-
+//React
+import React, { useEffect, useState, useContext } from 'react';
+//Firebase
+import { ref, update, onValue, off } from "firebase/database";
+//Contexts
+import { AuthContext } from "../../contexts/AuthContext";
+import { DBContext } from '../../contexts/DBContext';
 //Components
 import Sidebar from '../../components/Sidebar';
 import ReviewCard from '../../components/ReviewCard/ReviewCard';
-
-const auth = getAuth();
-const database = getDatabase();
-
-if (location.hostname === "localhost" && location.port === "5001") {
-    connectDatabaseEmulator(database, "localhost", 9000);
-    connectAuthEmulator(auth, "http://localhost:9099");
-}
+//Styles
+import './reviewPage.css';
+//Config
+import '../../firebaseConfig';
 
 const ReviewPage = (props) => {
+    const authContext = useContext(AuthContext);
+    const { database } = useContext(DBContext);
+    const user = authContext.user;
 
     const DEFAULT_STATUS_VIEW = "In Progress";
     const DEFAULT_SIZE_VIEW = "Default";
 
     const [contentList, setContentList] = useState([]);
     const [contentInput, setContentInput] = useState("");
-    const [loggedInUser, setUser] = useState(undefined);
     const [renderedContent, setRenderedContent] = useState(null);
     const [dbRef, setDbRef] = useState(undefined);
     const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
@@ -37,16 +33,16 @@ const ReviewPage = (props) => {
     }
 
     useEffect(() => {
-        if (loggedInUser) {
+        if (user) {
             if (dbRef) {
                 off(dbRef);
             }
-            setDbRef(ref(database, `users/${loggedInUser.uid}/review`));
+            setDbRef(ref(database, `users/${user.uid}/review`));
             setRenderedContent(null);
             setContentList([]);
             setCardStatusView(DEFAULT_STATUS_VIEW);
         }
-    }, [loggedInUser]);
+    }, [user]);
 
     useEffect(() => {
         generateCards();
@@ -57,7 +53,7 @@ const ReviewPage = (props) => {
             console.log("Not logged in/no type");
             return;
         }
-        if (!loggedInUser) {
+        if (!user) {
             console.log("Can't load content - no user found.");
             return;
         }
@@ -116,7 +112,7 @@ const ReviewPage = (props) => {
                                     cardSizeView={cardSizeView}
                                     cardStatusView={cardStatusView}
                                     database={database}
-                                    user={loggedInUser}
+                                    user={user}
                                 />)}
                     </div>
                     <div id="rightHalf">
@@ -137,7 +133,7 @@ const ReviewPage = (props) => {
                                     cardSizeView={cardSizeView}
                                     cardStatusView={cardStatusView}
                                     database={database}
-                                    user={loggedInUser}
+                                    user={user}
                                 />)}
                     </div>
                 </>
@@ -171,7 +167,7 @@ const ReviewPage = (props) => {
                                     cardSizeView={cardSizeView}
                                     cardStatusView={cardStatusView}
                                     database={database}
-                                    user={loggedInUser}
+                                    user={user}
                                 />)}
                     </div>
                     <div id="rightHalf">
@@ -192,7 +188,7 @@ const ReviewPage = (props) => {
                                     cardSizeView={cardSizeView}
                                     cardStatusView={cardStatusView}
                                     database={database}
-                                    user={loggedInUser}
+                                    user={user}
                                 />)}
                     </div>
                 </>
@@ -218,31 +214,18 @@ const ReviewPage = (props) => {
                         cardSizeView={cardSizeView}
                         cardStatusView={cardStatusView}
                         database={database}
-                        user={loggedInUser}
+                        user={user}
                     />)
             );
         }
     }
 
-    useEffect(() => {
-        onAuthStateChanged(auth, (userResult) => {
-            if (userResult) {
-                setUser(userResult);
-                console.log("Logged in");
-            } else {
-                console.log("Not logged in");
-                setUser(undefined);
-                window.location = "/login";
-            }
-        });
-    }, [auth]);
-
     function writeContent(content) {
-        if (!loggedInUser) {
-            console.log("Can't write content - no user found: " + loggedInUser);
+        if (!user) {
+            console.log("Can't write content - no user found: " + user);
             return;
         }
-        update(ref(database, 'users/' + loggedInUser.uid), {
+        update(ref(database, 'users/' + user.uid), {
             review: content
         });
     };
@@ -300,7 +283,7 @@ const ReviewPage = (props) => {
         return false;
     }
 
-    if (!loggedInUser) return null;
+    if (!user) return null;
     return (
         <>
             <div id="pageContent">

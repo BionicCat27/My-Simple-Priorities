@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-
-import './loginPage.css';
-
-import '../../firebaseConfig';
-
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
-
+//React
+import React, { useState, useContext } from 'react';
+//Firebase
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+//Contexts
+import { AuthContext } from "../../contexts/AuthContext";
 //Components
 import PageTitle from '../../components/PageTitle';
 import Footer from '../../components/Footer';
-
-const auth = getAuth();
-if (location.hostname === "localhost" && location.port === "5001") {
-    connectAuthEmulator(auth, "http://localhost:9099");
-}
+//Styles
+import './loginPage.css';
+//Config
+import '../../firebaseConfig';
 
 const LoginPage = () => {
+    const authContext = useContext(AuthContext);
+    const auth = authContext.auth;
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");

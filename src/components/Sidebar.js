@@ -15,19 +15,27 @@ const Sidebar = (props) => {
 
     function userSignOut() {
         signOut(auth).then(() => {
-            window.location = " /login";
+            window.location = "/login";
         }).catch((error) => {
             console.log("An error occurred during signout: " + error);
         });
     }
 
+    function generateSidebarLinks() {
+        return <>
+            <a href="/priorities">Priorities</a>
+            <a href="/todo">Todo</a>
+            <a href="/review">Review</a>
+            <a href="/timeline">Timeline</a>
+        </>;
+    }
+
+    let sidebarLinks = generateSidebarLinks();
     return (
         <div id="sidebar">
             <div id="sidebarLinksContainer">
                 <h2 id="sidebarTitle">My Simple<br />{props.title}</h2>
-                <a href="/priorities">Priorities</a>
-                <a href="/todo">Todo</a>
-                <a href="/review">Review</a>
+                {sidebarLinks}
                 <a onClick={userSignOut}>Logout</a>
             </div>
             <div id="sidebarCreditContainer">
