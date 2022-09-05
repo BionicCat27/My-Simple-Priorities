@@ -66,7 +66,7 @@ const TimelineGantt = (props) => {
                 continue;
             }
             let diff = getDaysDiff(card.dueDate, new Date());
-            if (diff < 1) return;
+            if (diff < 1) continue;
             output.push(
                 <tr key={`${card.index}${card.title}`}>
                     <td className="ganttCardName ganttBlock">{card.title}</td>
