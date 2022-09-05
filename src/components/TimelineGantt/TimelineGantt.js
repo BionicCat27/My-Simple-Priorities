@@ -44,14 +44,14 @@ const TimelineGantt = (props) => {
         let output = [];
         output.push(<th key={`ganttHeader`}>Todo</th>);
         for (let i = 0; i < length; i++) {
-            output.push(<th key={`ganttHeader${i}`}>{i}</th>);
+            output.push(<th key={`ganttHeader${i}`}>{i + 1}</th>);
         }
         return <tr>{output}</tr>;
     }
 
     function generateCardBar(diff, longestDiff) {
         let output = [];
-        output.push(<td className="ganttBlock bar" colSpan={diff} key={`ganttBody`}></td>);
+        output.push(<td className="ganttBlock ganttBar" colSpan={diff} key={`ganttBody`}></td>);
         for (let i = diff; i < longestDiff; i++) {
             output.push(<td className="ganttBlock" key={`ganttBody${i}`}></td>);
         }
