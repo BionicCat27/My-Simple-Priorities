@@ -14,6 +14,7 @@ import ReviewPage from './pages/review/reviewPage';
 import TimelinePage from './pages/timeline/timelinePage';
 import { AuthProvider } from './contexts/AuthContext';
 import { DBProvider } from './contexts/DBContext';
+import TypesPage from './pages/types/typesPage';
 
 const App = () => {
     return (
@@ -28,6 +29,7 @@ const App = () => {
                         <Route path="/timeline" element={<TimelinePage />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/signup" element={<SignupPage />} />
+                        <Route path="/types" element={<TypesPage />} />
                         <Route path="*" element={<NotFoundPage />} />
                     </Routes >
                 </BrowserRouter >
