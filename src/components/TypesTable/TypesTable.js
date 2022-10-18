@@ -3,7 +3,6 @@ import React from 'react';
 import TypesTableFormRow from './TypesTableFormRow/TypesTableFormRow';
 const TypesTable = (props) => {
     let types = [...props.types];
-    console.log("Table:" + JSON.stringify(types) + " : " + !types + " " + types.length);
     if (!types || types.length == 0) return (
         <>
             <table>

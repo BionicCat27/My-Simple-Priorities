@@ -51,7 +51,6 @@ const TypesPage = (props) => {
                 return;
             }
             setTypes(Object.values(data));
-            console.log(JSON.stringify(Object.values(data)));
         });
     }, [dbRef]);
     return (
