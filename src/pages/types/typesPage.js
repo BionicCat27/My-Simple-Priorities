@@ -10,6 +10,7 @@ import { DBContext } from '../../contexts/DBContext';
 import Sidebar from '../../components/Sidebar';
 import TimelineGantt from '../../components/TimelineGantt/TimelineGantt';
 //Styles
+import './typesPage.css';
 //Config
 import '../../firebaseConfig';
 import TypesTable from '../../components/TypesTable/TypesTable';
@@ -54,13 +55,12 @@ const TypesPage = (props) => {
         });
     }, [dbRef]);
     return (
-        <>
-            <div id="pageContent">
+        <div id="pageContent">
+            <div id="pageContainer">
                 <h1>Types</h1>
                 <TypesTable types={types} />
             </div>
-            <Sidebar title={"Timeline"} />
-        </>
+        </div>
     );
 };
 

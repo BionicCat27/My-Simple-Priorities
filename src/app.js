@@ -15,6 +15,7 @@ import TimelinePage from './pages/timeline/timelinePage';
 import { AuthProvider } from './contexts/AuthContext';
 import { DBProvider } from './contexts/DBContext';
 import TypesPage from './pages/types/typesPage';
+import HomePage from './pages/home/homePage';
 
 const App = () => {
     return (
@@ -30,6 +31,7 @@ const App = () => {
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/types" element={<TypesPage />} />
+                        <Route path="/home" element={<HomePage />} />
                         <Route path="*" element={<NotFoundPage />} />
                     </Routes >
                 </BrowserRouter >
