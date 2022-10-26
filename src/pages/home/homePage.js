@@ -8,6 +8,7 @@ import './homePage.css';
 //Config
 import '../../firebaseConfig';
 import TypesPage from '../types/typesPage';
+import ViewsPage from '../views/viewsPage';
 
 const HomePage = (props) => {
     const [hash, setHash] = useState("");
@@ -25,18 +26,25 @@ const HomePage = (props) => {
             </>
         );
     }
-    if (window.location.hash == "#home") {
+    if (window.location.hash == "#views") {
         return (
+            <>
+                <h3 id="backBtn" onClick={() => goTo("#home")}>Back</h3>
+                <ViewsPage />
+            </>
+        );
+    }
+    return (
+        <>
+            <h3 id="backBtn" onClick={() => window.location.href = "/priorities"}>Back</h3>
             <div id="pageContent">
                 <div id="pageContainer">
                     <h1>Home</h1>
                     <h2 onClick={() => goTo("#types")}>Types</h2>
+                    <h2 onClick={() => goTo("#views")}>Views</h2>
                 </div>
             </div>
-        );
-    }
-    return (
-        <h1>Home</h1>
+        </>
     );
 };
 

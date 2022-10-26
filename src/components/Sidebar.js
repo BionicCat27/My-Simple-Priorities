@@ -27,7 +27,7 @@ const Sidebar = (props) => {
             <a href="/todo">Todo</a>
             <a href="/review">Review</a>
             <a href="/timeline">Timeline</a>
-            <a href="/types">Types</a>
+            <a href="/home">Home</a>
         </>;
     }
 

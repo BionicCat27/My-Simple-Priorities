@@ -1,0 +1,13 @@
+#pageContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#pageContainer {
+    overflow-x: scroll;
+    padding: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-block;
+}

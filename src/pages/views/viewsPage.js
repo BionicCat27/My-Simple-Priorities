@@ -1,27 +1,24 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
 //Firebase
-import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
-import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
+import { ref, onValue, off } from "firebase/database";
 //Contexts
 import { AuthContext } from "../../contexts/AuthContext";
 import { DBContext } from '../../contexts/DBContext';
 //Components
-import Sidebar from '../../components/Sidebar';
-import TimelineGantt from '../../components/TimelineGantt/TimelineGantt';
 //Styles
-import './typesPage.css';
+import './viewsPage.css';
 //Config
 import '../../firebaseConfig';
-import TypesTable from '../../components/TypesTable/TypesTable';
+import ViewsTable from '../../components/ViewsTable/ViewsTable';
 
-const TypesPage = (props) => {
+const ViewsPage = (props) => {
     const { user } = useContext(AuthContext);
     const { database } = useContext(DBContext);
 
     const [dbRef, setDbRef] = useState(undefined);
 
-    const [types, setTypes] = useState([]);
+    const [views, setViews] = useState([]);
 
     //Set db ref on user set
     useEffect(() => {
@@ -29,8 +26,8 @@ const TypesPage = (props) => {
             if (dbRef) {
                 off(dbRef);
             }
-            setDbRef(ref(database, `users/${user.uid}/types`));
-            setTypes([]);
+            setDbRef(ref(database, `users/${user.uid}/views`));
+            setViews([]);
         }
     }, [user]);
 
@@ -48,7 +45,7 @@ const TypesPage = (props) => {
             const data = snapshot.val();
             if (data == null) {
                 console.log("An error occurred.");
-                setTypes([]);
+                setViews([]);
                 return;
             }
             let keyedData = Object.keys(data).map((key) => {
@@ -56,17 +53,17 @@ const TypesPage = (props) => {
                 value.key = key;
                 return value;
             });
-            setTypes(keyedData);
+            setViews(keyedData);
         });
     }, [dbRef]);
     return (
         <div id="pageContent">
             <div id="pageContainer">
-                <h1>Types</h1>
-                <TypesTable types={types} />
+                <h1>Views</h1>
+                <ViewsTable views={views} />
             </div>
         </div>
     );
 };
 
-export default TypesPage;
+export default ViewsPage;
