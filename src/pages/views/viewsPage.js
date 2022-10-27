@@ -11,6 +11,7 @@ import './viewsPage.css';
 //Config
 import '../../firebaseConfig';
 import ViewsTable from '../../components/ViewsTable/ViewsTable';
+import IndexTable from '../../components/IndexTable.js/IndexTable';
 
 const ViewsPage = (props) => {
     const { user } = useContext(AuthContext);
@@ -60,7 +61,7 @@ const ViewsPage = (props) => {
         <div id="pageContent">
             <div id="pageContainer">
                 <h1>Views</h1>
-                <ViewsTable views={views} />
+                <IndexTable datatype={{ name: "Views", field: "views" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={views} />
             </div>
         </div>
     );
