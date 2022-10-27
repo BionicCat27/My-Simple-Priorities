@@ -1,7 +1,11 @@
 //React
-import React from 'react';
+import React, { useContext } from 'react';
+import { NavigationContext } from '../../contexts/NavigationContext';
 import IndexTableFormRow from './IndexTableFormRow';
+import './IndexTable.css';
 const IndexTable = (props) => {
+
+    const { goToPage, setParameters } = useContext(NavigationContext);
 
     const NoContent = () => {
         return (
@@ -45,7 +49,10 @@ const IndexTable = (props) => {
                     }
                     let entries = Object.entries(object);
                     return (
-                        <tr key={object.key}>
+                        <tr key={object.key} className="indexTableRow" onClick={() => {
+                            goToPage(`#${datatype.target}`);
+                            setParameters({ view: object.key });
+                        }}>
                             {fields.map((field) => {
                                 let key = field.field;
                                 let value = object[key];

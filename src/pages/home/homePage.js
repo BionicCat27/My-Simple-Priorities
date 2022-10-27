@@ -15,6 +15,7 @@ import { DBContext } from '../../contexts/DBContext';
 import { off, onValue, ref } from 'firebase/database';
 import { NavigationContext } from '../../contexts/NavigationContext';
 import ViewPage from '../view/viewPage';
+import EditViewPage from '../editview/editViewPage';
 
 const HomePage = (props) => {
     const { user } = useContext(AuthContext);
@@ -61,29 +62,28 @@ const HomePage = (props) => {
             setViews(keyedData);
         });
     }, [dbRef]);
-    if (page == "#types") {
-        return (
-            <>
-                <h3 id="backBtn" onClick={() => goToPage("#home")}>Back</h3>
-                <TypesPage />
-            </>
-        );
+
+    function getPage() {
+        switch (page) {
+            case "#types":
+                return <TypesPage />;
+            case "#views":
+                return <ViewsPage />;
+            case "#view":
+                return <ViewPage />;
+            case "#editview":
+                return <EditViewPage />;
+            default:
+                return null;
+        }
     }
-    if (page == "#views") {
+    let contentPage = getPage();
+    if (contentPage) {
         return (
             <>
                 <h3 id="backBtn" onClick={() => goToPage("#home")}>Back</h3>
-                <ViewsPage />
-            </>
-        );
-    }
-    if (page == "#view") {
-        return (
-            <>
-                <h3 id="backBtn" onClick={() => goToPage("#home")}>Back</h3>
-                <ViewPage />
-            </>
-        );
+                {getPage()}
+            </>);
     }
     return (
         <>

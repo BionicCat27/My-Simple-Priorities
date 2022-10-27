@@ -3,22 +3,28 @@ import React, { useEffect, useState, useContext } from 'react';
 //Firebase
 import { ref, onValue, off } from "firebase/database";
 //Contexts
-import { AuthContext } from "../../contexts/AuthContext";
-import { DBContext } from '../../contexts/DBContext';
+import { NavigationContext } from '../../contexts/NavigationContext';
 //Components
 //Styles
-import './viewsPage.css';
+import './editViewPage.css';
 //Config
 import '../../firebaseConfig';
-import IndexTable from '../../components/IndexTable/IndexTable';
+import { AuthContext } from '../../contexts/AuthContext';
+import { DBContext } from '../../contexts/DBContext';
 
-const ViewsPage = (props) => {
+const EditViewPage = (props) => {
     const { user } = useContext(AuthContext);
     const { database } = useContext(DBContext);
+    const { goToPage, parameters } = useContext(NavigationContext);
 
     const [dbRef, setDbRef] = useState(undefined);
 
-    const [views, setViews] = useState([]);
+    const [view, setView] = useState([]);
+
+    const [viewKey] = useState(parameters.view);
+    useEffect(() => {
+        if (!viewKey) goToPage("#home");
+    }, [viewKey]);
 
     //Set db ref on user set
     useEffect(() => {
@@ -26,8 +32,8 @@ const ViewsPage = (props) => {
             if (dbRef) {
                 off(dbRef);
             }
-            setDbRef(ref(database, `users/${user.uid}/views`));
-            setViews([]);
+            setDbRef(ref(database, `users/${user.uid}/views/${viewKey}`));
+            setView([]);
         }
     }, [user]);
 
@@ -44,25 +50,20 @@ const ViewsPage = (props) => {
             const data = snapshot.val();
             if (data == null) {
                 console.log("An error occurred.");
-                setViews([]);
+                setView([]);
                 return;
             }
-            let keyedData = Object.keys(data).map((key) => {
-                let value = data[key];
-                value.key = key;
-                return value;
-            });
-            setViews(keyedData);
+            setView(data);
         });
     }, [dbRef]);
+
     return (
         <div id="pageContent">
             <div id="pageContainer">
-                <h1>Views</h1>
-                <IndexTable datatype={{ name: "Views", field: "views", target: "editview" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={views} />
+                <h1>Edit {view.name} View</h1>
             </div>
         </div>
     );
 };
 
-export default ViewsPage;
+export default EditViewPage;
