@@ -7,13 +7,11 @@ import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from 
 import { AuthContext } from "../../contexts/AuthContext";
 import { DBContext } from '../../contexts/DBContext';
 //Components
-import Sidebar from '../../components/Sidebar';
-import TimelineGantt from '../../components/TimelineGantt/TimelineGantt';
 //Styles
 import './typesPage.css';
 //Config
 import '../../firebaseConfig';
-import TypesTable from '../../components/TypesTable/TypesTable';
+import IndexTable from '../../components/IndexTable.js/IndexTable';
 
 const TypesPage = (props) => {
     const { user } = useContext(AuthContext);
@@ -63,7 +61,7 @@ const TypesPage = (props) => {
         <div id="pageContent">
             <div id="pageContainer">
                 <h1>Types</h1>
-                <TypesTable types={types} />
+                <IndexTable datatype={{ name: "Types", field: "types" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={types} />
             </div>
         </div>
     );

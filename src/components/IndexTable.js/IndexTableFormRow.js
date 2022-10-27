@@ -26,8 +26,7 @@ const IndexTableFormRow = (props) => {
         return fieldValueCopy;
     };
 
-    function addObject(event) {
-        event.preventDefault();
+    function addObject() {
         let obj = Object.fromEntries(fieldValues);
         let res = set(push(ref(database, `users/${user.uid}/${datatype.field}`)), obj);
 
@@ -41,7 +40,7 @@ const IndexTableFormRow = (props) => {
 
     const handleKeyDown = (event) => {
         if (event.key == 'Enter') {
-            addObject(event);
+            addObject();
         }
     };
 

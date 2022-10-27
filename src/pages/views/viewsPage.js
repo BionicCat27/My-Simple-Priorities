@@ -10,7 +10,6 @@ import { DBContext } from '../../contexts/DBContext';
 import './viewsPage.css';
 //Config
 import '../../firebaseConfig';
-import ViewsTable from '../../components/ViewsTable/ViewsTable';
 import IndexTable from '../../components/IndexTable.js/IndexTable';
 
 const ViewsPage = (props) => {
