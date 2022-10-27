@@ -11,7 +11,7 @@ import { DBContext } from '../../contexts/DBContext';
 import './typesPage.css';
 //Config
 import '../../firebaseConfig';
-import IndexTable from '../../components/IndexTable.js/IndexTable';
+import IndexTable from '../../components/IndexTable/IndexTable';
 
 const TypesPage = (props) => {
     const { user } = useContext(AuthContext);

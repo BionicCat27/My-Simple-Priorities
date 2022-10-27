@@ -10,7 +10,7 @@ import { DBContext } from '../../contexts/DBContext';
 import './viewsPage.css';
 //Config
 import '../../firebaseConfig';
-import IndexTable from '../../components/IndexTable.js/IndexTable';
+import IndexTable from '../../components/IndexTable/IndexTable';
 
 const ViewsPage = (props) => {
     const { user } = useContext(AuthContext);
