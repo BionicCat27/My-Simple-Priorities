@@ -60,7 +60,7 @@ const TypesPage = (props) => {
         <div id="pageContent">
             <div id="pageContainer">
                 <h1>Types</h1>
-                <IndexTable datatype={{ name: "Types", field: "types" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={types} />
+                <IndexTable datatype={{ name: "Types", field: "types", target: "edittype" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={types} />
             </div>
         </div>
     );
