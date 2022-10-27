@@ -35,7 +35,6 @@ const TypesPage = (props) => {
     //Retrieve cards on dbref change
     useEffect(() => {
         if (!dbRef) {
-            console.log("Not logged in/no type");
             return;
         }
         if (!user) {

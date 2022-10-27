@@ -13,10 +13,13 @@ import IndexList from '../../components/IndexList/IndexList';
 import { AuthContext } from '../../contexts/AuthContext';
 import { DBContext } from '../../contexts/DBContext';
 import { off, onValue, ref } from 'firebase/database';
+import { NavigationContext } from '../../contexts/NavigationContext';
+import ViewPage from '../view/viewPage';
 
 const HomePage = (props) => {
     const { user } = useContext(AuthContext);
     const { database } = useContext(DBContext);
+    const { goToPage, setParameters, page } = useContext(NavigationContext);
 
     const [dbRef, setDbRef] = useState(undefined);
 
@@ -37,7 +40,6 @@ const HomePage = (props) => {
     //Retrieve cards on dbref change
     useEffect(() => {
         if (!dbRef) {
-            console.log("Not logged in/no type");
             return;
         }
         if (!user) {
@@ -59,25 +61,27 @@ const HomePage = (props) => {
             setViews(keyedData);
         });
     }, [dbRef]);
-
-    function goTo(hash) {
-        setHash(hash);
-        window.location.hash = hash;
-    }
-
-    if (window.location.hash == "#types") {
+    if (page == "#types") {
         return (
             <>
-                <h3 id="backBtn" onClick={() => goTo("#home")}>Back</h3>
+                <h3 id="backBtn" onClick={() => goToPage("#home")}>Back</h3>
                 <TypesPage />
             </>
         );
     }
-    if (window.location.hash == "#views") {
+    if (page == "#views") {
         return (
             <>
-                <h3 id="backBtn" onClick={() => goTo("#home")}>Back</h3>
+                <h3 id="backBtn" onClick={() => goToPage("#home")}>Back</h3>
                 <ViewsPage />
+            </>
+        );
+    }
+    if (page == "#view") {
+        return (
+            <>
+                <h3 id="backBtn" onClick={() => goToPage("#home")}>Back</h3>
+                <ViewPage />
             </>
         );
     }
@@ -87,8 +91,8 @@ const HomePage = (props) => {
             <div id="pageContent">
                 <div id="pageContainer">
                     <h1>Home</h1>
-                    <h2 onClick={() => goTo("#types")}>Types</h2>
-                    <h2 onClick={() => goTo("#views")}>Views</h2>
+                    <h2 onClick={() => goToPage("#types")}>Types</h2>
+                    <h2 onClick={() => goToPage("#views")}>Views</h2>
                     <IndexList datatype={{ name: "Views", field: "views" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={views} />
                 </div>
             </div>
