@@ -17,6 +17,7 @@ import { NavigationContext } from '../../contexts/NavigationContext';
 import ViewPage from '../view/viewPage';
 import EditViewPage from '../editview/editViewPage';
 import TypePage from '../type/typePage';
+import EditTypePage from '../edittype/editTypePage';
 
 const HomePage = (props) => {
     const { user } = useContext(AuthContext);
@@ -107,6 +108,8 @@ const HomePage = (props) => {
                 return <ViewPage />;
             case "#editview":
                 return <EditViewPage />;
+            case "#edittype":
+                return <EditTypePage />;
             default:
                 return null;
         }
@@ -126,9 +129,9 @@ const HomePage = (props) => {
                 <div id="pageContainer">
                     <h1>Home</h1>
                     <h2 onClick={() => goToPage("#types")}>Types</h2>
-                    <IndexList datatype={{ name: "Types", field: "types", typeName: "type" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={types} />
+                    <IndexList datatype={{ name: "Types", field: "types", target: "type" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={types} />
                     <h2 onClick={() => goToPage("#views")}>Views</h2>
-                    <IndexList datatype={{ name: "Views", field: "views", typeName: "view" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={views} />
+                    <IndexList datatype={{ name: "Views", field: "views", target: "view" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={views} />
                 </div>
             </div>
         </>

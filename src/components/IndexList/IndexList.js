@@ -33,7 +33,7 @@ const IndexList = (props) => {
                 let entries = Object.entries(object);
                 return (
                     <li key={object.key} onClick={() => {
-                        goToPage(`#${datatype.typeName}`);
+                        goToPage(`#${datatype.target}`);
                         setParameters({ objectKey: object.key });
                     }}>
                         <h3>

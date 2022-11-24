@@ -51,7 +51,7 @@ const IndexTable = (props) => {
                     return (
                         <tr key={object.key} className="indexTableRow" onClick={() => {
                             goToPage(`#${datatype.target}`);
-                            setParameters({ view: object.key });
+                            setParameters({ objectKey: object.key });
                         }}>
                             {fields.map((field) => {
                                 let key = field.field;
