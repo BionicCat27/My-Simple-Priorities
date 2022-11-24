@@ -49,10 +49,11 @@ const IndexTable = (props) => {
                     }
                     let entries = Object.entries(object);
                     return (
-                        <tr key={object.key} className="indexTableRow" onClick={() => {
-                            goToPage(`#${datatype.target}`);
-                            setParameters({ objectKey: object.key });
-                        }}>
+                        <tr key={object.key} className={"indexTableRow clickable"}
+                            onClick={() => {
+                                goToPage(`#${datatype.target}`);
+                                setParameters({ objectKey: object.key });
+                            }}>
                             {fields.map((field) => {
                                 let key = field.field;
                                 let value = object[key];

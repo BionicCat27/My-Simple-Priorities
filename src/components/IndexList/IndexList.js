@@ -32,7 +32,7 @@ const IndexList = (props) => {
                 }
                 let entries = Object.entries(object);
                 return (
-                    <li key={object.key} onClick={() => {
+                    <li className={"clickable"} key={object.key} onClick={() => {
                         goToPage(`#${datatype.target}`);
                         setParameters({ objectKey: object.key });
                     }}>

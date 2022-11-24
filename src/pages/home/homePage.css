@@ -2,3 +2,7 @@
     position: fixed;
     margin-left: 2rem;
 }
+
+.clickable {
+    cursor: pointer;
+}

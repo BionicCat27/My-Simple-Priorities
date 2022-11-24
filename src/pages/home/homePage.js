@@ -118,7 +118,7 @@ const HomePage = (props) => {
     if (contentPage) {
         return (
             <>
-                <h3 id="backBtn" onClick={() => goToPage("#home")}>Back</h3>
+                <h3 id="backBtn" className={"clickable"} onClick={() => goToPage("#home")}>Back</h3>
                 {getPage()}
             </>);
     }
@@ -128,9 +128,9 @@ const HomePage = (props) => {
             <div id="pageContent">
                 <div id="pageContainer">
                     <h1>Home</h1>
-                    <h2 onClick={() => goToPage("#types")}>Types</h2>
+                    <h2 className={"clickable"} onClick={() => goToPage("#types")}>Types</h2>
                     <IndexList datatype={{ name: "Types", field: "types", target: "type" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={types} />
-                    <h2 onClick={() => goToPage("#views")}>Views</h2>
+                    <h2 className={"clickable"} onClick={() => goToPage("#views")}>Views</h2>
                     <IndexList datatype={{ name: "Views", field: "views", target: "view" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={views} />
                 </div>
             </div>
