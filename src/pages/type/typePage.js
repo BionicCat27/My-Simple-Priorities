@@ -6,26 +6,26 @@ import { ref, onValue, off } from "firebase/database";
 import { NavigationContext } from '../../contexts/NavigationContext';
 //Components
 //Styles
-import './viewPage.css';
+import './typePage.css';
 //Config
 import '../../firebaseConfig';
 import IndexTable from '../../components/IndexTable/IndexTable';
 import { AuthContext } from '../../contexts/AuthContext';
 import { DBContext } from '../../contexts/DBContext';
 
-const ViewPage = (props) => {
+const TypePage = (props) => {
     const { user } = useContext(AuthContext);
     const { database } = useContext(DBContext);
     const { goToPage, parameters } = useContext(NavigationContext);
 
     const [dbRef, setDbRef] = useState(undefined);
 
-    const [view, setView] = useState([]);
+    const [type, setType] = useState([]);
 
-    const [viewKey] = useState(parameters.objectKey);
+    const [typeKey] = useState(parameters.objectKey);
     useEffect(() => {
-        if (!viewKey) goToPage("#home");
-    }, [viewKey]);
+        if (!typeKey) goToPage("#home");
+    }, [typeKey]);
 
     //Set db ref on user set
     useEffect(() => {
@@ -33,8 +33,8 @@ const ViewPage = (props) => {
             if (dbRef) {
                 off(dbRef);
             }
-            setDbRef(ref(database, `users/${user.uid}/views/${viewKey}`));
-            setView([]);
+            setDbRef(ref(database, `users/${user.uid}/types/${typeKey}`));
+            setType([]);
         }
     }, [user]);
 
@@ -51,20 +51,20 @@ const ViewPage = (props) => {
             const data = snapshot.val();
             if (data == null) {
                 console.log("An error occurred.");
-                setView([]);
+                setType([]);
                 return;
             }
-            setView(data);
+            setType(data);
         });
     }, [dbRef]);
 
     return (
         <div id="pageContent">
             <div id="pageContainer">
-                <h1>{view.name}</h1>
+                <h1>{type.name}</h1>
             </div>
         </div>
     );
 };
 
-export default ViewPage;
+export default TypePage;
