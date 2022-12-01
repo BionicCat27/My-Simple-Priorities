@@ -114,11 +114,21 @@ const HomePage = (props) => {
                 return null;
         }
     }
+    function getBackButton() {
+        switch (page) {
+            case "#editview":
+                return <h3 id="backBtn" className={"clickable"} onClick={() => goToPage("#views")}>Back</h3>;
+            case "#edittype":
+                return <h3 id="backBtn" className={"clickable"} onClick={() => goToPage("#types")}>Back</h3>;
+            default:
+                return <h3 id="backBtn" className={"clickable"} onClick={() => goToPage("#home")}>Back</h3>;
+        }
+    }
     let contentPage = getPage();
     if (contentPage) {
         return (
             <>
-                <h3 id="backBtn" className={"clickable"} onClick={() => goToPage("#home")}>Back</h3>
+                {getBackButton()}
                 {getPage()}
             </>);
     }

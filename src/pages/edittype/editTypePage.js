@@ -11,6 +11,7 @@ import './editTypePage.css';
 import '../../firebaseConfig';
 import { AuthContext } from '../../contexts/AuthContext';
 import { DBContext } from '../../contexts/DBContext';
+import EditableText from '../../components/EditableText/EditableText';
 
 const EditTypePage = (props) => {
     const { user } = useContext(AuthContext);
@@ -57,10 +58,21 @@ const EditTypePage = (props) => {
         });
     }, [dbRef]);
 
+    if (type == "" || !type) {
+        return (
+            <div id="pageContent">
+                <div id="pageContainer">
+                </div>
+            </div>
+        );
+    }
     return (
         <div id="pageContent">
             <div id="pageContainer">
-                <h1>Edit {type.name} Type</h1>
+                <p><b>Title</b></p>
+                <EditableText value={type.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} />
+                <p><b>Description</b></p>
+                <EditableText value={type.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} />
             </div>
         </div>
     );

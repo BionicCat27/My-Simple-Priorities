@@ -4,6 +4,7 @@ import { push, ref, set, update } from 'firebase/database';
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { DBContext } from '../../contexts/DBContext';
+import './IndexTableFormRow.css';
 //Components
 const IndexTableFormRow = (props) => {
     const authContext = useContext(AuthContext);
@@ -49,6 +50,7 @@ const IndexTableFormRow = (props) => {
             {fields.map((field) => {
                 return <td key={field.name}>
                     <input
+                        className="indexTableFormInput"
                         placeholder={field.name}
                         value={fieldValues.get(field.field)}
                         onChange={change => setFieldValues(setFieldValue(fieldValues, field.field, change.target.value))}

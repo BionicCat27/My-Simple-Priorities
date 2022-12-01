@@ -60,6 +60,7 @@ const IndexTable = (props) => {
                                 if (key == "key") return null;
                                 return <td key={`${object.key}${key}`}>{value}</td>;
                             })}
+                            <td></td>
                         </tr>
                     );
                 }
