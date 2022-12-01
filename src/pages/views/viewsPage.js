@@ -59,6 +59,7 @@ const ViewsPage = (props) => {
         <div id="pageContent">
             <div id="pageContainer">
                 <h1>Views</h1>
+                <hr></hr>
                 <IndexTable datatype={{ name: "Views", field: "views", target: "editview" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={views} />
             </div>
         </div>

@@ -138,6 +138,7 @@ const HomePage = (props) => {
             <div id="pageContent">
                 <div id="pageContainer">
                     <h1>Home</h1>
+                    <hr></hr>
                     <h2 className={"clickable"} onClick={() => goToPage("#types")}>Types</h2>
                     <IndexList datatype={{ name: "Types", field: "types", target: "type" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={types} />
                     <h2 className={"clickable"} onClick={() => goToPage("#views")}>Views</h2>

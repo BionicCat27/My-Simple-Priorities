@@ -62,6 +62,7 @@ const TypePage = (props) => {
         <div id="pageContent">
             <div id="pageContainer">
                 <h1>{type.name}</h1>
+                <hr></hr>
             </div>
         </div>
     );

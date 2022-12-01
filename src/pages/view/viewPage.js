@@ -62,6 +62,7 @@ const ViewPage = (props) => {
         <div id="pageContent">
             <div id="pageContainer">
                 <h1>{view.name}</h1>
+                <hr></hr>
             </div>
         </div>
     );

@@ -71,6 +71,7 @@ const EditViewPage = (props) => {
             <div id="pageContainer">
                 <p><b>Title</b></p>
                 <EditableText value={view.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} />
+                <hr></hr>
                 <p><b>Description</b></p>
                 <EditableText value={view.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} />
             </div>
