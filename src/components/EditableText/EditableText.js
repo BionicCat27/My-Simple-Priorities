@@ -5,6 +5,7 @@ const EditableText = (props) => {
     const fieldName = props.fieldName;
     const dbRef = props.dbRef;
     const element = props.element;
+    const changeValue = props.changeValue;
     const [value, setValue] = useState(props.value || "");
     const [editValue, setEditingValue] = useState(props.value || "");
     const [isEditing, setIsEditing] = useState(false);
@@ -22,15 +23,6 @@ const EditableText = (props) => {
     const saveEdit = () => {
         setValue(editValue);
         setIsEditing(false);
-    };
-
-    function changeValue(fieldName, value) {
-        if (dbRef) {
-            let updates = {};
-            updates[fieldName] = value;
-
-            update(dbRef, updates);
-        }
     };
 
     if (isEditing || !value) {

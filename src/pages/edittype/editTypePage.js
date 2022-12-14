@@ -1,7 +1,7 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
 //Firebase
-import { ref, onValue, off } from "firebase/database";
+import { ref, onValue, off, update } from "firebase/database";
 //Contexts
 import { NavigationContext } from '../../contexts/NavigationContext';
 //Components
@@ -58,6 +58,15 @@ const EditTypePage = (props) => {
         });
     }, [dbRef]);
 
+    function changeValue(fieldName, value) {
+        if (dbRef) {
+            let updates = {};
+            updates[fieldName] = value;
+
+            update(dbRef, updates);
+        }
+    };
+
     if (type == "" || !type) {
         return (
             <div id="pageContent">
@@ -70,10 +79,10 @@ const EditTypePage = (props) => {
         <div id="pageContent">
             <div id="pageContainer">
                 <p><b>Title</b></p>
-                <EditableText value={type.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} />
+                <EditableText value={type.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} changeValue={changeValue} />
                 <hr></hr>
                 <p><b>Description</b></p>
-                <EditableText value={type.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} />
+                <EditableText value={type.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} changeValue={changeValue} />
             </div>
         </div>
     );

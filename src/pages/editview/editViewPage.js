@@ -12,6 +12,7 @@ import '../../firebaseConfig';
 import { AuthContext } from '../../contexts/AuthContext';
 import { DBContext } from '../../contexts/DBContext';
 import EditableText from '../../components/EditableText/EditableText';
+import EditViewDisplaysList from '../../components/EditViewDisplaysList/EditViewDisplaysList';
 
 const EditViewPage = (props) => {
     const { user } = useContext(AuthContext);
@@ -20,7 +21,7 @@ const EditViewPage = (props) => {
 
     const [dbRef, setDbRef] = useState(undefined);
 
-    const [view, setView] = useState([]);
+    const [view, setView] = useState({});
 
     const [viewKey] = useState(parameters.objectKey);
     useEffect(() => {
@@ -58,6 +59,15 @@ const EditViewPage = (props) => {
         });
     }, [dbRef]);
 
+    function changeValue(fieldName, value) {
+        if (dbRef) {
+            let updates = {};
+            updates[fieldName] = value;
+
+            update(dbRef, updates);
+        }
+    };
+
     if (view == "" || !view) {
         return (
             <div id="pageContent">
@@ -66,14 +76,17 @@ const EditViewPage = (props) => {
             </div>
         );
     }
+    console.log(`View: ${JSON.stringify(view)}`);
+    console.log(`Display for view: ${JSON.stringify(view.displays)}`);
     return (
         <div id="pageContent">
             <div id="pageContainer">
                 <p><b>Title</b></p>
-                <EditableText value={view.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} />
+                <EditableText value={view.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} changeValue={changeValue} />
                 <hr></hr>
                 <p><b>Description</b></p>
-                <EditableText value={view.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} />
+                <EditableText value={view.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} changeValue={changeValue} />
+                <EditViewDisplaysList displays={view.displays} changeValue={changeValue} />
             </div>
         </div>
     );
