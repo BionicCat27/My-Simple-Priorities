@@ -1,27 +1,26 @@
 //React
+import { push, ref, set } from 'firebase/database';
 import React, { useContext, useEffect, useState } from 'react';
+import { DBContext } from '../../contexts/DBContext';
 import DisplaySelector from './DisplaySelector/DisplaySelector';
 import EditableDisplay from './EditableDisplay/EditableDisplay';
 const EditViewDisplaysList = (props) => {
+    const { database } = useContext(DBContext);
 
     const [displays, setDisplays] = useState(props.displays);
     const dbRef = props.dbRef;
+    const viewRef = props.viewRef;
     const changeValue = props.changeValue;
 
     useEffect(() => { setDisplays(props.displays); }, [props.displays]);
 
 
     function addDisplay(displayKey) {
-        let newDisplaysList = [];
-        if (displays && displays.length > 0) {
-            newDisplaysList = [...displays];
-        }
+        let obj = { display: displayKey };
 
-        newDisplaysList.push({ display: displayKey });
-        changeValue("displays", newDisplaysList);
+        let res = set(push(ref(database, `${viewRef}/displays/`)), obj);
     }
 
-    console.log(`List of displays: ${displays}`);
     if (!displays || displays.length < 1) {
         return (
             <>
@@ -30,12 +29,23 @@ const EditViewDisplaysList = (props) => {
             </>
         );
     }
+    if (!displays.length) {
+        let display = displays;
+        return (
+            <>
+                <p><b>Displays</b></p>
+                <DisplaySelector addDisplay={addDisplay} />
+                <EditableDisplay display={display} displayRef={`${viewRef}/displays/${display.key}`} />
+            </>
+        );
+    }
     return (
         <>
-            <p><b>Displays</b></p>
+            <h2>Displays</h2>
             {displays.map((display, index) => {
-                console.log("Rendering display: " + display);
-                return <EditableDisplay key={`${index}${JSON.stringify(display.display)}`} display={display} />;
+                return <>
+                    <EditableDisplay key={`${index}${JSON.stringify(display.display)}`} display={display} displayRef={`${viewRef}/displays/${display.key}`} />
+                </>;
             })}
             <DisplaySelector addDisplay={addDisplay} />
         </>

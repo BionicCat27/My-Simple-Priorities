@@ -76,8 +76,15 @@ const EditViewPage = (props) => {
             </div>
         );
     }
-    console.log(`View: ${JSON.stringify(view)}`);
-    console.log(`Display for view: ${JSON.stringify(view.displays)}`);
+    let displays = [];
+    if (view.displays) {
+        displays = Object.keys(view.displays).map(key => {
+            let display = view.displays[key];
+            display.key = key;
+            return display;
+        });
+    }
+
     return (
         <div id="pageContent">
             <div id="pageContainer">
@@ -86,7 +93,7 @@ const EditViewPage = (props) => {
                 <hr></hr>
                 <p><b>Description</b></p>
                 <EditableText value={view.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} changeValue={changeValue} />
-                <EditViewDisplaysList displays={view.displays} changeValue={changeValue} />
+                <EditViewDisplaysList displays={displays} viewRef={`users/${user?.uid}/views/${viewKey}`} changeValue={changeValue} />
             </div>
         </div>
     );
