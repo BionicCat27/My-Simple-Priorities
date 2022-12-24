@@ -25,10 +25,16 @@ const EditableText = (props) => {
         setIsEditing(false);
     };
 
+    const handleKeyDown = (event) => {
+        if (event.key == 'Enter') {
+            saveEdit();
+        }
+    };
+
     if (isEditing || !value) {
         return (
             <>
-                <input value={editValue} onChange={field => setEditingValue(field.target.value)}></input>
+                <input value={editValue} onKeyDown={handleKeyDown} onChange={field => setEditingValue(field.target.value)}></input>
                 <button onClick={() => saveEdit()}>Save</button>
             </>
         );
