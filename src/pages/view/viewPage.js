@@ -12,6 +12,8 @@ import '../../firebaseConfig';
 import IndexTable from '../../components/IndexTable/IndexTable';
 import { AuthContext } from '../../contexts/AuthContext';
 import { DBContext } from '../../contexts/DBContext';
+import ListDisplay from '../../components/Displays/ListDisplay/ListDisplay';
+import { TypeContext, TypeProvider } from '../../contexts/TypeContext';
 
 const ViewPage = (props) => {
     const { user } = useContext(AuthContext);
@@ -58,11 +60,41 @@ const ViewPage = (props) => {
         });
     }, [dbRef]);
 
+    function renderDisplays() {
+        if (!view || !view.displays) {
+            return null;
+        }
+        let displays = [];
+        displays = Object.keys(view.displays).map(key => {
+            let display = view.displays[key];
+            display.key = key;
+            return display;
+        });
+        return displays.map((display) => {
+            return (
+                <TypeProvider key={`${display.type}`} user={user} typeKey={display.type}>
+                    {renderDisplay(display)}
+                </TypeProvider>);
+        });
+    }
+
+    function renderDisplay(display) {
+        switch (display.display) {
+            case "listDisplay":
+                return <ListDisplay display={display} />;
+                break;
+            default:
+                return <p>Invalid display: {JSON.stringify(display)}</p>;
+                break;
+        }
+    }
+
     return (
         <div id="pageContent">
             <div id="pageContainer">
                 <h1>{view.name}</h1>
                 <hr></hr>
+                {renderDisplays()}
             </div>
         </div>
     );

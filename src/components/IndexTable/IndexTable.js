@@ -37,6 +37,7 @@ const IndexTable = (props) => {
     let objects = props.objects;
     if (!objects) return <NoContent />;
     if (objects.length == 0) return <NoContent />;
+    console.log("Type contains: " + JSON.stringify(objects));
 
     return (
         <table>
@@ -49,10 +50,12 @@ const IndexTable = (props) => {
                     }
                     let entries = Object.entries(object);
                     return (
-                        <tr key={object.key} className={"indexTableRow clickable"}
+                        <tr key={object.key} className={"indexTableRow " + (datatype.target ? "clickable" : "")}
                             onClick={() => {
-                                goToPage(`#${datatype.target}`);
-                                setParameters({ objectKey: object.key });
+                                if (datatype.target) {
+                                    goToPage(`#${datatype.target}`);
+                                    setParameters({ objectKey: object.key });
+                                }
                             }}>
                             {fields.map((field) => {
                                 let key = field.field;

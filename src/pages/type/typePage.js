@@ -58,11 +58,32 @@ const TypePage = (props) => {
         });
     }, [dbRef]);
 
+    console.log(`Type: ${JSON.stringify(type)}`);
+
+    if (!type) {
+        return (
+            <p>No type found.</p>
+        );
+    }
+
+    function keyData(data) {
+        if (!data) {
+            return [];
+        }
+        let keyedData = Object.keys(data).map((key) => {
+            let value = data[key];
+            value.key = key;
+            return value;
+        });
+        return keyedData;
+    }
+
     return (
         <div id="pageContent">
             <div id="pageContainer">
                 <h1>{type.name}</h1>
                 <hr></hr>
+                <IndexTable datatype={{ name: "Data", field: `types/${typeKey}/data` }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={keyData(type.data) || []} />
             </div>
         </div>
     );
