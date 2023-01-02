@@ -29,11 +29,14 @@ const ListDisplay = (props) => {
     }
     let keyedData = keyData(typeData.data);
     return (
-        <ul>
-            {keyedData.map((object) => {
-                return <li key={JSON.stringify(object)}>{JSON.stringify(object)}</li>;
-            })}
-        </ul>
+        <>
+            <h2>List of {typeData.name}</h2>
+            <ul>
+                {keyedData.map((object) => {
+                    return <li key={JSON.stringify(object)}>{JSON.stringify(object)}</li>;
+                })}
+            </ul>
+        </>
     );
 };
 

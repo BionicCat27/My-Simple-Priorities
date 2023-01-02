@@ -80,7 +80,7 @@ const EditableListDisplay = (props) => {
                 }
                 {types.map((type) => {
                     if (type.key == displayType) {
-                        <option key={type.key} value={type.key}>{type.name} defaultValue</option>;
+                        return <option key={type.key} value={type.key} defaultValue>{type.name}</option>;
                     }
                     return (
                         <option key={type.key} value={type.key}>{type.name}</option>
