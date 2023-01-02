@@ -25,7 +25,6 @@ export const TypeProvider = ({ children, user, typeKey }) => {
     }, [user]);
 
     useEffect(() => {
-        console.log("Because dbref changed");
         if (!dbRef) {
             return;
         }
@@ -33,7 +32,6 @@ export const TypeProvider = ({ children, user, typeKey }) => {
             console.log("Can't load content - no user found.");
             return;
         }
-        console.log("Doing onvalue");
         onValue(dbRef, (snapshot) => {
             const data = snapshot.val();
             if (data == null) {
@@ -42,11 +40,8 @@ export const TypeProvider = ({ children, user, typeKey }) => {
                 return;
             }
             setTypeData(data);
-            console.log(data);
         });
     }, [dbRef]);
-
-    console.log(`Type data is: ${JSON.stringify(typeData)} typeKey is: ${typeKey} dbRef is: ${dbRef}`);
 
     return (
         <TypeContext.Provider value={{

@@ -43,9 +43,7 @@ const EditViewDisplaysList = (props) => {
         <>
             <h2>Displays</h2>
             {displays.map((display, index) => {
-                return <>
-                    <EditableDisplay key={`${index}${JSON.stringify(display.display)}`} display={display} displayRef={`${viewRef}/displays/${display.key}`} />
-                </>;
+                return <EditableDisplay key={`${index}${JSON.stringify(display.display)}`} display={display} displayRef={`${viewRef}/displays/${display.key}`} />;
             })}
             <DisplaySelector addDisplay={addDisplay} />
         </>

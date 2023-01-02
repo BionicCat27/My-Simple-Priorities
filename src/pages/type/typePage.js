@@ -58,8 +58,6 @@ const TypePage = (props) => {
         });
     }, [dbRef]);
 
-    console.log(`Type: ${JSON.stringify(type)}`);
-
     if (!type) {
         return (
             <p>No type found.</p>

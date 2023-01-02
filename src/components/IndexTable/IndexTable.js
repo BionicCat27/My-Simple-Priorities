@@ -37,7 +37,6 @@ const IndexTable = (props) => {
     let objects = props.objects;
     if (!objects) return <NoContent />;
     if (objects.length == 0) return <NoContent />;
-    console.log("Type contains: " + JSON.stringify(objects));
 
     return (
         <table>
