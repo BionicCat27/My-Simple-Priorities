@@ -1,9 +1,12 @@
 //React
 import React, { useContext } from 'react';
+import { NavigationContext } from '../../../contexts/NavigationContext';
 import { TypeContext } from '../../../contexts/TypeContext';
 const ListDisplay = (props) => {
 
     const { typeData } = useContext(TypeContext);
+
+    const { navigateToPage } = useContext(NavigationContext);
 
     const display = props.display;
     if (!typeData || !typeData.name) {
@@ -33,7 +36,7 @@ const ListDisplay = (props) => {
             <h2>List of {typeData.name}</h2>
             <ul>
                 {keyedData.map((object) => {
-                    return <li key={JSON.stringify(object)}>{JSON.stringify(object)}</li>;
+                    return <li className={"clickable"} key={JSON.stringify(object)} onClick={() => navigateToPage("#data")}><h3>{object.name}</h3></li>;
                 })}
             </ul>
         </>

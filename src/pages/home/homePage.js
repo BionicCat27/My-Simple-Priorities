@@ -18,11 +18,12 @@ import ViewPage from '../view/viewPage';
 import EditViewPage from '../editview/editViewPage';
 import TypePage from '../type/typePage';
 import EditTypePage from '../edittype/editTypePage';
+import TypeDataPage from '../typedata/typeDataPage';
 
 const HomePage = (props) => {
     const { user } = useContext(AuthContext);
     const { database } = useContext(DBContext);
-    const { goToPage, setParameters, page } = useContext(NavigationContext);
+    const { navigateToPage, navigateBack, page } = useContext(NavigationContext);
 
     const [viewsRef, setViewsRef] = useState(undefined);
     const [typesRef, setTypesRef] = useState(undefined);
@@ -110,25 +111,17 @@ const HomePage = (props) => {
                 return <EditViewPage />;
             case "#edittype":
                 return <EditTypePage />;
+            case "#data":
+                return <TypeDataPage />;
             default:
                 return null;
-        }
-    }
-    function getBackButton() {
-        switch (page) {
-            case "#editview":
-                return <h3 id="backBtn" className={"clickable"} onClick={() => goToPage("#views")}>Back</h3>;
-            case "#edittype":
-                return <h3 id="backBtn" className={"clickable"} onClick={() => goToPage("#types")}>Back</h3>;
-            default:
-                return <h3 id="backBtn" className={"clickable"} onClick={() => goToPage("#home")}>Back</h3>;
         }
     }
     let contentPage = getPage();
     if (contentPage) {
         return (
             <>
-                {getBackButton()}
+                <h3 id="backBtn" className={"clickable"} onClick={() => navigateBack()}>Back</h3>
                 {getPage()}
             </>);
     }
@@ -139,9 +132,9 @@ const HomePage = (props) => {
                 <div id="pageContainer">
                     <h1>Home</h1>
                     <hr></hr>
-                    <h2 className={"clickable"} onClick={() => goToPage("#types")}>Types</h2>
+                    <h2 className={"clickable"} onClick={() => navigateToPage("#types")}>Types</h2>
                     <IndexList datatype={{ name: "Types", field: "types", target: "type" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={types} />
-                    <h2 className={"clickable"} onClick={() => goToPage("#views")}>Views</h2>
+                    <h2 className={"clickable"} onClick={() => navigateToPage("#views")}>Views</h2>
                     <IndexList datatype={{ name: "Views", field: "views", target: "view" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={views} />
                 </div>
             </div>

@@ -2,7 +2,7 @@
 import React, { useContext } from 'react';
 import { NavigationContext } from '../../contexts/NavigationContext';
 const IndexList = (props) => {
-    const { goToPage, setParameters } = useContext(NavigationContext);
+    const { navigateToPage, setParameters } = useContext(NavigationContext);
 
     const objectHasAllFields = (object, fields) => {
         for (const field of fields) {
@@ -33,7 +33,7 @@ const IndexList = (props) => {
                 let entries = Object.entries(object);
                 return (
                     <li className={"clickable"} key={object.key} onClick={() => {
-                        goToPage(`#${datatype.target}`);
+                        navigateToPage(`#${datatype.target}`);
                         setParameters({ objectKey: object.key });
                     }}>
                         <h3>

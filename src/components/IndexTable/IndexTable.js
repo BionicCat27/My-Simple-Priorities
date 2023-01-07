@@ -5,7 +5,7 @@ import IndexTableFormRow from './IndexTableFormRow';
 import './IndexTable.css';
 const IndexTable = (props) => {
 
-    const { goToPage, setParameters } = useContext(NavigationContext);
+    const { navigateToPage, setParameters } = useContext(NavigationContext);
 
     const NoContent = () => {
         return (
@@ -52,7 +52,7 @@ const IndexTable = (props) => {
                         <tr key={object.key} className={"indexTableRow " + (datatype.target ? "clickable" : "")}
                             onClick={() => {
                                 if (datatype.target) {
-                                    goToPage(`#${datatype.target}`);
+                                    navigateToPage(`#${datatype.target}`);
                                     setParameters({ objectKey: object.key });
                                 }
                             }}>

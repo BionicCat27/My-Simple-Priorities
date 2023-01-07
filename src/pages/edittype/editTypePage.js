@@ -16,7 +16,7 @@ import EditableText from '../../components/EditableText/EditableText';
 const EditTypePage = (props) => {
     const { user } = useContext(AuthContext);
     const { database } = useContext(DBContext);
-    const { goToPage, parameters } = useContext(NavigationContext);
+    const { navigateToPage, parameters } = useContext(NavigationContext);
 
     const [dbRef, setDbRef] = useState(undefined);
 
@@ -24,7 +24,7 @@ const EditTypePage = (props) => {
 
     const [typeKey] = useState(parameters.objectKey);
     useEffect(() => {
-        if (!typeKey) goToPage("#home");
+        if (!typeKey) navigateToPage("#home");
     }, [typeKey]);
 
     //Set db ref on user set

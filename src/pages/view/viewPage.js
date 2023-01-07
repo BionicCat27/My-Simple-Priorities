@@ -18,7 +18,7 @@ import { TypeContext, TypeProvider } from '../../contexts/TypeContext';
 const ViewPage = (props) => {
     const { user } = useContext(AuthContext);
     const { database } = useContext(DBContext);
-    const { goToPage, parameters } = useContext(NavigationContext);
+    const { navigateToPage, parameters } = useContext(NavigationContext);
 
     const [dbRef, setDbRef] = useState(undefined);
 
@@ -26,7 +26,7 @@ const ViewPage = (props) => {
 
     const [viewKey] = useState(parameters.objectKey);
     useEffect(() => {
-        if (!viewKey) goToPage("#home");
+        if (!viewKey) navigateToPage("#home");
     }, [viewKey]);
 
     //Set db ref on user set

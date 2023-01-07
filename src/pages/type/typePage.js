@@ -16,7 +16,7 @@ import { DBContext } from '../../contexts/DBContext';
 const TypePage = (props) => {
     const { user } = useContext(AuthContext);
     const { database } = useContext(DBContext);
-    const { goToPage, parameters } = useContext(NavigationContext);
+    const { navigateToPage, parameters } = useContext(NavigationContext);
 
     const [dbRef, setDbRef] = useState(undefined);
 
@@ -24,7 +24,7 @@ const TypePage = (props) => {
 
     const [typeKey] = useState(parameters.objectKey);
     useEffect(() => {
-        if (!typeKey) goToPage("#home");
+        if (!typeKey) navigateToPage("#home");
     }, [typeKey]);
 
     //Set db ref on user set
@@ -81,7 +81,7 @@ const TypePage = (props) => {
             <div id="pageContainer">
                 <h1>{type.name}</h1>
                 <hr></hr>
-                <IndexTable datatype={{ name: "Data", field: `types/${typeKey}/data` }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={keyData(type.data) || []} />
+                <IndexTable datatype={{ name: "Data", field: `types/${typeKey}/data`, target: "data" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={keyData(type.data) || []} />
             </div>
         </div>
     );
