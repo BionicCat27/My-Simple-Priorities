@@ -19,83 +19,13 @@ import EditViewPage from '../editview/editViewPage';
 import TypePage from '../type/typePage';
 import EditTypePage from '../edittype/editTypePage';
 import TypeDataPage from '../typedata/typeDataPage';
+import { TypesContext } from '../../contexts/TypesContext';
+import { ViewsContext } from '../../contexts/ViewsContext';
 
 const HomePage = (props) => {
-    const { user } = useContext(AuthContext);
-    const { database } = useContext(DBContext);
     const { navigateToPage, navigateBack, page } = useContext(NavigationContext);
-
-    const [viewsRef, setViewsRef] = useState(undefined);
-    const [typesRef, setTypesRef] = useState(undefined);
-
-    const [views, setViews] = useState([]);
-    const [types, setTypes] = useState([]);
-
-    //Set db ref on user set
-    useEffect(() => {
-        if (user) {
-            if (viewsRef) {
-                off(viewsRef);
-            }
-            if (typesRef) {
-                off(typesRef);
-            }
-            setViewsRef(ref(database, `users/${user.uid}/views`));
-            setTypesRef(ref(database, `users/${user.uid}/types`));
-            setViews([]);
-            setTypes([]);
-        }
-    }, [user]);
-    const [hash, setHash] = useState("");
-
-    //Retrieve cards on dbref change
-    useEffect(() => {
-        if (!viewsRef) {
-            return;
-        }
-        if (!user) {
-            console.log("Can't load content - no user found.");
-            return;
-        }
-        onValue(viewsRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data == null) {
-                console.log("An error occurred.");
-                setViews([]);
-                return;
-            }
-            let keyedData = Object.keys(data).map((key) => {
-                let value = data[key];
-                value.key = key;
-                return value;
-            });
-            setViews(keyedData);
-        });
-    }, [viewsRef]);
-
-    useEffect(() => {
-        if (!typesRef) {
-            return;
-        }
-        if (!user) {
-            console.log("Can't load content - no user found.");
-            return;
-        }
-        onValue(typesRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data == null) {
-                console.log("An error occurred.");
-                setTypes([]);
-                return;
-            }
-            let keyedData = Object.keys(data).map((key) => {
-                let value = data[key];
-                value.key = key;
-                return value;
-            });
-            setTypes(keyedData);
-        });
-    }, [typesRef]);
+    const { typesData } = useContext(TypesContext);
+    const { viewsData } = useContext(ViewsContext);
 
     function getPage() {
         switch (page) {
@@ -133,9 +63,9 @@ const HomePage = (props) => {
                     <h1>Home</h1>
                     <hr></hr>
                     <h2 className={"clickable"} onClick={() => navigateToPage("#types")}>Types</h2>
-                    <IndexList datatype={{ name: "Types", field: "types", target: "type" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={types} />
+                    <IndexList datatype={{ name: "Types", field: "types", target: "type" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={typesData} />
                     <h2 className={"clickable"} onClick={() => navigateToPage("#views")}>Views</h2>
-                    <IndexList datatype={{ name: "Views", field: "views", target: "view" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={views} />
+                    <IndexList datatype={{ name: "Views", field: "views", target: "view" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={viewsData} />
                 </div>
             </div>
         </>
