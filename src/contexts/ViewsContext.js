@@ -13,6 +13,7 @@ export const ViewsProvider = ({ children }) => {
     const [dbRef, setDbRef] = useState(undefined);
 
     const [viewsData, setViewsData] = useState();
+    const [rawViewsData, setRawViewsData] = useState();
 
     //Set db ref on user set
     useEffect(() => {
@@ -40,6 +41,7 @@ export const ViewsProvider = ({ children }) => {
                 setViewsData([]);
                 return;
             }
+            setRawViewsData(data);
             let keyedData = Object.keys(data).map((key) => {
                 let value = data[key];
                 value.key = key;
@@ -49,9 +51,16 @@ export const ViewsProvider = ({ children }) => {
         });
     }, [dbRef]);
 
+    function getView(viewKey) {
+        let view = rawViewsData[viewKey];
+        view.key = viewKey;
+        return view;
+    }
+
     return (
         <ViewsContext.Provider value={{
-            viewsData
+            viewsData,
+            getView
         }}>{children}</ViewsContext.Provider>
     );
 };;

@@ -13,6 +13,7 @@ export const TypesProvider = ({ children }) => {
     const [dbRef, setDbRef] = useState(undefined);
 
     const [typesData, setTypesData] = useState();
+    const [rawTypesData, setRawTypesData] = useState();
 
     //Set db ref on user set
     useEffect(() => {
@@ -40,6 +41,7 @@ export const TypesProvider = ({ children }) => {
                 setTypesData([]);
                 return;
             }
+            setRawTypesData(data);
             let keyedData = Object.keys(data).map((key) => {
                 let value = data[key];
                 value.key = key;
@@ -49,9 +51,16 @@ export const TypesProvider = ({ children }) => {
         });
     }, [dbRef]);
 
+    function getType(typeKey) {
+        let type = rawTypesData[typeKey];
+        type.key = typeKey;
+        return type;
+    }
+
     return (
         <TypesContext.Provider value={{
-            typesData
+            typesData,
+            getType
         }}>{children}</TypesContext.Provider>
     );
 };;

@@ -1,7 +1,6 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
 //Firebase
-import { ref, onValue, off } from "firebase/database";
 //Contexts
 import { NavigationContext } from '../../contexts/NavigationContext';
 //Components
@@ -9,56 +8,23 @@ import { NavigationContext } from '../../contexts/NavigationContext';
 import './viewPage.css';
 //Config
 import '../../firebaseConfig';
-import IndexTable from '../../components/IndexTable/IndexTable';
 import { AuthContext } from '../../contexts/AuthContext';
-import { DBContext } from '../../contexts/DBContext';
 import ListDisplay from '../../components/Displays/ListDisplay/ListDisplay';
-import { TypeContext, TypeProvider } from '../../contexts/TypeContext';
+import { ViewsContext } from '../../contexts/ViewsContext';
+import { TypeProvider } from '../../contexts/TypeContext';
 
 const ViewPage = (props) => {
     const { user } = useContext(AuthContext);
-    const { database } = useContext(DBContext);
     const { navigateToPage, parameters } = useContext(NavigationContext);
-
-    const [dbRef, setDbRef] = useState(undefined);
-
-    const [view, setView] = useState([]);
+    const { getView } = useContext(ViewsContext);
 
     const [viewKey] = useState(parameters.objectKey);
+
+    let view = getView(viewKey);
+
     useEffect(() => {
         if (!viewKey) navigateToPage("#home");
     }, [viewKey]);
-
-    //Set db ref on user set
-    useEffect(() => {
-        if (user) {
-            if (dbRef) {
-                off(dbRef);
-            }
-            setDbRef(ref(database, `users/${user.uid}/views/${viewKey}`));
-            setView([]);
-        }
-    }, [user]);
-
-    //Retrieve cards on dbref change
-    useEffect(() => {
-        if (!dbRef) {
-            return;
-        }
-        if (!user) {
-            console.log("Can't load content - no user found.");
-            return;
-        }
-        onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data == null) {
-                console.log("An error occurred.");
-                setView([]);
-                return;
-            }
-            setView(data);
-        });
-    }, [dbRef]);
 
     function renderDisplays() {
         if (!view || !view.displays) {
