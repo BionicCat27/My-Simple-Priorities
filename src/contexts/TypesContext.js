@@ -1,4 +1,4 @@
-import { off, onValue, ref } from "firebase/database";
+import { off, onValue, ref, update } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { DBContext } from "./DBContext";
@@ -52,15 +52,31 @@ export const TypesProvider = ({ children }) => {
     }, [dbRef]);
 
     function getType(typeKey) {
+        if (!typeKey) {
+            return;
+        }
         let type = rawTypesData[typeKey];
+        if (!type) {
+            return;
+        }
         type.key = typeKey;
         return type;
     }
 
+    function setTypeValue(typeKey, fieldName, value) {
+        if (dbRef) {
+            let updates = {};
+            updates[fieldName] = value;
+
+            update(ref(database, `users/${user.uid}/types/${typeKey}`), updates);
+        }
+    };
+
     return (
         <TypesContext.Provider value={{
             typesData,
-            getType
+            getType,
+            setTypeValue
         }}>{children}</TypesContext.Provider>
     );
 };;

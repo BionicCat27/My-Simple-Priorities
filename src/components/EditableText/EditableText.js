@@ -6,6 +6,7 @@ const EditableText = (props) => {
     const dbRef = props.dbRef;
     const element = props.element;
     const changeValue = props.changeValue;
+    const parentKey = props.parentKey;
     const [value, setValue] = useState(props.value || "");
     const [editValue, setEditingValue] = useState(props.value || "");
     const [isEditing, setIsEditing] = useState(false);
@@ -17,7 +18,7 @@ const EditableText = (props) => {
     useEffect(() => {
         setIsEditing(false);
         setEditingValue(value);
-        changeValue(fieldName, value);
+        changeValue(parentKey, fieldName, value);
     }, [value]);
 
     const saveEdit = () => {

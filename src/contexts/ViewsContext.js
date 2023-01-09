@@ -1,4 +1,4 @@
-import { off, onValue, ref } from "firebase/database";
+import { off, onValue, ref, update } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { DBContext } from "./DBContext";
@@ -52,15 +52,31 @@ export const ViewsProvider = ({ children }) => {
     }, [dbRef]);
 
     function getView(viewKey) {
+        if (!viewKey) {
+            return;
+        }
         let view = rawViewsData[viewKey];
+        if (!view) {
+            return;
+        }
         view.key = viewKey;
         return view;
     }
 
+    function setViewValue(viewKey, fieldName, value) {
+        if (dbRef) {
+            let updates = {};
+            updates[fieldName] = value;
+
+            update(ref(database, `users/${user.uid}/views/${viewKey}`), updates);
+        }
+    };
+
     return (
         <ViewsContext.Provider value={{
             viewsData,
-            getView
+            getView,
+            setViewValue
         }}>{children}</ViewsContext.Provider>
     );
 };;

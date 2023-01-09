@@ -1,14 +1,16 @@
 //React
 import React, { useContext } from 'react';
 import { NavigationContext } from '../../../contexts/NavigationContext';
-import { TypeContext } from '../../../contexts/TypeContext';
+import { TypesContext } from '../../../contexts/TypesContext';
 const ListDisplay = (props) => {
 
-    const { typeData } = useContext(TypeContext);
+    const { getType } = useContext(TypesContext);
 
     const { navigateToPage } = useContext(NavigationContext);
 
     const display = props.display;
+    let typeData = getType(display.type);
+
     if (!typeData || !typeData.name) {
         return (
             <p>No type found.</p>

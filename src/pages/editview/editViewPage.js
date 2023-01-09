@@ -11,6 +11,7 @@ import './editViewPage.css';
 import '../../firebaseConfig';
 import { AuthContext } from '../../contexts/AuthContext';
 import { DBContext } from '../../contexts/DBContext';
+import { ViewsContext } from '../../contexts/ViewsContext';
 import EditableText from '../../components/EditableText/EditableText';
 import EditViewDisplaysList from '../../components/EditViewDisplaysList/EditViewDisplaysList';
 
@@ -19,54 +20,17 @@ const EditViewPage = (props) => {
     const { database } = useContext(DBContext);
     const { navigateToPage, parameters } = useContext(NavigationContext);
 
+    const { getView, setViewValue } = useContext(ViewsContext);
+
     const [dbRef, setDbRef] = useState(undefined);
 
-    const [view, setView] = useState({});
-
     const [viewKey] = useState(parameters.objectKey);
+
+    let view = getView(viewKey);
+
     useEffect(() => {
         if (!viewKey) navigateToPage("#home");
     }, [viewKey]);
-
-    //Set db ref on user set
-    useEffect(() => {
-        if (user) {
-            if (dbRef) {
-                off(dbRef);
-            }
-            setDbRef(ref(database, `users/${user.uid}/views/${viewKey}`));
-            setView([]);
-        }
-    }, [user]);
-
-    //Retrieve cards on dbref change
-    useEffect(() => {
-        if (!dbRef) {
-            return;
-        }
-        if (!user) {
-            console.log("Can't load content - no user found.");
-            return;
-        }
-        onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data == null) {
-                console.log("An error occurred.");
-                setView([]);
-                return;
-            }
-            setView(data);
-        });
-    }, [dbRef]);
-
-    function changeValue(fieldName, value) {
-        if (dbRef) {
-            let updates = {};
-            updates[fieldName] = value;
-
-            update(dbRef, updates);
-        }
-    };
 
     if (view == "" || !view) {
         return (
@@ -89,11 +53,11 @@ const EditViewPage = (props) => {
         <div id="pageContent">
             <div id="pageContainer">
                 <p><b>Title</b></p>
-                <EditableText value={view.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} changeValue={changeValue} />
+                <EditableText value={view.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} parentKey={viewKey} changeValue={setViewValue} />
                 <hr></hr>
                 <p><b>Description</b></p>
-                <EditableText value={view.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} changeValue={changeValue} />
-                <EditViewDisplaysList displays={displays} viewRef={`users/${user?.uid}/views/${viewKey}`} changeValue={changeValue} />
+                <EditableText value={view.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} changeValue={setViewValue} parentKey={viewKey} />
+                <EditViewDisplaysList displays={displays} viewRef={`users/${user?.uid}/views/${viewKey}`} changeValue={setViewValue} parentKey={viewKey} />
             </div>
         </div>
     );

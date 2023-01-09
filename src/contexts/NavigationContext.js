@@ -12,6 +12,12 @@ export const NavigationProvider = ({ children }) => {
     }, [page]);
 
     function navigateBack() {
+        if (!pageHistory || pageHistory.length == 0) {
+            setPage("#home");
+            setParameters({});
+            setPageHistory([]);
+            return;
+        }
         let newPageHistory = [...pageHistory];
         let lastPageObject = newPageHistory.pop();
         setPage(lastPageObject.page);

@@ -15,14 +15,8 @@ import { DBContext } from '../../contexts/DBContext';
 import { TypesContext } from '../../contexts/TypesContext';
 
 const TypePage = (props) => {
-    const { user } = useContext(AuthContext);
-    const { database } = useContext(DBContext);
     const { navigateToPage, parameters } = useContext(NavigationContext);
     const { getType } = useContext(TypesContext);
-
-    const [dbRef, setDbRef] = useState(undefined);
-
-    // const [type, setType] = useState([]);
 
     const [typeKey] = useState(parameters.objectKey);
 

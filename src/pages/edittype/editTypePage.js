@@ -11,6 +11,7 @@ import './editTypePage.css';
 import '../../firebaseConfig';
 import { AuthContext } from '../../contexts/AuthContext';
 import { DBContext } from '../../contexts/DBContext';
+import { TypesContext } from '../../contexts/TypesContext';
 import EditableText from '../../components/EditableText/EditableText';
 
 const EditTypePage = (props) => {
@@ -18,45 +19,18 @@ const EditTypePage = (props) => {
     const { database } = useContext(DBContext);
     const { navigateToPage, parameters } = useContext(NavigationContext);
 
+    const { getType, setTypeValue } = useContext(TypesContext);
+
     const [dbRef, setDbRef] = useState(undefined);
 
-    const [type, setType] = useState([]);
+    // const [type, setType] = useState([]);
 
     const [typeKey] = useState(parameters.objectKey);
+
+    let type = getType(typeKey);
     useEffect(() => {
         if (!typeKey) navigateToPage("#home");
     }, [typeKey]);
-
-    //Set db ref on user set
-    useEffect(() => {
-        if (user) {
-            if (dbRef) {
-                off(dbRef);
-            }
-            setDbRef(ref(database, `users/${user.uid}/types/${typeKey}`));
-            setType([]);
-        }
-    }, [user]);
-
-    //Retrieve cards on dbref change
-    useEffect(() => {
-        if (!dbRef) {
-            return;
-        }
-        if (!user) {
-            console.log("Can't load content - no user found.");
-            return;
-        }
-        onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data == null) {
-                console.log("An error occurred.");
-                setType([]);
-                return;
-            }
-            setType(data);
-        });
-    }, [dbRef]);
 
     function changeValue(fieldName, value) {
         if (dbRef) {
@@ -79,10 +53,10 @@ const EditTypePage = (props) => {
         <div id="pageContent">
             <div id="pageContainer">
                 <p><b>Title</b></p>
-                <EditableText value={type.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} changeValue={changeValue} />
+                <EditableText value={type.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} changeValue={setTypeValue} parentKey={typeKey} />
                 <hr></hr>
                 <p><b>Description</b></p>
-                <EditableText value={type.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} changeValue={changeValue} />
+                <EditableText value={type.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} changeValue={setTypeValue} parentKey={typeKey} />
             </div>
         </div>
     );

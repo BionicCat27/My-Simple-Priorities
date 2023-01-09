@@ -11,7 +11,6 @@ import '../../firebaseConfig';
 import { AuthContext } from '../../contexts/AuthContext';
 import ListDisplay from '../../components/Displays/ListDisplay/ListDisplay';
 import { ViewsContext } from '../../contexts/ViewsContext';
-import { TypeProvider } from '../../contexts/TypeContext';
 
 const ViewPage = (props) => {
     const { user } = useContext(AuthContext);
@@ -37,22 +36,19 @@ const ViewPage = (props) => {
             return display;
         });
         return displays.map((display) => {
-            return (
-                <TypeProvider key={`${display.type}`} user={user} typeKey={display.type}>
-                    {renderDisplay(display)}
-                </TypeProvider>);
+            switch (display.display) {
+                case "listDisplay":
+                    return <ListDisplay key={`${display.type}`} display={display} />;
+                    break;
+                default:
+                    return <p key={`${display.type}`}>Invalid display: {JSON.stringify(display)}</p>;
+                    break;
+            }
         });
     }
 
-    function renderDisplay(display) {
-        switch (display.display) {
-            case "listDisplay":
-                return <ListDisplay display={display} />;
-                break;
-            default:
-                return <p>Invalid display: {JSON.stringify(display)}</p>;
-                break;
-        }
+    if (!view) {
+        return <p>No view found.</p>;
     }
 
     return (
