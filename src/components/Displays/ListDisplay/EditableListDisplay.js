@@ -73,7 +73,7 @@ const EditableListDisplay = (props) => {
         <div>
             <h3>List Display</h3>
             <h4>Type</h4>
-            <select value={displayType ? displayType : "Select Type"} onChange={field => setDisplayType(field.target.value)}>
+            <select value={displayType ? displayType : "Select Type"} onChange={field => { setDisplayType(field.target.value); }}>
                 {(display && display.type)
                     ? null
                     : <option defaultValue hidden disabled>Select Type</option>
