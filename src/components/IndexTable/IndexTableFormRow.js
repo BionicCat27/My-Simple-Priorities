@@ -48,7 +48,7 @@ const IndexTableFormRow = (props) => {
     return (
         <tr>
             {fields.map((field) => {
-                return <td key={field.name}>
+                return <th key={field.name}>
                     <input
                         className="indexTableFormInput"
                         placeholder={field.name}
@@ -56,9 +56,9 @@ const IndexTableFormRow = (props) => {
                         onChange={change => setFieldValues(setFieldValue(fieldValues, field.field, change.target.value))}
                         onKeyDown={handleKeyDown}>
                     </input>
-                </td>;
+                </th>;
             })}
-            <td><button onClick={addObject}>Add</button></td>
+            <th><button onClick={addObject}>Add</button></th>
         </tr>
     );
 };

@@ -6,7 +6,7 @@ const ListDisplay = (props) => {
 
     const { getType } = useContext(TypesContext);
 
-    const { navigateToPage } = useContext(NavigationContext);
+    const { navigateToPage, setParameters } = useContext(NavigationContext);
 
     const display = props.display;
     let typeData = getType(display.type);
@@ -38,7 +38,7 @@ const ListDisplay = (props) => {
             <h2>List of {typeData.name}</h2>
             <ul>
                 {keyedData.map((object) => {
-                    return <li className={"clickable"} key={JSON.stringify(object)} onClick={() => navigateToPage("#data")}><h3>{object.name}</h3></li>;
+                    return <li className={"clickable"} key={JSON.stringify(object)} onClick={() => { navigateToPage("#data"); setParameters({ objectKey: typeData.key }); }}><h3>{object.name}</h3></li>;
                 })}
             </ul>
         </>
