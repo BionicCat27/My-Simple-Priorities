@@ -63,20 +63,33 @@ export const TypesProvider = ({ children }) => {
         return type;
     }
 
-    function setTypeValue(typeKey, fieldName, value) {
+    function setTypeValue(dataPath, fieldName, value) {
         if (dbRef) {
             let updates = {};
             updates[fieldName] = value;
 
-            update(ref(database, `users/${user.uid}/types/${typeKey}`), updates);
+            update(ref(database, `users/${user.uid}/types/${dataPath}`), updates);
         }
     };
+
+    function keyData(data) {
+        if (!data) {
+            return [];
+        }
+        let keyedData = Object.keys(data).map((key) => {
+            let value = data[key];
+            value.key = key;
+            return value;
+        });
+        return keyedData;
+    }
 
     return (
         <TypesContext.Provider value={{
             typesData,
             getType,
-            setTypeValue
+            setTypeValue,
+            keyData
         }}>{children}</TypesContext.Provider>
     );
 };;

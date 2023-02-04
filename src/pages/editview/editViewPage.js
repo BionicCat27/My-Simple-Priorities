@@ -53,10 +53,10 @@ const EditViewPage = (props) => {
         <div id="pageContent">
             <div id="pageContainer">
                 <p><b>Title</b></p>
-                <EditableText value={view.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} parentKey={viewKey} changeValue={setViewValue} />
+                <EditableText value={view.name} fieldName="name" element={(content) => <h1>{content}</h1>} dbPath={viewKey} changeValue={setViewValue} />
                 <hr></hr>
                 <p><b>Description</b></p>
-                <EditableText value={view.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} changeValue={setViewValue} parentKey={viewKey} />
+                <EditableText value={view.description} fieldName="description" element={(content) => <p>{content}</p>} changeValue={setViewValue} dbPath={viewKey} />
                 <EditViewDisplaysList displays={displays} viewRef={`users/${user?.uid}/views/${viewKey}`} changeValue={setViewValue} parentKey={viewKey} />
             </div>
         </div>

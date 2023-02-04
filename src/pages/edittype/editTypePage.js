@@ -1,7 +1,6 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
 //Firebase
-import { ref, onValue, off, update } from "firebase/database";
 //Contexts
 import { NavigationContext } from '../../contexts/NavigationContext';
 //Components
@@ -9,21 +8,14 @@ import { NavigationContext } from '../../contexts/NavigationContext';
 import './editTypePage.css';
 //Config
 import '../../firebaseConfig';
-import { AuthContext } from '../../contexts/AuthContext';
-import { DBContext } from '../../contexts/DBContext';
 import { TypesContext } from '../../contexts/TypesContext';
 import EditableText from '../../components/EditableText/EditableText';
+import IndexTable from '../../components/IndexTable/IndexTable';
 
 const EditTypePage = (props) => {
-    const { user } = useContext(AuthContext);
-    const { database } = useContext(DBContext);
     const { navigateToPage, parameters } = useContext(NavigationContext);
 
-    const { getType, setTypeValue } = useContext(TypesContext);
-
-    const [dbRef, setDbRef] = useState(undefined);
-
-    // const [type, setType] = useState([]);
+    const { getType, setTypeValue, keyData } = useContext(TypesContext);
 
     const [typeKey] = useState(parameters.objectKey);
 
@@ -31,15 +23,6 @@ const EditTypePage = (props) => {
     useEffect(() => {
         if (!typeKey) navigateToPage("#home");
     }, [typeKey]);
-
-    function changeValue(fieldName, value) {
-        if (dbRef) {
-            let updates = {};
-            updates[fieldName] = value;
-
-            update(dbRef, updates);
-        }
-    };
 
     if (type == "" || !type) {
         return (
@@ -53,10 +36,13 @@ const EditTypePage = (props) => {
         <div id="pageContent">
             <div id="pageContainer">
                 <p><b>Title</b></p>
-                <EditableText value={type.name} fieldName="name" dbRef={dbRef} element={(content) => <h1>{content}</h1>} changeValue={setTypeValue} parentKey={typeKey} />
+                <EditableText value={type.name} fieldName="name" element={(content) => <h1>{content}</h1>} changeValue={setTypeValue} dbPath={typeKey} />
                 <hr></hr>
                 <p><b>Description</b></p>
-                <EditableText value={type.description} fieldName="description" dbRef={dbRef} element={(content) => <p>{content}</p>} changeValue={setTypeValue} parentKey={typeKey} />
+                <EditableText value={type.description} fieldName="description" element={(content) => <p>{content}</p>} changeValue={setTypeValue} dbPath={typeKey} />
+                <hr></hr>
+                <p><b>Data</b></p>
+                <IndexTable datatype={{ name: "Data", field: `types/${typeKey}/data` }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={keyData(type.data) || []} />
             </div>
         </div>
     );

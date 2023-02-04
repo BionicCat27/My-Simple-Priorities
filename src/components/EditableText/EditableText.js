@@ -3,10 +3,9 @@ import { update } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
 const EditableText = (props) => {
     const fieldName = props.fieldName;
-    const dbRef = props.dbRef;
     const element = props.element;
     const changeValue = props.changeValue;
-    const parentKey = props.parentKey;
+    const dbPath = props.dbPath;
     const [value, setValue] = useState(props.value || "");
     const [editValue, setEditingValue] = useState(props.value || "");
     const [isEditing, setIsEditing] = useState(false);
@@ -18,7 +17,7 @@ const EditableText = (props) => {
     useEffect(() => {
         setIsEditing(false);
         setEditingValue(value);
-        changeValue(parentKey, fieldName, value);
+        changeValue(dbPath, fieldName, value);
     }, [value]);
 
     const saveEdit = () => {
