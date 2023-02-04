@@ -42,7 +42,7 @@ const ListDisplay = (props) => {
     return (
         <>
             <h2>List of {typeData.name}</h2>
-            <table><IndexTableFormRow datatype={datatype} fields={fields} /></table>
+            <table><thead><IndexTableFormRow datatype={datatype} fields={fields} /></thead></table>
             <ul>
                 {keyedData.map((object) => {
                     return <li className={"clickable"} key={JSON.stringify(object)} onClick={() => { navigateToPage("#data"); setParameters({ typeKey: typeData.key, dataKey: object.key }); }}><h3>{object.name}</h3></li>;
