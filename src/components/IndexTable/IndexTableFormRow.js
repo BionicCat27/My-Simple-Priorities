@@ -33,7 +33,6 @@ const IndexTableFormRow = (props) => {
 
         let fieldBuild = fieldValues;
         fields.forEach((field) => {
-            console.log(field.field);
             fieldBuild = setFieldValue(fieldBuild, field.field, "");
         });
         setFieldValues(fieldBuild);

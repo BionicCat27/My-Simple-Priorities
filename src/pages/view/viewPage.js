@@ -11,6 +11,7 @@ import '../../firebaseConfig';
 import { AuthContext } from '../../contexts/AuthContext';
 import ListDisplay from '../../components/Displays/ListDisplay/ListDisplay';
 import { ViewsContext } from '../../contexts/ViewsContext';
+import CardsDisplay from '../../components/Displays/CardsDisplay/CardsDisplay';
 
 const ViewPage = (props) => {
     const { user } = useContext(AuthContext);
@@ -38,7 +39,10 @@ const ViewPage = (props) => {
         return displays.map((display) => {
             switch (display.display) {
                 case "listDisplay":
-                    return <ListDisplay key={`${display.type}`} display={display} />;
+                    return <ListDisplay key={`${display.type}list`} display={display} />;
+                    break;
+                case "cardsDisplay":
+                    return <CardsDisplay key={`${display.type}cards`} display={display} />;
                     break;
                 default:
                     return <p key={`${display.type}`}>Invalid display: {JSON.stringify(display)}</p>;

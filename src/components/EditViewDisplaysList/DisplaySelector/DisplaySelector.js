@@ -10,6 +10,7 @@ const DisplaySelector = (props) => {
         <div>
             <select value={selectorValue} onChange={change => setSelectorValue(change.target.value)}>
                 <option value={"listDisplay"}>List</option>
+                <option value={"cardsDisplay"}>Cards</option>
             </select>
             <button onClick={() => { if (selectorValue != "") addDisplay(selectorValue); }}>Add Display</button>
         </div>
