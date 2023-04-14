@@ -34,6 +34,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.5.1",
     "dotenv": "^14.3.2",
+    "expo": "^48.0.4",
     "firebase": "^9.6.5",
     "nodemon": "^2.0.15",
     "react": "^17.0.2",

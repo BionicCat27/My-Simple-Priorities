@@ -57,7 +57,6 @@ const HomePage = (props) => {
     }
     return (
         <>
-            <h3 id="backBtn" onClick={() => window.location.href = "/priorities"}>Back</h3>
             <div id="pageContent">
                 <div id="pageContainer">
                     <h1>Home</h1>
