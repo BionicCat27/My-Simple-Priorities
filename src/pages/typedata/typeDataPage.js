@@ -18,8 +18,6 @@ const TypeDataPage = (props) => {
     const [dataKey] = useState(parameters.dataKey);
 
     let type = getType(typeKey);
-    let typeChildren = type.data;
-    let targetTypeData = typeChildren[dataKey];
 
     if (!type) {
         return (
@@ -30,6 +28,9 @@ const TypeDataPage = (props) => {
             </div >
         );
     }
+
+    let typeChildren = type.data;
+    let targetTypeData = typeChildren[dataKey];
 
     return (
         <div id="pageContent">

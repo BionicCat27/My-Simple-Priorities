@@ -19,11 +19,6 @@ const CardsDisplay = (props) => {
             <p>No type found.</p>
         );
     }
-    if (!typeData.data) {
-        return (
-            <p>No type data for {typeData.name}.</p>
-        );
-    }
 
     let datatype = { name: "Data", field: `types/${typeKey}/data`, target: "data" };
     let fields = [{ name: "Name", field: "name" }, { name: "Description", field: "description" }];

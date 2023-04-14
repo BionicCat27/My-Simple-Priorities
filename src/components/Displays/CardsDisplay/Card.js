@@ -1,8 +1,7 @@
 //React
 import React, { useContext } from 'react';
 import { NavigationContext } from '../../../contexts/NavigationContext';
-import { TypesContext } from '../../../contexts/TypesContext';
-import IndexTableFormRow from '../../IndexTable/IndexTableFormRow';
+import './Card.css';
 const Card = (props) => {
 
     const { navigateToPage, setParameters } = useContext(NavigationContext);
@@ -12,7 +11,7 @@ const Card = (props) => {
     const dataKey = props.dataKey;
 
     return (
-        <div draggable className={"content_card"} onClick={() => { navigateToPage("#data"); setParameters({ typeKey: typeKey, dataKey: dataKey }); }}>
+        <div draggable className={"content_card clickable"} onClick={() => { navigateToPage("#data"); setParameters({ typeKey: typeKey, dataKey: dataKey }); }}>
             {cardTitle}
         </div >
     );
