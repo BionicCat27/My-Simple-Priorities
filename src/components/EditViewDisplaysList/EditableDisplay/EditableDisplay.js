@@ -15,26 +15,26 @@ const EditableDisplay = (props) => {
         remove(ref(database, displayRef));
     }
 
-    switch (display.display) {
-        case 'listDisplay':
-            return <>
-                <EditableListDisplay display={display} displayRef={displayRef} />
-                <p className={"clickable"} onClick={() => removeDisplay()}>Remove</p>
-            </>;
-            break;
-        case 'cardsDisplay':
-            return <>
-                <EditableCardsDisplay display={display} displayRef={displayRef} />
-                <p className={"clickable"} onClick={() => removeDisplay()}>Remove</p>
-            </>;
-            break;
-        default:
-            return <>
-                <p>Invalid Display</p>
-                <p className={"clickable"} onClick={() => removeDisplay()}>Remove</p>
-            </>;
-            break;
+    function generateDisplay() {
+        switch (display.display) {
+            case 'listDisplay':
+                return <EditableListDisplay display={display} displayRef={displayRef} />;
+                break;
+            case 'cardsDisplay':
+                return <EditableCardsDisplay display={display} displayRef={displayRef} />;
+                break;
+            default:
+                return <p>Invalid Display</p>;
+                break;
+        }
     }
+
+    return (
+        <div className="content_card">
+            {generateDisplay()}
+            <p className={"clickable"} onClick={() => removeDisplay()}>Remove</p>
+        </div>
+    );
 };
 
 export default EditableDisplay;

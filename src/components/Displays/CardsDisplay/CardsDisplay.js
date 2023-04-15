@@ -37,7 +37,7 @@ const CardsDisplay = (props) => {
     let keyedData = keyData(typeData.data);
     return (
         <>
-            <h2>List of {typeData.name} Cards</h2>
+            <h2>{display.title}</h2>
             <table><thead><IndexTableFormRow datatype={datatype} fields={fields} /></thead></table>
             {keyedData.map((object) => {
                 return <Card className={"clickable"} key={JSON.stringify(object)} cardTitle={object.name} typeKey={typeData.key} dataKey={object.key} />;

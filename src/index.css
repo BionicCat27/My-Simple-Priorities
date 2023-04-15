@@ -39,6 +39,10 @@ a {
     color: black;
 }
 
+label {
+    margin-bottom: 0.2em;
+}
+
 table {
     border-spacing: 0px;
     width: 100%;

@@ -3,6 +3,7 @@ import { off, onValue, ref, update } from 'firebase/database';
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { DBContext } from '../../../contexts/DBContext';
+import EditableText from '../../EditableText/EditableText';
 const EditableCardsDisplay = (props) => {
 
     const { user } = useContext(AuthContext);
@@ -66,17 +67,43 @@ const EditableCardsDisplay = (props) => {
         }
     }
 
+    function setDisplayValue(dataPath, fieldName, value) {
+        if (displayDbRef) {
+            let updates = {};
+            updates[fieldName] = value;
+
+            let res = update(displayDbRef, updates);
+        }
+    };
+
     if (!display) {
         return null;
     }
     return (
         <div>
-            <h3>Cards Display</h3>
-            <h4>Type</h4>
+            <h3>Card Display</h3>
+            <label>Title</label>
+            <EditableText value={display.title} fieldName="title" element={(content) => <h3>{content}</h3>} changeValue={setDisplayValue} dbPath={""} />
+            <label>Type</label>
             <select value={displayType ? displayType : "Select Type"} onChange={field => { setDisplayType(field.target.value); }}>
                 {(display && display.type)
                     ? null
                     : <option defaultValue hidden disabled>Select Type</option>
+                }
+                {types.map((type) => {
+                    if (type.key == displayType) {
+                        return <option key={type.key} value={type.key} defaultValue>{type.name}</option>;
+                    }
+                    return (
+                        <option key={type.key} value={type.key}>{type.name}</option>
+                    );
+                })}
+            </select>
+            <label>Order By</label>
+            <select value={displayType ? displayType : "Order By"} onChange={field => { setDisplayType(field.target.value); }}>
+                {(display && display.type)
+                    ? null
+                    : <option defaultValue hidden disabled>Select Order By Field</option>
                 }
                 {types.map((type) => {
                     if (type.key == displayType) {

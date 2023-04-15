@@ -36,7 +36,7 @@ const ListDisplay = (props) => {
     let keyedData = keyData(typeData.data);
     return (
         <>
-            <h2>List of {typeData.name}</h2>
+            <h2>{display.title}</h2>
             <table><thead><IndexTableFormRow datatype={datatype} fields={fields} /></thead></table>
             <ul>
                 {keyedData.map((object) => {
