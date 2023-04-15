@@ -48,7 +48,7 @@ const TypeDataPage = (props) => {
                 <hr></hr>
                 <p><b>Description</b></p>
                 <EditableText value={targetTypeData.description} fieldName="description" element={(content) => <p>{content}</p>} changeValue={setTypeValue} dbPath={`${typeKey}/data/${dataKey}`} />
-                <p className={"clickable"} onClick={() => removeData()}>Remove</p>
+                <p className={"clickable remove_button"} onClick={() => removeData()}>Remove</p>
             </div>
         </div>
     );

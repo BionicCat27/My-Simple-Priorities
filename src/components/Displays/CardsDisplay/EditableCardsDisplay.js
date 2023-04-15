@@ -17,6 +17,8 @@ const EditableCardsDisplay = (props) => {
     const displayRef = props.displayRef;
 
     let displayType = display?.type || undefined;
+    let displayOrderBy = display?.orderBy || undefined;
+
 
     //Set db ref on user set
     useEffect(() => {
@@ -99,21 +101,18 @@ const EditableCardsDisplay = (props) => {
                     );
                 })}
             </select>
-            <label>Order By</label>
-            <select value={displayType ? displayType : "Order By"} onChange={field => { setDisplayType(field.target.value); }}>
-                {(display && display.type)
-                    ? null
-                    : <option defaultValue hidden disabled>Select Order By Field</option>
-                }
-                {types.map((type) => {
-                    if (type.key == displayType) {
-                        return <option key={type.key} value={type.key} defaultValue>{type.name}</option>;
-                    }
-                    return (
-                        <option key={type.key} value={type.key}>{type.name}</option>
-                    );
-                })}
-            </select>
+            {
+                displayType ? <>
+                    <label>Order By</label>
+                    <select value={displayOrderBy ? displayOrderBy : "Order By"} onChange={field => { setDisplayType(field.target.value); }}>
+                        {(display && display.orderBy)
+                            ? null
+                            : <option defaultValue hidden disabled>Select Order By Field</option>
+                        }
+                    </select>
+                </> : null
+            }
+
         </div>
     );
 };

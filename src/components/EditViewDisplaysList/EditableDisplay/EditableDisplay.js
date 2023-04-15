@@ -32,7 +32,7 @@ const EditableDisplay = (props) => {
     return (
         <div className="content_card">
             {generateDisplay()}
-            <p className={"clickable"} onClick={() => removeDisplay()}>Remove</p>
+            <p className={"clickable remove_button"} onClick={() => removeDisplay()}>Remove</p>
         </div>
     );
 };

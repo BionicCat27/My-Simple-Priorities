@@ -136,3 +136,7 @@ button:hover {
 .emptyTitle {
     text-align: center;
 }
+
+.remove_button {
+    color: red;
+}
