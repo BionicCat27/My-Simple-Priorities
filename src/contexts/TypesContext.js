@@ -1,4 +1,4 @@
-import { off, onValue, ref, update } from "firebase/database";
+import { off, onValue, ref, remove, update } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { DBContext } from "./DBContext";
@@ -72,6 +72,12 @@ export const TypesProvider = ({ children }) => {
         }
     };
 
+    function removeTypeValue(dataPath) {
+        if (dbRef) {
+            remove(ref(database, `users/${user.uid}/types/${dataPath}`));
+        }
+    }
+
     function keyData(data) {
         if (!data) {
             return [];
@@ -89,6 +95,7 @@ export const TypesProvider = ({ children }) => {
             typesData,
             getType,
             setTypeValue,
+            removeTypeValue,
             keyData
         }}>{children}</TypesContext.Provider>
     );
