@@ -6,7 +6,7 @@ import { ref, update, onValue, off } from "firebase/database";
 import { AuthContext } from "../../contexts/AuthContext";
 import { DBContext } from '../../contexts/DBContext';
 //Components
-import Sidebar from '../../components/Sidebar';
+import NavMenu from '../../components/NavMenu/NavMenu';
 import ReviewCard from '../../components/ReviewCard/ReviewCard';
 //Styles
 import './reviewPage.css';
@@ -286,6 +286,7 @@ const ReviewPage = (props) => {
     if (!user) return null;
     return (
         <>
+            <NavMenu title="Review" />
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" className="content_field" />
@@ -308,7 +309,6 @@ const ReviewPage = (props) => {
                     {renderedContent}
                 </div>
             </div>
-            <Sidebar title="Review" />
         </>
     );
 };

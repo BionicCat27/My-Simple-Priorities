@@ -7,7 +7,7 @@ import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from 
 import { AuthContext } from "../../contexts/AuthContext";
 import { DBContext } from '../../contexts/DBContext';
 //Components
-import Sidebar from '../../components/Sidebar';
+import NavMenu from '../../components/NavMenu/NavMenu';
 import TimelineGantt from '../../components/TimelineGantt/TimelineGantt';
 //Styles
 import './timelinePage.css';
@@ -84,10 +84,10 @@ const TimelinePage = (props) => {
     }, [dbRef]);
     return (
         <>
+            <NavMenu title="Timeline" />
             <div id="pageContent">
                 <TimelineGantt cards={cards} />
             </div>
-            <Sidebar title={"Timeline"} />
         </>
     );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Sidebar.css';
 
-import '../firebaseConfig';
+import '../../../firebaseConfig';
 
 import { getAuth, signOut, connectAuthEmulator } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';

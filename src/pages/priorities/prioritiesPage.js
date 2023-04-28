@@ -1,12 +1,12 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
 //Firebase
-import { ref, update, onValue, off} from "firebase/database";
+import { ref, update, onValue, off } from "firebase/database";
 //Contexts
 import { AuthContext } from "../../contexts/AuthContext";
 import { DBContext } from '../../contexts/DBContext';
 //Components
-import Sidebar from '../../components/Sidebar';
+import NavMenu from '../../components/NavMenu/NavMenu';
 import PrioritiesCard from '../../components/PrioritiesCard/PrioritiesCard';
 //Styles
 import './prioritiesPage.css';
@@ -33,7 +33,7 @@ const PrioritiesPage = (props) => {
         setContentInput(value);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         if (user) {
             if (dbRef) {
                 off(dbRef);
@@ -43,9 +43,9 @@ const PrioritiesPage = (props) => {
             setContentList([]);
             setCardStatusView(DEFAULT_STATUS_VIEW);
         } else {
-            setRenderedContent(<p>Not logged in.</p>)
+            setRenderedContent(<p>Not logged in.</p>);
         }
-    }, [user])
+    }, [user]);
 
     useEffect(() => {
         generateCards();
@@ -295,6 +295,7 @@ const PrioritiesPage = (props) => {
     if (!user) return null;
     return (
         <>
+            <NavMenu title="Priorities" />
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" className="content_field" />
@@ -310,7 +311,6 @@ const PrioritiesPage = (props) => {
                     {renderedContent}
                 </div>
             </div>
-            <Sidebar title="Priorities" />
         </>
     );
 };
