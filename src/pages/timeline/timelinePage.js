@@ -47,7 +47,6 @@ const TimelinePage = (props) => {
             const data = snapshot.val();
             if (data == null) {
                 console.log("An error occurred.");
-                setContentList([]);
                 return;
             }
             //Validate card fields
