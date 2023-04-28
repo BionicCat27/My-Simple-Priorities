@@ -6,7 +6,7 @@ import { ref, update, onValue, off } from "firebase/database";
 import { AuthContext } from "../../contexts/AuthContext";
 import { DBContext } from '../../contexts/DBContext';
 //Components
-import Sidebar from '../../components/Sidebar';
+import NavMenu from '../../components/NavMenu/NavMenu';
 import TodoCard from '../../components/TodoCard/TodoCard';
 //Styles
 import './todoPage.css';
@@ -249,6 +249,7 @@ const TodoPage = (props) => {
     if (!user) return null;
     return (
         <>
+            <NavMenu title="Todo" />
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" className="content_field" />
@@ -271,7 +272,6 @@ const TodoPage = (props) => {
                     {renderedContent}
                 </div>
             </div>
-            <Sidebar title="Todo" />
         </>
     );
 };
