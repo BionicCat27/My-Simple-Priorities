@@ -5,6 +5,7 @@ import './Sidebar.css';
 import '../firebaseConfig';
 
 import { getAuth, signOut, connectAuthEmulator } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
 
 const auth = getAuth();
 if (location.hostname === "localhost" && location.port === "5001") {
@@ -12,6 +13,8 @@ if (location.hostname === "localhost" && location.port === "5001") {
 }
 
 const Sidebar = (props) => {
+
+    const navigate = useNavigate();
 
     function userSignOut() {
         signOut(auth).then(() => {
@@ -23,10 +26,10 @@ const Sidebar = (props) => {
 
     function generateSidebarLinks() {
         return <>
-            <a href="/priorities">Priorities</a>
-            <a href="/todo">Todo</a>
-            <a href="/review">Review</a>
-            <a href="/timeline">Timeline</a>
+            <a onClick={() => navigate("/priorities")}>Priorities</a>
+            <a onClick={() => navigate("/todo")}>Todo</a>
+            <a onClick={() => navigate("/review")}>Review</a>
+            <a onClick={() => navigate("/timeline")}>Timeline</a>
         </>;
     }
 
