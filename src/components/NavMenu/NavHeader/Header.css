@@ -50,7 +50,7 @@ h1 {
     margin: 10px;
 }
 
-a {
+.nav-button {
     text-align: center;
     width: 100%;
     padding: 1rem;
@@ -58,7 +58,7 @@ a {
     text-decoration: none;
 }
 
-a:hover {
+.nav-button :hover {
     padding: 1rem;
     display: block;
     color: white;

@@ -38,11 +38,11 @@ const Header = (props) => {
                 </button>
             </div>
             <nav className={`nav-list ${showMenu ? 'show' : ''}`}>
-                <a onClick={() => navigate("/priorities")}>Priorities</a>
-                <a onClick={() => navigate("/todo")}>Todo</a>
-                <a onClick={() => navigate("/review")}>Review</a>
-                <a onClick={() => navigate("/timeline")}>Timeline</a>
-                <a onClick={userSignOut}>Logout</a>
+                <a className={"nav-button"} onClick={() => navigate("/priorities")}>Priorities</a>
+                <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
+                <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
+                <a className={"nav-button"} onClick={() => navigate("/timeline")}>Timeline</a>
+                <a className={"nav-button"} onClick={userSignOut}>Logout</a>
             </nav>
         </header>
     );

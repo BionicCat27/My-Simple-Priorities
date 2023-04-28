@@ -26,10 +26,10 @@ const Sidebar = (props) => {
 
     function generateSidebarLinks() {
         return <>
-            <a onClick={() => navigate("/priorities")}>Priorities</a>
-            <a onClick={() => navigate("/todo")}>Todo</a>
-            <a onClick={() => navigate("/review")}>Review</a>
-            <a onClick={() => navigate("/timeline")}>Timeline</a>
+            <a className={"nav-button"} onClick={() => navigate("/priorities")}>Priorities</a>
+            <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
+            <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
+            <a className={"nav-button"} onClick={() => navigate("/timeline")}>Timeline</a>
         </>;
     }
 
@@ -39,7 +39,7 @@ const Sidebar = (props) => {
             <div id="sidebarLinksContainer">
                 <h2 id="sidebarTitle">My Simple<br />{props.title}</h2>
                 {sidebarLinks}
-                <a onClick={userSignOut}>Logout</a>
+                <a className={"nav-button"} onClick={userSignOut}>Logout</a>
             </div>
             <div id="sidebarCreditContainer">
                 <a href="https://aslanbb.vercel.app/">Aslan Bennington-Barr</a>
