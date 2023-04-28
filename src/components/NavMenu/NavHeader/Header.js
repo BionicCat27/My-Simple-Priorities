@@ -33,6 +33,8 @@ const Header = (props) => {
                 <h1 id="title">My Simple {props.title}</h1>
                 <button className="hamburger-btn" onClick={toggleMenu}>
                     <span className="hamburger-icon"></span>
+                    <span className="hamburger-icon"></span>
+                    <span className="hamburger-icon"></span>
                 </button>
             </div>
             <nav className={`nav-list ${showMenu ? 'show' : ''}`}>
