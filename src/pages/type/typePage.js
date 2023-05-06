@@ -10,16 +10,19 @@ import './typePage.css';
 import '../../firebaseConfig';
 import IndexTable from '../../components/IndexTable/IndexTable';
 import { TypesContext } from '../../contexts/TypesContext';
+import NavMenu from '../../components/NavMenu/NavMenu';
+import { useNavigate } from 'react-router';
 
 const TypePage = (props) => {
     const { navigateToPage, parameters } = useContext(NavigationContext);
     const { getType, keyData } = useContext(TypesContext);
+    const navigate = useNavigate();
 
     const [typeKey] = useState(parameters.objectKey);
 
     let type = getType(typeKey);
     useEffect(() => {
-        if (!typeKey) navigateToPage("#home");
+        if (!typeKey) navigate("/");
     }, [typeKey]);
 
     if (!type) {
@@ -29,13 +32,16 @@ const TypePage = (props) => {
     }
 
     return (
-        <div id="pageContent">
-            <div id="pageContainer">
-                <h1>{type.name}</h1>
-                <hr></hr>
-                <IndexTable datatype={{ name: "Data", field: `types/${typeKey}/data` }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={keyData(type.data) || []} />
+        <>
+            <NavMenu title="Types" />
+            <div id="pageContent">
+                <div id="pageContainer">
+                    <h1>{type.name}</h1>
+                    <hr></hr>
+                    <IndexTable datatype={{ name: "Data", field: `types/${typeKey}/data` }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={keyData(type.data) || []} />
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

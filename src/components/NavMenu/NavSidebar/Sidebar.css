@@ -39,6 +39,7 @@
     cursor: pointer;
 }
 
+/* Header */
 @media (max-width: 720px) {
     #sidebar {
         position: relative;
@@ -60,7 +61,7 @@
 
 /* Sidebar padding */
 
-#pageContent {
+body {
     padding-left: 12rem;
 }
 

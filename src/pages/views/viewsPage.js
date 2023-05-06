@@ -9,18 +9,22 @@ import './viewsPage.css';
 //Config
 import '../../firebaseConfig';
 import IndexTable from '../../components/IndexTable/IndexTable';
+import NavMenu from '../../components/NavMenu/NavMenu';
 
 const ViewsPage = (props) => {
     const { viewsData } = useContext(ViewsContext);
 
     return (
-        <div id="pageContent">
-            <div id="pageContainer">
-                <h1>Views</h1>
-                <hr></hr>
-                <IndexTable datatype={{ name: "Views", field: "views", target: "editview" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={viewsData} />
+        <>
+            <NavMenu title="Types" />
+            <div id="pageContent">
+                <div id="pageContainer">
+                    <h1>Views</h1>
+                    <hr></hr>
+                    <IndexTable datatype={{ name: "Views", field: "views", target: "editview" }} fields={[{ name: "Name", field: "name" }, { name: "Description", field: "description" }]} objects={viewsData} />
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

@@ -14,6 +14,8 @@ import { DBContext } from '../../contexts/DBContext';
 import { ViewsContext } from '../../contexts/ViewsContext';
 import EditableText from '../../components/EditableText/EditableText';
 import EditViewDisplaysList from '../../components/EditViewDisplaysList/EditViewDisplaysList';
+import NavMenu from '../../components/NavMenu/NavMenu';
+import { useNavigate } from 'react-router';
 
 const EditViewPage = (props) => {
     const { user } = useContext(AuthContext);
@@ -26,10 +28,13 @@ const EditViewPage = (props) => {
 
     const [viewKey] = useState(parameters.objectKey);
 
+    const navigate = useNavigate();
+
+
     let view = getView(viewKey);
 
     useEffect(() => {
-        if (!viewKey) navigateToPage("#home");
+        if (!viewKey) navigate("/");
     }, [viewKey]);
 
     if (view == "" || !view) {
@@ -50,16 +55,19 @@ const EditViewPage = (props) => {
     }
 
     return (
-        <div id="pageContent">
-            <div id="pageContainer">
-                <p><b>Title</b></p>
-                <EditableText value={view.name} fieldName="name" element={(content) => <h1>{content}</h1>} dbPath={viewKey} changeValue={setViewValue} />
-                <hr></hr>
-                <p><b>Description</b></p>
-                <EditableText value={view.description} fieldName="description" element={(content) => <p>{content}</p>} changeValue={setViewValue} dbPath={viewKey} />
-                <EditViewDisplaysList displays={displays} viewRef={`users/${user?.uid}/views/${viewKey}`} changeValue={setViewValue} parentKey={viewKey} />
+        <>
+            <NavMenu title="Types" />
+            <div id="pageContent">
+                <div id="pageContainer">
+                    <p><b>Title</b></p>
+                    <EditableText value={view.name} fieldName="name" element={(content) => <h1>{content}</h1>} dbPath={viewKey} changeValue={setViewValue} />
+                    <hr></hr>
+                    <p><b>Description</b></p>
+                    <EditableText value={view.description} fieldName="description" element={(content) => <p>{content}</p>} changeValue={setViewValue} dbPath={viewKey} />
+                    <EditViewDisplaysList displays={displays} viewRef={`users/${user?.uid}/views/${viewKey}`} changeValue={setViewValue} parentKey={viewKey} />
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

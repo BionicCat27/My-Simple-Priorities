@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import './Sidebar.css';
 
-import '../firebaseConfig';
+import '../../../firebaseConfig';
 
 import { getAuth, signOut, connectAuthEmulator } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
+import { ViewsContext } from '../../../contexts/ViewsContext';
+import { NavigationContext } from '../../../contexts/NavigationContext';
 
 const auth = getAuth();
 if (location.hostname === "localhost" && location.port === "5001") {
@@ -12,6 +15,11 @@ if (location.hostname === "localhost" && location.port === "5001") {
 }
 
 const Sidebar = (props) => {
+    const { setParameters } = useContext(NavigationContext);
+    const { viewsData } = useContext(ViewsContext);
+
+    const navigate = useNavigate();
+
 
     function userSignOut() {
         signOut(auth).then(() => {
@@ -22,13 +30,21 @@ const Sidebar = (props) => {
     }
 
     function generateSidebarLinks() {
-        return <>
-            <a href="/priorities">Priorities</a>
-            <a href="/todo">Todo</a>
-            <a href="/review">Review</a>
-            <a href="/timeline">Timeline</a>
-            <a href="/home">Home</a>
-        </>;
+        if (!viewsData) {
+            return null;
+        }
+        return (
+            <>
+                {viewsData.map((object) => {
+                    return (
+                        <a key={object.key} className={"nav-button"} onClick={() => {
+                            navigate(`/view`);
+                            setParameters({ objectKey: object.key });
+                        }}>{object.name}</a>
+                    );
+                })}
+            </>
+        );
     }
 
     let sidebarLinks = generateSidebarLinks();
@@ -36,8 +52,10 @@ const Sidebar = (props) => {
         <div id="sidebar">
             <div id="sidebarLinksContainer">
                 <h2 id="sidebarTitle">My Simple<br />{props.title}</h2>
+                <a className={"nav-button"} onClick={() => navigate(-1)}>Back</a>
+                <a className={"nav-button"} onClick={() => navigate("/")}>Home</a>
                 {sidebarLinks}
-                <a onClick={userSignOut}>Logout</a>
+                <a className={"nav-button"} onClick={userSignOut}>Logout</a>
             </div>
             <div id="sidebarCreditContainer">
                 <a href="https://aslanbb.vercel.app/">Aslan Bennington-Barr</a>

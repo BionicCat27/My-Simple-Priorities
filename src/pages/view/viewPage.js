@@ -12,18 +12,22 @@ import { AuthContext } from '../../contexts/AuthContext';
 import ListDisplay from '../../components/Displays/ListDisplay/ListDisplay';
 import { ViewsContext } from '../../contexts/ViewsContext';
 import CardsDisplay from '../../components/Displays/CardsDisplay/CardsDisplay';
+import NavMenu from '../../components/NavMenu/NavMenu';
+import { useNavigate } from 'react-router';
 
 const ViewPage = (props) => {
     const { user } = useContext(AuthContext);
-    const { navigateToPage, parameters } = useContext(NavigationContext);
+    const { parameters } = useContext(NavigationContext);
     const { getView } = useContext(ViewsContext);
+
+    const navigate = useNavigate();
 
     const [viewKey] = useState(parameters.objectKey);
 
     let view = getView(viewKey);
 
     useEffect(() => {
-        if (!viewKey) navigateToPage("#home");
+        if (!viewKey) navigate("/");
     }, [viewKey]);
 
     function renderDisplays() {
@@ -56,13 +60,16 @@ const ViewPage = (props) => {
     }
 
     return (
-        <div id="pageContent">
-            <div id="pageContainer">
-                <h1>{view.name}</h1>
-                <hr></hr>
-                {renderDisplays()}
+        <>
+            <NavMenu title="Types" />
+            <div id="pageContent">
+                <div id="pageContainer">
+                    <h1>{view.name}</h1>
+                    <hr></hr>
+                    {renderDisplays()}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

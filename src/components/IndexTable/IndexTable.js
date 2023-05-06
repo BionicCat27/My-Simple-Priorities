@@ -3,9 +3,12 @@ import React, { useContext } from 'react';
 import { NavigationContext } from '../../contexts/NavigationContext';
 import IndexTableFormRow from './IndexTableFormRow';
 import './IndexTable.css';
+import { useNavigate } from 'react-router';
 const IndexTable = (props) => {
 
     const { navigateToPage, setParameters } = useContext(NavigationContext);
+
+    const navigate = useNavigate();
 
     const NoContent = () => {
         return (
@@ -52,7 +55,7 @@ const IndexTable = (props) => {
                         <tr key={object.key} className={"indexTableRow " + (datatype.target ? "clickable" : "")}
                             onClick={() => {
                                 if (datatype.target) {
-                                    navigateToPage(`#${datatype.target}`);
+                                    navigate(`/${datatype.target}`);
                                     setParameters({ objectKey: object.key });
                                 }
                             }}>

@@ -9,6 +9,7 @@ import '../../firebaseConfig';
 import { NavigationContext } from '../../contexts/NavigationContext';
 import { TypesContext } from '../../contexts/TypesContext';
 import EditableText from '../../components/EditableText/EditableText';
+import NavMenu from '../../components/NavMenu/NavMenu';
 
 const TypeDataPage = (props) => {
     const { navigateToPage, parameters, navigateBack } = useContext(NavigationContext);
@@ -40,17 +41,20 @@ const TypeDataPage = (props) => {
     }
 
     return (
-        <div id="pageContent">
-            <div id="pageContainer">
-                <hr></hr>
-                <p><b>Title</b></p>
-                <EditableText value={targetTypeData.name} fieldName="name" element={(content) => <h1>{content}</h1>} changeValue={setTypeValue} dbPath={`${typeKey}/data/${dataKey}`} />
-                <hr></hr>
-                <p><b>Description</b></p>
-                <EditableText value={targetTypeData.description} fieldName="description" element={(content) => <p>{content}</p>} changeValue={setTypeValue} dbPath={`${typeKey}/data/${dataKey}`} />
-                <p className={"clickable remove_button"} onClick={() => removeData()}>Remove</p>
+        <>
+            <NavMenu title="Types" />
+            <div id="pageContent">
+                <div id="pageContainer">
+                    <hr></hr>
+                    <p><b>Title</b></p>
+                    <EditableText value={targetTypeData.name} fieldName="name" element={(content) => <h1>{content}</h1>} changeValue={setTypeValue} dbPath={`${typeKey}/data/${dataKey}`} />
+                    <hr></hr>
+                    <p><b>Description</b></p>
+                    <EditableText value={targetTypeData.description} fieldName="description" element={(content) => <p>{content}</p>} changeValue={setTypeValue} dbPath={`${typeKey}/data/${dataKey}`} />
+                    <p className={"clickable remove_button"} onClick={() => removeData()}>Remove</p>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
