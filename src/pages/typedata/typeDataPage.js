@@ -12,7 +12,7 @@ import EditableText from '../../components/EditableText/EditableText';
 import NavMenu from '../../components/NavMenu/NavMenu';
 
 const TypeDataPage = (props) => {
-    const { navigateToPage, parameters, navigateBack } = useContext(NavigationContext);
+    const { parameters, navigateBack } = useContext(NavigationContext);
     const { getType, setTypeValue, removeTypeValue } = useContext(TypesContext);
 
     const [typeKey] = useState(parameters.typeKey);

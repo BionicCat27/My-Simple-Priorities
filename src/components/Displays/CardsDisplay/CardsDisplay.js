@@ -8,8 +8,6 @@ const CardsDisplay = (props) => {
 
     const { getType } = useContext(TypesContext);
 
-    const { navigateToPage, setParameters } = useContext(NavigationContext);
-
     const display = props.display;
     let typeKey = display.type;
     let typeData = getType(typeKey);

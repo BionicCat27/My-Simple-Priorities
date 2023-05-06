@@ -15,7 +15,6 @@ import NavMenu from '../../components/NavMenu/NavMenu';
 import { useNavigate } from 'react-router';
 
 const HomePage = (props) => {
-    const { navigateToPage, navigateBack, page } = useContext(NavigationContext);
     const { typesData } = useContext(TypesContext);
     const { viewsData } = useContext(ViewsContext);
 

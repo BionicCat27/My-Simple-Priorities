@@ -15,7 +15,7 @@ import NavMenu from '../../components/NavMenu/NavMenu';
 import { useNavigate } from 'react-router';
 
 const EditTypePage = (props) => {
-    const { navigateToPage, parameters } = useContext(NavigationContext);
+    const { parameters } = useContext(NavigationContext);
 
     const { getType, setTypeValue, keyData } = useContext(TypesContext);
 

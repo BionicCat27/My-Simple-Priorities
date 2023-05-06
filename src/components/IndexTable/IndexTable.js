@@ -6,7 +6,7 @@ import './IndexTable.css';
 import { useNavigate } from 'react-router';
 const IndexTable = (props) => {
 
-    const { navigateToPage, setParameters } = useContext(NavigationContext);
+    const { setParameters } = useContext(NavigationContext);
 
     const navigate = useNavigate();
 

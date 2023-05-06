@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router';
 const EditViewPage = (props) => {
     const { user } = useContext(AuthContext);
     const { database } = useContext(DBContext);
-    const { navigateToPage, parameters } = useContext(NavigationContext);
+    const { parameters } = useContext(NavigationContext);
 
     const { getView, setViewValue } = useContext(ViewsContext);
 

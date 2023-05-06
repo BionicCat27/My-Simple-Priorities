@@ -3,11 +3,14 @@ import React, { useContext } from 'react';
 import { NavigationContext } from '../../../contexts/NavigationContext';
 import { TypesContext } from '../../../contexts/TypesContext';
 import IndexTableFormRow from '../../IndexTable/IndexTableFormRow';
+import { useNavigate } from 'react-router';
 const ListDisplay = (props) => {
 
     const { getType } = useContext(TypesContext);
 
-    const { navigateToPage, setParameters } = useContext(NavigationContext);
+    const { setParameters } = useContext(NavigationContext);
+
+    const navigate = useNavigate();
 
     const display = props.display;
     let typeKey = display.type;
@@ -40,7 +43,7 @@ const ListDisplay = (props) => {
             <table><thead><IndexTableFormRow datatype={datatype} fields={fields} /></thead></table>
             <ul>
                 {keyedData.map((object) => {
-                    return <li className={"clickable"} key={JSON.stringify(object)} onClick={() => { navigateToPage("#data"); setParameters({ typeKey: typeData.key, dataKey: object.key }); }}><h3>{object.name}</h3></li>;
+                    return <li className={"clickable"} key={JSON.stringify(object)} onClick={() => { navigate("/data"); setParameters({ typeKey: typeData.key, dataKey: object.key }); }}><h3>{object.name}</h3></li>;
                 })}
             </ul>
         </>
