@@ -16,7 +16,7 @@ const ViewsPage = (props) => {
 
     return (
         <>
-            <NavMenu title="Types" />
+            <NavMenu title="Views" />
             <div id="pageContent">
                 <div id="pageContainer">
                     <h1>Views</h1>

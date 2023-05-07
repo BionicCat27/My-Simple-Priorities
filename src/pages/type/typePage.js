@@ -33,7 +33,7 @@ const TypePage = (props) => {
 
     return (
         <>
-            <NavMenu title="Types" />
+            <NavMenu title="Type" />
             <div id="pageContent">
                 <div id="pageContainer">
                     <h1>{type.name}</h1>

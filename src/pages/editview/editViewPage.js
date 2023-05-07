@@ -19,20 +19,14 @@ import { useNavigate } from 'react-router';
 
 const EditViewPage = (props) => {
     const { user } = useContext(AuthContext);
-    const { database } = useContext(DBContext);
     const { parameters } = useContext(NavigationContext);
-
     const { getView, setViewValue } = useContext(ViewsContext);
-
-    const [dbRef, setDbRef] = useState(undefined);
 
     const [viewKey] = useState(parameters.objectKey);
 
     const navigate = useNavigate();
 
-
     let view = getView(viewKey);
-
     useEffect(() => {
         if (!viewKey) navigate("/");
     }, [viewKey]);

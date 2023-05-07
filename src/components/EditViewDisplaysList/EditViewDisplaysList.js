@@ -8,10 +8,7 @@ const EditViewDisplaysList = (props) => {
     const { database } = useContext(DBContext);
 
     const [displays, setDisplays] = useState(props.displays);
-    const dbRef = props.dbRef;
     const viewRef = props.viewRef;
-    const changeValue = props.changeValue;
-    const parentKey = props.parentKey;
 
     useEffect(() => { setDisplays(props.displays); }, [props.displays]);
 

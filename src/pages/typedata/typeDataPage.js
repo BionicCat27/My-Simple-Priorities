@@ -42,7 +42,7 @@ const TypeDataPage = (props) => {
 
     return (
         <>
-            <NavMenu title="Types" />
+            <NavMenu title="Type Data" />
             <div id="pageContent">
                 <div id="pageContainer">
                     <hr></hr>

@@ -61,7 +61,7 @@ const ViewPage = (props) => {
 
     return (
         <>
-            <NavMenu title="Types" />
+            <NavMenu title="View" />
             <div id="pageContent">
                 <div id="pageContainer">
                     <h1>{view.name}</h1>
