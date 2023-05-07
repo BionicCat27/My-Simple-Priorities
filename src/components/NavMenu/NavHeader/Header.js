@@ -68,7 +68,6 @@ const Header = (props) => {
                 <a className={"nav-button"} onClick={() => navigate("/")}>Home</a>
                 {sidebarLinks}
                 <a className={"nav-button"} onClick={userSignOut}>Logout</a>
-                <a className={"nav-button"} onClick={userSignOut}>Logout</a>
             </nav>
         </header>
     );

@@ -4,10 +4,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { DBContext } from '../../../contexts/DBContext';
 import EditableText from '../../EditableText/EditableText';
+import { TypesContext } from '../../../contexts/TypesContext';
 const EditableCardsDisplay = (props) => {
 
     const { user } = useContext(AuthContext);
     const { database } = useContext(DBContext);
+    const { getType } = useContext(TypesContext);
 
     const [typesDbRef, setTypesDbRef] = useState(undefined);
     const [displayDbRef, setDisplayDbRef] = useState(undefined);
@@ -18,6 +20,16 @@ const EditableCardsDisplay = (props) => {
 
     let displayType = display?.type || undefined;
     let displayOrderBy = display?.orderBy || undefined;
+
+    let typeData = getType(displayType);
+    let typeFields = [];
+    if (typeData?.fields) {
+        typeFields = Object.keys(typeData.fields).map((key) => {
+            let value = typeData.fields[key];
+            value.key = key;
+            return value;
+        });
+    }
 
 
     //Set db ref on user set
@@ -81,6 +93,7 @@ const EditableCardsDisplay = (props) => {
     if (!display) {
         return null;
     }
+
     return (
         <div>
             <h3>Card Display</h3>
@@ -102,13 +115,18 @@ const EditableCardsDisplay = (props) => {
                 })}
             </select>
             {
-                displayType ? <>
+                typeData ? <>
                     <label>Order By</label>
                     <select value={displayOrderBy ? displayOrderBy : "Order By"} onChange={field => { setDisplayType(field.target.value); }}>
                         {(display && display.orderBy)
                             ? null
                             : <option defaultValue hidden disabled>Select Order By Field</option>
                         }
+                        {typeFields.map((field) => {
+                            return (
+                                <option key={field.key} value={field.key} >{field.title}</option>
+                            );
+                        })}
                     </select>
                 </> : null
             }

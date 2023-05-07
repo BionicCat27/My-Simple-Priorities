@@ -59,10 +59,11 @@ const EditableTextField = (props) => {
         });
     }, [typesDbRef]);
 
-    function setFieldValue(value) {
+    function setFieldValue(dataPath, fieldName, value) {
         if (fieldDbRef) {
             let updates = {};
-            updates["type"] = value;
+            updates[fieldName] = value;
+
             let res = update(fieldDbRef, updates);
         }
     }

@@ -13,7 +13,8 @@ import NavMenu from '../../components/NavMenu/NavMenu';
 
 const TypeDataPage = (props) => {
     const { parameters, navigateBack } = useContext(NavigationContext);
-    const { getType, setTypeValue, removeTypeValue } = useContext(TypesContext);
+    const { getType, setTypeValue, removeTypeValue, keyData } = useContext(TypesContext);
+    const [fieldDbRef, setFieldDbRef] = useState(undefined);
 
     const [typeKey] = useState(parameters.typeKey);
     const [dataKey] = useState(parameters.dataKey);
@@ -32,8 +33,34 @@ const TypeDataPage = (props) => {
         );
     }
 
+    let typeFields;
+    if (type?.fields) {
+        typeFields = keyData(type.fields);
+    }
+
     let typeChildren = type.data;
     let targetTypeData = typeChildren[dataKey];
+
+    function setFieldValue(dataPath, fieldName, value) {
+        setTypeValue(dataRef + "/fields", fieldName, value);
+    }
+
+    function renderFields() {
+        if (typeFields) {
+            return typeFields.map((field) => {
+                let fieldValue = "";
+                if (targetTypeData?.fields) {
+                    fieldValue = targetTypeData.fields[field.key];
+                }
+                return (
+                    <>
+                        <h3 key={`${field.key}-title`} >{field.title}</h3>
+                        <EditableText key={`${field.key}-field`} value={fieldValue} fieldName={field.key} element={(content) => <h3>{content}</h3>} changeValue={setFieldValue} dbPath={""} />
+                    </>
+                );
+            });
+        }
+    }
 
     function removeData() {
         removeTypeValue(dataRef);
@@ -51,6 +78,9 @@ const TypeDataPage = (props) => {
                     <hr></hr>
                     <p><b>Description</b></p>
                     <EditableText value={targetTypeData.description} fieldName="description" element={(content) => <p>{content}</p>} changeValue={setTypeValue} dbPath={`${typeKey}/data/${dataKey}`} />
+                    <p><b>Fields</b></p>
+                    {renderFields()}
+                    <hr></hr>
                     <p className={"clickable remove_button"} onClick={() => removeData()}>Remove</p>
                 </div>
             </div>
