@@ -140,3 +140,9 @@ button:hover {
 .remove_button {
     color: red;
 }
+
+.clear_button {
+    margin-left: 10px;
+    color: red;
+    display: inline-block;
+}

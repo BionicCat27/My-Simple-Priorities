@@ -1,5 +1,5 @@
 //React
-import { off, onValue, ref, update } from 'firebase/database';
+import { off, onValue, ref, remove, update } from 'firebase/database';
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { DBContext } from '../../../contexts/DBContext';
@@ -90,6 +90,23 @@ const EditableCardsDisplay = (props) => {
         }
     };
 
+    function setOrderBy(value) {
+        if (displayDbRef) {
+            let updates = {};
+            updates["orderBy"] = value;
+            let res = update(displayDbRef, updates);
+        }
+    }
+
+    function clearType() {
+        remove(ref(database, `${displayRef}/type`));
+
+    }
+
+    function clearOrderBy() {
+        remove(ref(database, `${displayRef}/orderBy`));
+    }
+
     if (!display) {
         return null;
     }
@@ -100,10 +117,10 @@ const EditableCardsDisplay = (props) => {
             <label>Title</label>
             <EditableText value={display.title} fieldName="title" element={(content) => <h3>{content}</h3>} changeValue={setDisplayValue} dbPath={""} />
             <label>Type</label>
-            <select value={displayType ? displayType : "Select Type"} onChange={field => { setDisplayType(field.target.value); }}>
+            <select value={displayType ? displayType : "Select Type"} onChange={field => setDisplayType(field.target.value)}>
                 {(display && display.type)
                     ? null
-                    : <option defaultValue hidden disabled>Select Type</option>
+                    : <option defaultValue={true} hidden disabled>Select Type</option>
                 }
                 {types.map((type) => {
                     if (type.key == displayType) {
@@ -114,20 +131,25 @@ const EditableCardsDisplay = (props) => {
                     );
                 })}
             </select>
+            <p className={"clickable clear_button"} onClick={() => clearType()}>Clear</p>
             {
                 typeData ? <>
                     <label>Order By</label>
-                    <select value={displayOrderBy ? displayOrderBy : "Order By"} onChange={field => { setDisplayType(field.target.value); }}>
+                    <select value={displayOrderBy ? displayOrderBy : "Select Order By Field"} onChange={field => setOrderBy(field.target.value)}>
                         {(display && display.orderBy)
                             ? null
                             : <option defaultValue hidden disabled>Select Order By Field</option>
                         }
                         {typeFields.map((field) => {
+                            if (field.key === displayOrderBy) {
+                                return <option key={field.key} value={field.key} defaultValue={true}>{field.title}</option>;
+                            }
                             return (
-                                <option key={field.key} value={field.key} >{field.title}</option>
+                                <option key={field.key} value={field.key}>{field.title}</option>
                             );
                         })}
                     </select>
+                    <p className={"clickable clear_button"} onClick={() => clearOrderBy()}>Clear</p>
                 </> : null
             }
 
