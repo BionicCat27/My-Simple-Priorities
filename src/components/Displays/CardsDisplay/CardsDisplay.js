@@ -12,7 +12,7 @@ const CardsDisplay = (props) => {
     let typeKey = display.type;
     let typeData = getType(typeKey);
 
-    let orderBy = typeData?.orderBy;
+    let orderBy = display?.orderBy;
 
     if (!typeData || !typeData.name) {
         return (
@@ -40,14 +40,8 @@ const CardsDisplay = (props) => {
             <h2>{display.title}</h2>
             <table><thead><IndexTableFormRow datatype={datatype} fields={fields} /></thead></table>
             {keyedData.sort((object1, object2) => {
-                console.log("sorting: " + JSON.stringify(object1) + " vs " + JSON.stringify(object2));
                 if (object1?.fields && object2?.fields) {
-                    let object1Val = object1.fields[orderBy];
-                    let object2Val = object2.fields[orderBy];
-
-                    console.log(`${object1Val} vs ${object2Val} for ${orderBy}`);
-
-                    return object1Val < object2Val;
+                    return object1.fields[orderBy] - object2.fields[orderBy];
                 }
             }).map((object) => {
                 return <Card className={"clickable"} key={JSON.stringify(object)} cardTitle={object.name} typeKey={typeData.key} dataKey={object.key} />;
