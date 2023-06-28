@@ -64,7 +64,6 @@ const EditableNumericField = (props) => {
             let updates = {};
             updates[fieldName] = value;
 
-            console.log(`Updates: ${JSON.stringify(updates)}`);
             let res = update(fieldDbRef, updates);
         }
     }
@@ -78,7 +77,7 @@ const EditableNumericField = (props) => {
             <h4>Name</h4>
             <EditableText value={field.title} fieldName="title" element={(content) => <h3>{content}</h3>} changeValue={setFieldValue} dbPath={""} />
             <label>
-                <input type="checkbox" checked={field.uniqueValue ? field.uniqueValue : false} onChange={event => setFieldValue(undefined, "uniqueValue", !(event.target.checked))} /> {/* TODO fix event handling */}
+                <input type="checkbox" checked={field.uniqueValue} onChange={event => setFieldValue(undefined, "uniqueValue", event.target.checked)} /> {/* TODO fix event handling */}
                 Use Unique Values
             </label>
         </div>

@@ -46,8 +46,6 @@ const EditTypePage = (props) => {
             return field;
         });
     }
-    console.log(`Fields: ${JSON.stringify(type)}`);
-
 
     return (
         <>
