@@ -15,6 +15,9 @@ const EditTypeFieldsList = (props) => {
 
     function addField(fieldKey) {
         let obj = { field: fieldKey };
+        if (fieldKey === "indexField") {
+            obj["title"] = "Index";
+        }
 
         let res = set(push(ref(database, `${typeRef}/fields/`)), obj);
     }
@@ -22,7 +25,7 @@ const EditTypeFieldsList = (props) => {
     if (!typeRef) {
         return <p>Error: no typeRef</p>;
     }
-    if (!fields || fields.length < 1) {
+    if (!fields || fields.length == 0) {
         return (
             <>
                 <p><b>Fields</b></p>
@@ -31,19 +34,26 @@ const EditTypeFieldsList = (props) => {
         );
     }
     if (!fields.length) {
+        // One field exists
         let field = fields;
         return (
             <>
                 <p><b>Fields</b></p>
-                <FieldSelector addDisplay={addField} />
+                <FieldSelector addDisplay={addField} hasIndex={field.field === "indexField"} />
                 <EditableField field={field} fieldRef={`${typeRef}/fields/${field.key}`} />
             </>
         );
     }
+    let hasIndex = false;
+    for (let i = 0; i < fields.length; i++) {
+        if (fields[0]?.field === "indexField") {
+            hasIndex = true;
+        }
+    }
     return (
         <>
             <h2>Fields</h2>
-            <FieldSelector addField={addField} />
+            <FieldSelector addField={addField} hasIndex={hasIndex} />
             {fields.map((field, index) => {
                 return <EditableField key={`${index}${JSON.stringify(field.field)}`} field={field} fieldRef={`${typeRef}/fields/${field.key}`} />;
             })}
