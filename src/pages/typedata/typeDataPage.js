@@ -53,10 +53,10 @@ const TypeDataPage = (props) => {
                     fieldValue = targetTypeData.fields[field.key];
                 }
                 return (
-                    <>
+                    <div key={`${field.key}-container`}>
                         <h3 key={`${field.key}-title`} >{field.title}</h3>
                         <EditableText key={`${field.key}-field`} value={fieldValue} fieldName={field.key} element={(content) => <h3>{content}</h3>} changeValue={setFieldValue} dbPath={""} />
-                    </>
+                    </div>
                 );
             });
         }
