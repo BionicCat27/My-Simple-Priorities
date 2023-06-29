@@ -5,6 +5,7 @@ import { DBContext } from '../../../contexts/DBContext';
 import EditableTextField from '../../Fields/TextField/EditableTextField';
 import EditableDateField from '../../Fields/DateField/EditableDateField';
 import EditableNumericField from '../../Fields/NumericField/EditableNumericField';
+import EditableIndexField from '../../Fields/IndexField/EditableIndexField';
 
 const EditableField = (props) => {
     const { database } = useContext(DBContext);
@@ -26,6 +27,9 @@ const EditableField = (props) => {
                 break;
             case 'numericField':
                 return <EditableNumericField field={field} fieldRef={fieldRef} />;
+                break;
+            case 'indexField':
+                return <EditableIndexField field={field} fieldRef={fieldRef} />;
                 break;
             default:
                 return <p>Invalid Display</p>;

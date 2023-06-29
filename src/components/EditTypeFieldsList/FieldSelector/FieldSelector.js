@@ -12,6 +12,7 @@ const FieldSelector = (props) => {
                 <option value={"textField"}>Text</option>
                 <option value={"dateField"}>Date</option>
                 <option value={"numericField"}>Numeric</option>
+                <option value={"indexField"}>Index</option>
             </select>
             <button onClick={() => { if (selectorValue != "") addField(selectorValue); }}>Add Field</button>
         </div>
