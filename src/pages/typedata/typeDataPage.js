@@ -23,6 +23,8 @@ const TypeDataPage = (props) => {
 
     let type = getType(typeKey);
 
+    console.log(`Type: ${JSON.stringify(type)}`);
+
     if (!type) {
         return (
             <div id="pageContent">
@@ -40,6 +42,18 @@ const TypeDataPage = (props) => {
 
     let typeChildren = type.data;
     let targetTypeData = typeChildren[dataKey];
+
+    if (!targetTypeData) {
+        navigateBack();
+
+        return (
+            <div id="pageContent">
+                <div id="pageContainer">
+                    <p>No type data found.</p>
+                </div>
+            </div >
+        );
+    }
 
     function setFieldValue(dataPath, fieldName, value) {
         setTypeValue(dataRef + "/fields", fieldName, value);
@@ -64,7 +78,9 @@ const TypeDataPage = (props) => {
 
     function removeData() {
         removeTypeValue(dataRef);
+        console.log("Removing type value...");
         navigateBack();
+        console.log("Navigating away!");
     }
 
     return (

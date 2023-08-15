@@ -10,25 +10,21 @@ import './editViewPage.css';
 //Config
 import '../../firebaseConfig';
 import { AuthContext } from '../../contexts/AuthContext';
-import { DBContext } from '../../contexts/DBContext';
 import { ViewsContext } from '../../contexts/ViewsContext';
 import EditableText from '../../components/EditableText/EditableText';
 import EditViewDisplaysList from '../../components/EditViewDisplaysList/EditViewDisplaysList';
 import NavMenu from '../../components/NavMenu/NavMenu';
-import { useNavigate } from 'react-router';
 
 const EditViewPage = (props) => {
     const { user } = useContext(AuthContext);
-    const { parameters } = useContext(NavigationContext);
+    const { parameters, navigateToPage } = useContext(NavigationContext);
     const { getView, setViewValue } = useContext(ViewsContext);
 
     const [viewKey] = useState(parameters.objectKey);
 
-    const navigate = useNavigate();
-
     let view = getView(viewKey);
     useEffect(() => {
-        if (!viewKey) navigate("/");
+        if (!viewKey) navigateToPage("/", {});
     }, [viewKey]);
 
     if (view == "" || !view) {

@@ -13,33 +13,31 @@ export const NavigationProvider = ({ children }) => {
 
     function navigateBack() {
         if (!pageHistory || pageHistory.length == 0) {
-            setPage("#home");
+            setPage("/home");
             setParameters({});
             setPageHistory([]);
             return;
         }
         let newPageHistory = [...pageHistory];
         let lastPageObject = newPageHistory.pop();
-        setPage(lastPageObject.page);
+        navigate(lastPageObject.page);
         setPageHistory(newPageHistory);
         setParameters(lastPageObject.parameters);
     }
 
-    function navigateToPage(to) {
+    function addParams(to, parameters) {
         let newPageHistory = [...pageHistory];
-        let newPageObject = { page: page, parameters, parameters };
+        let newPageObject = { page: page, parameters: parameters };
         newPageHistory.push(newPageObject);
         setPageHistory(newPageHistory);
-        setPage(to);
+        navigate(to);
         setParameters({});
     }
 
     return (
         <NavigationContext.Provider value={{
             navigateToPage: navigateToPage,
-            navigateToPage: navigateToPage,
             navigateBack: navigateBack,
-            setParameters: setParameters,
             page: page,
             parameters: parameters
         }}>{children}</NavigationContext.Provider>

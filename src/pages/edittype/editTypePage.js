@@ -12,22 +12,19 @@ import { TypesContext } from '../../contexts/TypesContext';
 import EditableText from '../../components/EditableText/EditableText';
 import IndexTable from '../../components/IndexTable/IndexTable';
 import NavMenu from '../../components/NavMenu/NavMenu';
-import { useNavigate } from 'react-router';
 import EditTypeFieldsList from '../../components/EditTypeFieldsList/EditTypeFieldsList';
 import { AuthContext } from '../../contexts/AuthContext';
 
 const EditTypePage = (props) => {
     const { user } = useContext(AuthContext);
-    const { parameters } = useContext(NavigationContext);
+    const { navigateToPage, parameters } = useContext(NavigationContext);
     const { getType, setTypeValue, keyData } = useContext(TypesContext);
 
     const [typeKey] = useState(parameters.objectKey);
 
-    const navigate = useNavigate();
-
     let type = getType(typeKey);
     useEffect(() => {
-        if (!typeKey) navigate("/");
+        if (!typeKey) navigateToPage("/", {});
     }, [typeKey]);
 
     if (type == "" || !type) {

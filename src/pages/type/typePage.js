@@ -11,18 +11,16 @@ import '../../firebaseConfig';
 import IndexTable from '../../components/IndexTable/IndexTable';
 import { TypesContext } from '../../contexts/TypesContext';
 import NavMenu from '../../components/NavMenu/NavMenu';
-import { useNavigate } from 'react-router';
 
 const TypePage = (props) => {
-    const { parameters } = useContext(NavigationContext);
+    const { parameters, navigateToPage } = useContext(NavigationContext);
     const { getType, keyData } = useContext(TypesContext);
-    const navigate = useNavigate();
 
     const [typeKey] = useState(parameters.objectKey);
 
     let type = getType(typeKey);
     useEffect(() => {
-        if (!typeKey) navigate("/");
+        if (!typeKey) navigateToPage("/", {});
     }, [typeKey]);
 
     if (!type) {

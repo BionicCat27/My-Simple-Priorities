@@ -13,21 +13,18 @@ import ListDisplay from '../../components/Displays/ListDisplay/ListDisplay';
 import { ViewsContext } from '../../contexts/ViewsContext';
 import CardsDisplay from '../../components/Displays/CardsDisplay/CardsDisplay';
 import NavMenu from '../../components/NavMenu/NavMenu';
-import { useNavigate } from 'react-router';
 
 const ViewPage = (props) => {
     const { user } = useContext(AuthContext);
-    const { parameters } = useContext(NavigationContext);
+    const { parameters, navigateToPage } = useContext(NavigationContext);
     const { getView } = useContext(ViewsContext);
-
-    const navigate = useNavigate();
 
     const [viewKey] = useState(parameters.objectKey);
 
     let view = getView(viewKey);
 
     useEffect(() => {
-        if (!viewKey) navigate("/");
+        if (!viewKey) navigateToPage("/", {});
     }, [viewKey]);
 
     function renderDisplays() {

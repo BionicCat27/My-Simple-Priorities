@@ -5,7 +5,6 @@ import './Sidebar.css';
 import '../../../firebaseConfig';
 
 import { getAuth, signOut, connectAuthEmulator } from "firebase/auth";
-import { useNavigate } from 'react-router-dom';
 import { ViewsContext } from '../../../contexts/ViewsContext';
 import { NavigationContext } from '../../../contexts/NavigationContext';
 
@@ -15,11 +14,8 @@ if (location.hostname === "localhost" && location.port === "5001") {
 }
 
 const Sidebar = (props) => {
-    const { setParameters } = useContext(NavigationContext);
+    const { navigateBack, navigateToPage } = useContext(NavigationContext);
     const { viewsData } = useContext(ViewsContext);
-
-    const navigate = useNavigate();
-
 
     function userSignOut() {
         signOut(auth).then(() => {
@@ -38,8 +34,7 @@ const Sidebar = (props) => {
                 {viewsData.map((object) => {
                     return (
                         <a key={object.key} className={"nav-button"} onClick={() => {
-                            navigate(`/view`);
-                            setParameters({ objectKey: object.key });
+                            navigateToPage(`/view`, { objectKey: object.key });
                         }}>{object.name}</a>
                     );
                 })}
@@ -52,8 +47,8 @@ const Sidebar = (props) => {
         <div id="sidebar">
             <div id="sidebarLinksContainer">
                 <h2 id="sidebarTitle">My Simple<br />{props.title}</h2>
-                <a className={"nav-button"} onClick={() => navigate(-1)}>Back</a>
-                <a className={"nav-button"} onClick={() => navigate("/")}>Home</a>
+                <a className={"nav-button"} onClick={() => navigateBack()}>Back</a>
+                <a className={"nav-button"} onClick={() => navigateToPage("/", {})}>Home</a>
                 {sidebarLinks}
                 <a className={"nav-button"} onClick={userSignOut}>Logout</a>
             </div>
