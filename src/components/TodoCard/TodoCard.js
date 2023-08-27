@@ -132,23 +132,19 @@ const TodoCard = (props) => {
         let date = new Date(new Date(dateToCheck).toDateString()).getTime();
         let today = new Date(new Date().toDateString()).getTime();
         // console.log("Date: " + date + " today: " + today + "(" + (today - date) + ") ");
-        if(date < today) {
+        if (date < today) {
             //Day is before today
             return "date-passed ";
-        } else if(date == today) {
+        } else if (date == today) {
             //Day is today
             return "date-today ";
         } else {
             //Day is after today
             return "date-future ";
         }
-    } 
+    }
 
     function generateCardContent() {
-        let todoSelected = (statusInput == "Todo" ? "btn-active": "");
-        let inprogSelected = (statusInput == "In Progress" ? "btn-active": "");
-        let doneSelected = (statusInput == "Done" ? "btn-active": "");
-
         if (isEditing) {
             return (<>
                 <label htmlFor="contentTitleInput">Title</label>
@@ -159,11 +155,7 @@ const TodoCard = (props) => {
                 <div id="formButtonContainer">
                     <button onClick={() => { addChecklistItem(); }}>Add Checklist item</button>
                 </div>
-                <div id="formButtonContainer">
-                    <button onClick={() => { setStatusInput("Todo"); }} className={todoSelected}>Todo</button>
-                    <button onClick={() => { setStatusInput("In Progress"); }} className={inprogSelected}>In Progress</button>
-                    <button onClick={() => { setStatusInput("Done"); }} className={doneSelected}>Done</button>
-                </div>
+                <StatusSelector value={statusInput} setValue={(value) => setStatusInput(value)} />
                 <label htmlFor="contentDueDateInput">Due Date</label>
                 <input id="contentDueDateInput" type="date" onChange={field => setDueDateInput(field.target.value)} value={dueDateInput}></input>
                 <div id="formButtonContainer">
