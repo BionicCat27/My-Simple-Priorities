@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ref, update, getDatabase } from "firebase/database";
 
 import './TodoCard.css';
+import StatusSelector from "../StatusSelector";
 
 const TodoCard = (props) => {
     const [isEditing, setEditing] = useState(false);
