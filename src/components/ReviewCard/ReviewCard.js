@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ref, update, getDatabase } from "firebase/database";
 
 import './ReviewCard.css';
+import StatusSelector from "../StatusSelector";
 
 const ReviewCard = (props) => {
     const initialTitle = props.title || "";
@@ -147,12 +148,7 @@ const ReviewCard = (props) => {
                     </div>
                 ))}
                 <p onClick={handleAddStage}>Add progress stage</p>
-                <p>Status: {statusInput}</p>
-                <div id="formButtonContainer">
-                    <button onClick={() => { setStatusInput("Todo"); }}>Todo</button>
-                    <button onClick={() => { setStatusInput("In Progress"); }}>In Progress</button>
-                    <button onClick={() => { setStatusInput("Done"); }}>Done</button>
-                </div>
+                <StatusSelector value={statusInput} setValue={(value) => setStatusInput(value)} />
                 <div id="formButtonContainer">
                     <button onClick={updateContent}>Save</button>
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>
