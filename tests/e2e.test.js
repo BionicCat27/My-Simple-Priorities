@@ -7,7 +7,7 @@ const signInUser = async (auth, email, password) => {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        console.log("User signed in:", user);
+        console.debug("User signed in");
     } catch (error) {
         console.error("Error signing in:", error);
     }
@@ -17,7 +17,7 @@ const createUser = async (auth, email, password) => {
     try {
         // Call the function to create a user
         await createUserWithEmailAndPassword(auth, email, password);
-        console.log('User created successfully');
+        console.debug('User created successfully');
     } catch (error) {
         console.error('Error creating user:', error);
         signInUser(auth, email, password);
@@ -50,9 +50,20 @@ describe("App", () => {
 
 
     // it("navigates to the todo page", async () => {
-    //     expect(auth.currentUser).toBeDefined();
-    //     await page.goto("http://localhost:5002/todo");
-    //     await page.waitForSelector("#title");
+    //     await page.goto("http://localhost:5002");
+    //     await page.waitForSelector("#pageTitle");
+    //     await page.$('#loginForm');
+    //     await page.type('#loginFormEmail', email);
+    //     await page.type('#loginFormPassword', password);
+    //     await page.click('#loginButton');
+    //     await page.waitForNavigation();
+    //     expect(false).toBe(true);
+
+    //     const navButtons = await page.waitForSelector(".nav-button", (e) => e.textContent);
+    //     const todoNavButton = navButtons.evaluate((element) => element.textContent === "Todo");
+    //     expect(todoNavButton.textContent).toBe("Todo");
+    //     todoNavButton.click();
+    //     await page.waitForNavigation();
     //     const text = await page.$eval("#title", (e) => e.textContent);
     //     expect(text).toContain("My Simple Todo");
     // });
@@ -60,7 +71,7 @@ describe("App", () => {
     afterAll(() => {
         browser.close();
         if (auth?.currentUser) {
-            console.log("Deleting user");
+            console.debug("Deleting user");
             deleteUser(auth.currentUser);
         }
     });

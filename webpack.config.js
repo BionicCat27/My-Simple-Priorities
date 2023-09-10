@@ -30,7 +30,7 @@ module.exports = (env) => {
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.DefinePlugin({ "process.env.MODE": env.MODE })
+      new webpack.DefinePlugin({ "process.env.MODE": JSON.stringify(env.MODE) })
     ],
     devServer: {
       static: path.join(__dirname, 'src'),
