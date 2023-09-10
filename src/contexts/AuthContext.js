@@ -21,10 +21,6 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         //Get auth
-        if (location.hostname === "localhost" && location.port === "5001") {
-            connectAuthEmulator(auth, "http://localhost:9099");
-        }
-        //Log in 
         onAuthStateChanged(auth, (userResult) => {
             setUser(userResult);
             checkLoggedIn(userResult);

@@ -10,7 +10,6 @@ import Footer from '../../components/Footer';
 //Styles
 import './loginPage.css';
 //Config
-import '../../firebaseConfig';
 
 const LoginPage = () => {
     const authContext = useContext(AuthContext);

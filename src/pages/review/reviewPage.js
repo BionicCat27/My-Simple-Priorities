@@ -10,8 +10,6 @@ import NavMenu from '../../components/NavMenu/NavMenu';
 import ReviewCard from '../../components/ReviewCard/ReviewCard';
 //Styles
 import './reviewPage.css';
-//Config
-import '../../firebaseConfig';
 
 const ReviewPage = (props) => {
     const authContext = useContext(AuthContext);

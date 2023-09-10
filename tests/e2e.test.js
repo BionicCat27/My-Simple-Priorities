@@ -1,9 +1,7 @@
-import { connectAuthEmulator, createUserWithEmailAndPassword, deleteUser, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, deleteUser, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import puppeteer from "puppeteer";
+process.env.MODE = "development";
 import '../src/firebaseConfig';
-
-const auth = getAuth();
-connectAuthEmulator(auth, "http://localhost:9099");
 
 const signInUser = async (auth, email, password) => {
     try {
@@ -34,16 +32,17 @@ describe("App", () => {
     let password = "testuser";
 
     beforeAll(async () => {
+        expect(process.env.MODE).toBe("development");
         auth = getAuth();
-        expect(auth).not.toBeNull();
-        browser = await puppeteer.launch();
+        expect(auth).toBeDefined();
+        browser = await puppeteer.launch({ headless: "new" });
         page = await browser.newPage();
         await createUser(auth, email, password);
         expect(auth.currentUser).toBeDefined();
     });
 
     it("navigates to the login page", async () => {
-        await page.goto("http://localhost:5001");
+        await page.goto("http://localhost:5002");
         await page.waitForSelector("#pageTitle");
         const text = await page.$eval("#pageTitle", (e) => e.textContent);
         expect(text).toContain("Login");
@@ -52,7 +51,7 @@ describe("App", () => {
 
     // it("navigates to the todo page", async () => {
     //     expect(auth.currentUser).toBeDefined();
-    //     await page.goto("http://localhost:5001/todo");
+    //     await page.goto("http://localhost:5002/todo");
     //     await page.waitForSelector("#title");
     //     const text = await page.$eval("#title", (e) => e.textContent);
     //     expect(text).toContain("My Simple Todo");
@@ -60,9 +59,9 @@ describe("App", () => {
 
     afterAll(() => {
         browser.close();
-        if (auth.currentUser) {
+        if (auth?.currentUser) {
             console.log("Deleting user");
             deleteUser(auth.currentUser);
         }
     });
-});
+});;

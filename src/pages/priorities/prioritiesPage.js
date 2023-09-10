@@ -10,8 +10,6 @@ import NavMenu from '../../components/NavMenu/NavMenu';
 import PrioritiesCard from '../../components/PrioritiesCard/PrioritiesCard';
 //Styles
 import './prioritiesPage.css';
-//Config
-import '../../firebaseConfig';
 
 const PrioritiesPage = (props) => {
     const authContext = useContext(AuthContext);

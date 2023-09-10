@@ -1,8 +1,7 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
 //Firebase
-import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
-import { getDatabase, ref, update, onValue, off, connectDatabaseEmulator } from "firebase/database";
+import { ref, update, onValue, off } from "firebase/database";
 //Contexts
 import { AuthContext } from "../../contexts/AuthContext";
 import { DBContext } from '../../contexts/DBContext';
@@ -11,8 +10,6 @@ import NavMenu from '../../components/NavMenu/NavMenu';
 import TimelineGantt from '../../components/TimelineGantt/TimelineGantt';
 //Styles
 import './timelinePage.css';
-//Config
-import '../../firebaseConfig';
 
 const TimelinePage = (props) => {
     const { user } = useContext(AuthContext);

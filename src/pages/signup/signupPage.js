@@ -9,8 +9,6 @@ import PageTitle from '../../components/PageTitle';
 import Footer from '../../components/Footer';
 //Styles
 import './signupPage.css';
-//Config
-import '../../firebaseConfig';
 
 const SignupPage = () => {
     const authContext = useContext(AuthContext);

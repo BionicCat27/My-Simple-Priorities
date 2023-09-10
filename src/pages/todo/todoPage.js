@@ -10,8 +10,6 @@ import NavMenu from '../../components/NavMenu/NavMenu';
 import TodoCard from '../../components/TodoCard/TodoCard';
 //Styles
 import './todoPage.css';
-//Config
-import '../../firebaseConfig';
 
 const TodoPage = (props) => {
     const authContext = useContext(AuthContext);
