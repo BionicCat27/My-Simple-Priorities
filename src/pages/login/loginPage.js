@@ -45,7 +45,7 @@ const LoginPage = () => {
                     <input id="loginFormPassword" className="loginFormElement" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
                     <button id="loginButton" onClick={prepareSignIn}>Login</button>
                 </form>
-                {errorMessage != null ? <p>{errorMessage}</p> : null}
+                {errorMessage ? <p id="login-error-message">{errorMessage}</p> : null}
                 <p>Or <a href="/signup">Signup</a></p>
             </div>
             <Footer />

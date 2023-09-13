@@ -16,8 +16,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const enableDevelopmentMode = () => {
-    connectAuthEmulator(getAuth(), "http://localhost:9099");
-    connectDatabaseEmulator(getDatabase(), "localhost", 9000);
+    let hostname = "127.0.0.1";
+    connectAuthEmulator(getAuth(), `http://${hostname}:9099`);
+    connectDatabaseEmulator(getDatabase(), hostname, 9000);
     console.debug("Development mode enabled, connected to emulators");
 }
 
