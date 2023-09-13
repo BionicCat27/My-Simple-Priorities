@@ -1,11 +1,34 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import NavMenu from "../../components/NavMenu/NavMenu";
+import '../common.css';
 
 const CapturePage = () => {
+    const [note, setNote] = useState("");
+
+    const captureNote = (e) => {
+        e.preventDefault();
+
+        setNote("");
+    }
+
     return (
         <>
             <NavMenu title="Capture" />
             <div id="pageContent">
+                <div id="capture-page">
+                    <div id="capture-page-content">
+                        <form onSubmit={captureNote}>
+                            <input
+                                name=""
+                                value={note}
+                                onChange={(e) => setNote(e.target.value)}
+                                placeholder="Capture note"
+                            ></input>
+                            <button type="submit">+</button>
+                        </form>
+                        <button>See notes</button>
+                    </div>
+                </div>
             </div>
         </>
     )

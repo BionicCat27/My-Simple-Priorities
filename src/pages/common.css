@@ -1,0 +1,21 @@
+input {
+    height: 1.5em;
+}
+
+#capture-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4em;
+}
+
+#capture-page-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#capture-page-content * {
+    margin-top: 1em;
+}
