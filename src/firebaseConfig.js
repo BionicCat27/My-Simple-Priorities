@@ -15,12 +15,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-if (process.env.MODE === "development") {
+const enableDevelopmentMode = () => {
     connectAuthEmulator(getAuth(), "http://localhost:9099");
     connectDatabaseEmulator(getDatabase(), "localhost", 9000);
     console.debug("Development mode enabled, connected to emulators");
-} else {
-    console.debug(`Production mode enabled (${JSON.stringify(process.env.MODE)})`);
 }
 
-export { app };
+if (process.env.MODE === "development") {
+    enableDevelopmentMode();
+}
+
+export { app, enableDevelopmentMode };

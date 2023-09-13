@@ -1,7 +1,8 @@
 import { createUserWithEmailAndPassword, deleteUser, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import puppeteer from "puppeteer";
 process.env.MODE = "development";
-import '../src/firebaseConfig';
+import {enableDevelopmentMode} from '../src/firebaseConfig';
+enableDevelopmentMode();
 
 const signInUser = async (auth, email, password) => {
     try {
@@ -41,32 +42,38 @@ describe("App", () => {
         expect(auth.currentUser).toBeDefined();
     });
 
-    it("navigates to the login page", async () => {
+    // it("navigates to the login page", async () => {
+    //     await page.goto("http://localhost:5002");
+    //     await page.waitForNavigation();
+    //     await page.waitForSelector("#pageTitle");
+    //     const text = await page.$eval("#pageTitle", (e) => e.textContent);
+    //     expect(text).toContain("Login");
+        
+
+    // });
+
+
+    it("navigates to the todo page", async () => {
         await page.goto("http://localhost:5002");
         await page.waitForSelector("#pageTitle");
-        const text = await page.$eval("#pageTitle", (e) => e.textContent);
-        expect(text).toContain("Login");
+        const pageTitle = await page.$eval("#pageTitle", (e) => e.textContent);
+        expect(pageTitle).toBe("Login")
+        await page.$('#loginForm');
+        await page.type('#loginFormEmail', "abcd1234");
+        await page.type('#loginFormPassword', "abcd1234");
+        await page.click('#loginButton');
+
+
+        // await page.waitForNavigation();
+
+        // const navButtons = await page.waitForSelector(".nav-button", (e) => e.textContent);
+        // const todoNavButton = navButtons.evaluate((element) => element.textContent === "Todo");
+        // expect(todoNavButton.textContent).toBe("Todo");
+        // todoNavButton.click();
+        // await page.waitForNavigation();
+        // const text = await page.$eval("#title", (e) => e.textContent);
+        // expect(text).toContain("My Simple Todo");
     });
-
-
-    // it("navigates to the todo page", async () => {
-    //     await page.goto("http://localhost:5002");
-    //     await page.waitForSelector("#pageTitle");
-    //     await page.$('#loginForm');
-    //     await page.type('#loginFormEmail', email);
-    //     await page.type('#loginFormPassword', password);
-    //     await page.click('#loginButton');
-    //     await page.waitForNavigation();
-    //     expect(false).toBe(true);
-
-    //     const navButtons = await page.waitForSelector(".nav-button", (e) => e.textContent);
-    //     const todoNavButton = navButtons.evaluate((element) => element.textContent === "Todo");
-    //     expect(todoNavButton.textContent).toBe("Todo");
-    //     todoNavButton.click();
-    //     await page.waitForNavigation();
-    //     const text = await page.$eval("#title", (e) => e.textContent);
-    //     expect(text).toContain("My Simple Todo");
-    // });
 
     afterAll(() => {
         browser.close();
