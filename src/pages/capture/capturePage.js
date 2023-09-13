@@ -1,13 +1,16 @@
 import React, { useContext, useState } from "react";
 import NavMenu from "../../components/NavMenu/NavMenu";
 import '../common.css';
+import {DBContext} from '../../contexts/DBContext'
 
 const CapturePage = () => {
+    const {addData} = useContext(DBContext);
+
     const [note, setNote] = useState("");
 
     const captureNote = (e) => {
         e.preventDefault();
-
+        addData("capture", {value: note});
         setNote("");
     }
 

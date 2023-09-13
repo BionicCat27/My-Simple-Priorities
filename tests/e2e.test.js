@@ -2,6 +2,9 @@ import { createUserWithEmailAndPassword, deleteUser, getAuth, signInWithEmailAnd
 import puppeteer from "puppeteer";
 process.env.MODE = "development";
 import {app, enableDevelopmentMode} from '../src/firebaseConfig';
+import {DBProvider, addData} from '../src/contexts/DBContext';
+import render from 'pptr-testing-library'
+import React from "react";
 enableDevelopmentMode();
 
 const createUser = async (auth, email, password) => {
@@ -79,4 +82,28 @@ describe("App", () => {
             deleteUser(auth.currentUser);
         }
     });
-});;
+});
+
+describe("DBContext", () => {
+    let browser;
+    let page;
+    let auth;
+    let baseUrl = "http://127.0.0.1:5002";
+    let email = "logintestuser@testusers.com";
+    let password = "testuser";
+
+    const DBContextComponent = () => {
+        const { addData } = useContext(DBContext);
+        console.debug("Adding note:");
+        addData("data", {"Note": "Note!!!!!"});
+        return null;
+    }
+
+    it.skip("pushes new object", async () => {
+        const pagecontent = render(
+            <DBProvider>
+                <DBContextComponent />
+            </DBProvider>
+        )
+    });
+});
