@@ -14,6 +14,7 @@ import ReviewPage from './pages/review/reviewPage';
 import TimelinePage from './pages/timeline/timelinePage';
 import { AuthProvider } from './contexts/AuthContext';
 import { DBProvider } from './contexts/DBContext';
+import CapturePage from './pages/capture/capturePage';
 
 const App = () => {
     return (
@@ -21,7 +22,9 @@ const App = () => {
             <DBProvider>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<PrioritiesPage />} />
+                        {/* <Route path="/" element={<PrioritiesPage />} /> */}
+                        <Route path="/" element={<CapturePage />} />
+                        <Route path="/capture" element={<CapturePage />} />
                         <Route path="/priorities" element={<PrioritiesPage />} />
                         <Route path="/todo" element={<TodoPage />} />
                         <Route path="/review" element={<ReviewPage />} />

@@ -28,6 +28,8 @@ describe("App", () => {
         expect(auth).toBeDefined();
         await createUser(auth, email, password);
         expect(auth.currentUser).toBeDefined();
+        browser = await puppeteer.launch({ headless: "new" });
+        browser.createIncognitoBrowserContext();
     });
 
     beforeEach(async () => {
@@ -37,6 +39,7 @@ describe("App", () => {
 
     it("logs user in successfully", async () => {
         await page.goto(baseUrl);
+        expect(page.url()).toBe(`${baseUrl}/login`)
         await page.waitForSelector("#pageTitle");
         const text = await page.$eval("#pageTitle", (e) => e.textContent);
         expect(text).toContain("Login");
@@ -46,12 +49,13 @@ describe("App", () => {
         await page.click('#loginButton');
         await page.waitForSelector("#sidebarTitle");
         const sidebarTitle = await page.$eval("#sidebarTitle", (e) => e.textContent);
-        expect(sidebarTitle).toContain("My SimplePriorities");
+        expect(sidebarTitle).toContain("My SimpleCapture");
     });
 
 
     it("fails to login invalid user", async () => {
-        await page.goto(baseUrl);
+        await page.goto(baseUrl);   
+        expect(page.url()).toBe(`${baseUrl}/login`)
         await page.waitForSelector("#pageTitle");
         const pageTitle = await page.$eval("#pageTitle", (e) => e.textContent);
         expect(pageTitle).toBe("Login")
