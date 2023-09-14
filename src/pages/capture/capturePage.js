@@ -4,13 +4,13 @@ import '../common.css';
 import {DBContext} from '../../contexts/DBContext'
 
 const CapturePage = () => {
-    const {addData} = useContext(DBContext);
+    const {pushObject} = useContext(DBContext);
 
     const [note, setNote] = useState("");
 
     const captureNote = (e) => {
         e.preventDefault();
-        addData("capture", {value: note});
+        pushObject("capture", {value: note});
         setNote("");
     }
 
@@ -22,6 +22,7 @@ const CapturePage = () => {
                     <div id="capture-page-content">
                         <form onSubmit={captureNote}>
                             <input
+                                id="capture-input"
                                 name=""
                                 value={note}
                                 onChange={(e) => setNote(e.target.value)}

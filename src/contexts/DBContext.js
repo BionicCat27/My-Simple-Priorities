@@ -8,7 +8,7 @@ export const DBProvider = ({ children }) => {
     const { user } = useContext(AuthContext);
     const database = getDatabase();
 
-    const addData = (path, object) => {
+    const pushObject = (path, object) => {
         if(!(user?.uid)) return;
         console.log(JSON.stringify(object))
         set(push(ref(database, `${user.uid}/${path}`)), object);
@@ -17,7 +17,7 @@ export const DBProvider = ({ children }) => {
     return (
         <DBContext.Provider value={{
             database,
-            addData
+            pushObject
         }}>{children}</DBContext.Provider>
     );
 };
