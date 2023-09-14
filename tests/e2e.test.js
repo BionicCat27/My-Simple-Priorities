@@ -33,9 +33,6 @@ describe("App", () => {
     let browser;
     let page;
     let auth;
-    let baseUrl = "http://localhost:5000";
-    let email = "logintestuser@testusers.com";
-    let password = "testuser";
 
     beforeAll(async () => {
         expect(process.env.MODE).toBe("development");
@@ -46,9 +43,7 @@ describe("App", () => {
     });
 
     beforeEach(async () => {
-        browser = await puppeteer.launch({
-            headless: "new",
-            args: ['--no-sandbox'] });
+        browser = await puppeteer.launch({ headless: "new" });
         browser.createIncognitoBrowserContext();
         page = await browser.newPage();
     });
@@ -76,6 +71,10 @@ describe("App", () => {
 
     afterAll(() => {
         browser.close();
+        if (auth?.currentUser) {
+            console.debug("Deleting user");
+            deleteUser(auth.currentUser);
+        }
     });
 });
 
