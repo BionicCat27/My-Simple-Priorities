@@ -3,10 +3,8 @@
 My Simple Priorities is a simple priority management website. Visit the live version at [my-simple-priorities.web.app](https://my-simple-priorities.web.app/)
 
 ## Instructions
-1. Clone repository
-2. Run ``npm install``
-3. Run ``npm start``
-4. Visit [www.localhost:5000](http://www.localhost:5000)
+1. Run ``docker-compose-up --build``
+4. Visit [http://localhost:5000](http://localhost:5000)
 5. Add and manage your priorities!
 
 ## Complete features
