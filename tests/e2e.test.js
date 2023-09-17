@@ -18,7 +18,7 @@ describe("App", () => {
     let browser;
     let page;
     let auth;
-    let baseUrl = "http://127.0.0.1:5002";
+    let baseUrl = "http://0.0.0.0:5000";
     let email = "logintestuser@testusers.com";
     let password = "testuser";
 
