@@ -4,39 +4,27 @@ process.env.MODE = "development";
 import {app, enableDevelopmentMode} from '../src/firebaseConfig';
 enableDevelopmentMode();
 
-const createUser = async (auth, email, password) => {
-    try {
-        // Call the function to create a user
-        await createUserWithEmailAndPassword(auth, email, password);
-        console.debug('User created successfully');
-    } catch (error) {
-        console.error('Error creating user:', error);
-    }
-};
-
 describe("App", () => {
     let browser;
     let page;
     let auth;
-    let baseUrl = "http://0.0.0.0:5000";
+    let baseUrl = "http://localhost:5000";
     let email = "logintestuser@testusers.com";
     let password = "testuser";
 
     beforeAll(async () => {
         expect(process.env.MODE).toBe("development");
-        auth = getAuth();
-        expect(auth).toBeDefined();
-        await createUser(auth, email, password);
-        expect(auth.currentUser).toBeDefined();
     });
 
     beforeEach(async () => {
         browser = await puppeteer.launch({ headless: "new" });
+        browser.createIncognitoBrowserContext();
         page = await browser.newPage();
     });
 
     it("logs user in successfully", async () => {
         await page.goto(baseUrl);
+        expect(page.url()).toBe(`${baseUrl}/login`)
         await page.waitForSelector("#pageTitle");
         const text = await page.$eval("#pageTitle", (e) => e.textContent);
         expect(text).toContain("Login");
@@ -52,6 +40,7 @@ describe("App", () => {
 
     it("fails to login invalid user", async () => {
         await page.goto(baseUrl);
+        expect(page.url()).toBe(`${baseUrl}/login`)
         await page.waitForSelector("#pageTitle");
         const pageTitle = await page.$eval("#pageTitle", (e) => e.textContent);
         expect(pageTitle).toBe("Login")
@@ -70,9 +59,5 @@ describe("App", () => {
 
     afterAll(() => {
         browser.close();
-        if (auth?.currentUser) {
-            console.debug("Deleting user");
-            deleteUser(auth.currentUser);
-        }
     });
-});;
+});
