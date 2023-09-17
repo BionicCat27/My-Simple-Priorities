@@ -33,6 +33,9 @@ describe("App", () => {
     let browser;
     let page;
     let auth;
+    let baseUrl = "http://0.0.0.0:5000";
+    let email = "logintestuser@testusers.com";
+    let password = "testuser";
 
     beforeAll(async () => {
         expect(process.env.MODE).toBe("development");
