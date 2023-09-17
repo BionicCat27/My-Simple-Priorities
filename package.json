@@ -6,10 +6,11 @@
   "scripts": {
     "build": "webpack",
     "build_dev": "webpack --env MODE=development --config webpack.config.js",
-    "emulators": "npm run build_dev && firebase emulators:start --project demo-test",
+    "emulators": "npm run watch & firebase emulators:start --project demo-test --import emulatorDataExport",
     "watch": "nodemon --exec \"npm run build_dev\"",
-    "test": "jest",
-    "deploy": "npm run build && firebase deploy --only hosting"
+    "test": "jest --detectOpenHandles",
+    "deploy": "npm run build && firebase deploy --only hosting",
+    "export": "firebase emulators:export --project demo-test ./emulatorDataExport"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "@babel/preset-react": "^7.14.5",
     "babel-loader": "^8.2.2",
     "firebase": "^9.23.0",
+    "firebase-admin": "^11.10.1",
     "firebase-tools": "^12.5.3",
     "jest": "^29.6.4",
     "pptr-testing-library": "^0.7.0",
