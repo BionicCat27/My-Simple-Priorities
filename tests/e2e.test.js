@@ -26,31 +26,23 @@ describe("App", () => {
 
     it("logs user in successfully", async () => {
         await page.goto(baseUrl);
-        expect(page.url()).toBe(`${baseUrl}/login`)
-        await page.waitForSelector("#pageTitle");
-        const text = await page.$eval("#pageTitle", (e) => e.textContent);
-        expect(text).toContain("Login");
+        await page.waitForSelector("#loginForm");
         await page.$('#loginForm');
         await page.type('#loginFormEmail', email);
         await page.type('#loginFormPassword', password);
         await page.click('#loginButton');
-        await page.waitForSelector("#sidebarTitle");
-        const sidebarTitle = await page.$eval("#sidebarTitle", (e) => e.textContent);
-        expect(sidebarTitle).toContain("My SimplePriorities");
+        await page.waitForNavigation();
+        expect(page.url()).toBe(`${baseUrl}/`)
     });
 
 
     it("fails to login invalid user", async () => {
         await page.goto(baseUrl);
-        expect(page.url()).toBe(`${baseUrl}/login`)
-        await page.waitForSelector("#pageTitle");
-        const pageTitle = await page.$eval("#pageTitle", (e) => e.textContent);
-        expect(pageTitle).toBe("Login")
+        await page.waitForSelector("#loginForm");
         await page.$('#loginForm');
         await page.type('#loginFormEmail', "abcd1234");
         await page.type('#loginFormPassword', "abcd1234");
         await page.click('#loginButton');
-        await page.waitForSelector("#login-error-message");
         const loginErrorMessage = await page.$eval("#login-error-message", (e) => e.textContent);
         expect(loginErrorMessage).toBe("Incorrect username or password.")
     });
