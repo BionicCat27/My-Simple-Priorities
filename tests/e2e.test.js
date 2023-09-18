@@ -46,7 +46,9 @@ describe("App", () => {
     });
 
     beforeEach(async () => {
-        browser = await puppeteer.launch({ headless: "new" });
+        browser = await puppeteer.launch({
+            headless: "new",
+            args: ['--no-sandbox'] });
         browser.createIncognitoBrowserContext();
         page = await browser.newPage();
     });
