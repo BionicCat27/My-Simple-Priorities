@@ -54,17 +54,16 @@ describe("App", () => {
     });
 
     it("logs user in successfully", async () => {
-        await page.goto(baseUrl);
-        expect(page.url()).toBe(`${baseUrl}/login`)
+        page.goto(baseUrl);
+        await page.waitForSelector("#loginForm");
         await doFormLogin(page, email, password)
-        await page.waitForSelector("#sidebarTitle");
-        const sidebarTitle = await page.$eval("#sidebarTitle", (e) => e.textContent);
-        expect(sidebarTitle).toContain("My SimpleCapture");
+        await page.waitForNavigation();
+        expect(page.url()).toBe(`${baseUrl}/`)
     });
 
 
     it("fails to login invalid user", async () => {
-        await page.goto(baseUrl);
+        page.goto(baseUrl);
         await doFormLogin(page, "acbd1234", "acbd1234")
         await page.waitForSelector("#login-error-message");
         const loginErrorMessage = await page.$eval("#login-error-message", (e) => e.textContent);
