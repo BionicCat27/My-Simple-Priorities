@@ -25,7 +25,7 @@ describe("App", () => {
     });
 
     it("logs user in successfully", async () => {
-        await page.goto(baseUrl);
+        page.goto(baseUrl);
         await page.waitForSelector("#loginForm");
         await page.$('#loginForm');
         await page.type('#loginFormEmail', email);
@@ -37,12 +37,13 @@ describe("App", () => {
 
 
     it("fails to login invalid user", async () => {
-        await page.goto(baseUrl);
+        page.goto(baseUrl);
         await page.waitForSelector("#loginForm");
         await page.$('#loginForm');
         await page.type('#loginFormEmail', "abcd1234");
         await page.type('#loginFormPassword', "abcd1234");
         await page.click('#loginButton');
+        await page.waitForSelector("#login-error-message");
         const loginErrorMessage = await page.$eval("#login-error-message", (e) => e.textContent);
         expect(loginErrorMessage).toBe("Incorrect username or password.")
     });
