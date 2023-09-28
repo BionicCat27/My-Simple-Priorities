@@ -1,12 +1,24 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NavMenu from "../../components/NavMenu/NavMenu";
 import '../common.css';
 import {DBContext} from '../../contexts/DBContext'
 
 const CapturePage = () => {
-    const {pushObject} = useContext(DBContext);
+    const {pushObject, ready, addDataListener} = useContext(DBContext);
 
     const [note, setNote] = useState("");
+    const [notes, setNotes] = useState([])
+    const [showNotes, setShowNotes] = useState(false);
+
+    useEffect(() => {
+        if (ready) {
+            addDataListener("capture", setNotes);   
+        }
+    }, [ready])
+
+    useEffect(() => {
+        console.log(`Notes: ${JSON.stringify(notes)}`)
+    }, [notes])
 
     const captureNote = (e) => {
         e.preventDefault();
@@ -30,7 +42,16 @@ const CapturePage = () => {
                             ></input>
                             <button type="submit">+</button>
                         </form>
-                        <button>See notes</button>
+                        <button id="capture-see_notes" onClick={() => setShowNotes(!showNotes)}>
+                            {showNotes ? "Hide notes" : "See notes"}
+                        </button>
+                        {showNotes && 
+                        <div>
+                            {notes ? Object.keys(notes).map((noteKey, index) => {
+                                return <div className="card column-card" key={index}><button>Task</button><p className="">{notes[noteKey]["value"]}</p><button>Note</button></div>
+                            }) : <p>No notes found.</p>}
+                        </div>
+                        }
                     </div>
                 </div>
             </div>
