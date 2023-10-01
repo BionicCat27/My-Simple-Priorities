@@ -16,10 +16,6 @@ const CapturePage = () => {
         }
     }, [ready])
 
-    useEffect(() => {
-        console.log(`Notes: ${JSON.stringify(notes)}`)
-    }, [notes])
-
     const captureNote = (e) => {
         e.preventDefault();
         pushObject("capture", {value: note});
