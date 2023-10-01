@@ -9,6 +9,7 @@
     "emulators": "npm run watch & firebase emulators:start --project demo-test --import emulatorDataExport",
     "watch": "nodemon --exec \"npm run build_dev\"",
     "test": "jest --detectOpenHandles",
+    "firebaselogin": "firebase login",
     "deploy": "npm run build && firebase deploy --only hosting",
     "export": "firebase emulators:export --project demo-test ./emulatorDataExport"
   },

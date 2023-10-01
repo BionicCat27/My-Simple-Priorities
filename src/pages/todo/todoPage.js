@@ -267,6 +267,7 @@ const TodoPage = (props) => {
                     </select>
                 </form>
                 <div className="cards_container">
+                    
                     {renderedContent}
                 </div>
             </div>
