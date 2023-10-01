@@ -1,172 +1,54 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
 //Firebase
-import { ref, update, onValue, off } from "firebase/database";
 //Contexts
-import { AuthContext } from "../../contexts/AuthContext";
 import { DBContext } from '../../contexts/DBContext';
 //Components
 import NavMenu from '../../components/NavMenu/NavMenu';
-import TodoCard from '../../components/TodoCard/TodoCard';
+import StatusSelector from '../../components/StatusSelector'
 //Styles
 import './todoPage.css';
+import './TodoCard.css';
 
 const TodoPage = (props) => {
-    const authContext = useContext(AuthContext);
-    const { database } = useContext(DBContext);
-    const user = authContext.user;
+    const { ready, addDataListener, pushObject } = useContext(DBContext);
 
-    const DEFAULT_STATUS_VIEW = "In Progress";
+    const DEFAULT_STATUS_VIEW = "Planning";
     const DEFAULT_SIZE_VIEW = "Default";
 
     const [contentList, setContentList] = useState([]);
     const [contentInput, setContentInput] = useState("");
-    const [renderedContent, setRenderedContent] = useState(null);
-    const [dbRef, setDbRef] = useState(undefined);
     const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
     const [cardStatusView, setCardStatusView] = useState(DEFAULT_STATUS_VIEW);
 
-    function onContentInputChange(value) {
-        setContentInput(value);
-    }
-
     useEffect(() => {
-        if (user) {
-            if (dbRef) {
-                off(dbRef);
-            }
-            setDbRef(ref(database, `users/${user.uid}/todo`));
-            setRenderedContent(null);
-            setContentList([]);
-            setCardStatusView(DEFAULT_STATUS_VIEW);
+        if(ready) {
+            addDataListener(`todo`, setContentList)
         }
-    }, [user]);
-
-
-    useEffect(() => {
-        if (!dbRef) {
-            console.log("Not logged in/no type");
-            return;
-        }
-        if (!user) {
-            console.log("Can't load content - no user found.");
-            return;
-        }
-        onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data == null) {
-                console.log("An error occurred.");
-                setContentList([]);
-                return;
-            }
-            //Validate card fields
-            data.forEach((card, index) => {
-                card.index = index;
-                let needsSet = false;
-                if (card.title == undefined) {
-                    console.log("Title undefined");
-                    card = { ...card, title: "" };
-                    needsSet = true;
-                }
-                if (card.description == undefined) {
-                    card = { ...card, description: "" };
-                    needsSet = true;
-                }
-                if (card.status == undefined) {
-                    card = { ...card, status: "" };
-                    needsSet = true;
-                }
-                // if (card.checklist == undefined) {
-                //     card = { ...card, checklist: [] };
-                //     needsSet = true;
-                // }
-                //If a field was undefined, write the fully constructed object
-                if (needsSet) {
-                    console.log("Fixing undefined problem: " + JSON.stringify(card));
-                    update(ref(database, 'users/' + user.uid + '/todo/' + index), {
-                        ...card
-                    });
-                }
-                return card;
-            });
-            setContentList(data);
-        });
-    }, [dbRef]);
+    }, [ready])
 
     function generateCard(card) {
         return <TodoCard
-            cardType="todo"
-            title={card.title}
-            description={card.description}
-            progress={card.progress}
-            status={card.status}
-            checklist={card.checklist}
-            dueDate={card.dueDate}
+            card={card}
             key={`${card.index}${card.title}`}
-            index={card.index}
-            moveCard={moveContent}
-            deleteCard={deleteContent}
-            updateCard={updateContent}
             cardSizeView={cardSizeView}
             cardStatusView={cardStatusView}
-            database={database}
-            user={user}
         />;
     }
-
-    function writeContent(content) {
-        if (!user) {
-            console.log("Can't write content - no user found: " + user);
-            return;
-        }
-        update(ref(database, 'users/' + user.uid), {
-            todo: content
-        });
-    };
 
     function addContent(event) {
         event.preventDefault();
         if (contentInput.length == 0) {
             return;
         }
-        writeContent([{
+        pushObject(`todo`, {
             title: contentInput,
             description: "",
             status: "Todo",
             checklist: []
-        }, ...contentList]);
+        })
+        
         setContentInput("");
-    }
-
-    function moveContent(fromIndex, toIndex) {
-        if (fromIndex < 0 || toIndex < 0 || fromIndex > contentList.length || toIndex > contentList.length) {
-            console.log("An error occurred (" + fromIndex + " " + toIndex + " " + contentList + ")");
-            return;
-        }
-        let workingList = contentList.slice();
-        var element = workingList[fromIndex];
-        workingList.splice(fromIndex, 1);
-        workingList.splice(toIndex, 0, element);
-        writeContent(workingList);
-    }
-
-    function deleteContent(index) {
-        if (index < 0 || index > contentList.length) {
-            console.log("An error occurred (" + index + " " + contentList + ")");
-            return;
-        }
-        let workingList = contentList.slice();
-        workingList.splice(index, 1);
-        writeContent(workingList);
-    }
-
-    function updateContent(index, value) {
-        if (index < 0 || index > contentList.length) {
-            console.log("An error occurred (" + index + " " + contentList + ")");
-        }
-        let workingList = contentList.slice();
-        workingList[index] = value;
-        writeContent(workingList);
     }
 
     function statusMatch(status, targetstatus) {
@@ -181,7 +63,7 @@ const TodoPage = (props) => {
         return (
             <div className='statusBlock'>
                 <h3>{status}</h3>
-                    {contentList.map(card => {
+                    {contentList && contentList.map(card => {
                         if (statusMatch(card.status, status)) {
                             return generateCard(card);
                         }
@@ -191,13 +73,12 @@ const TodoPage = (props) => {
         );
     }
 
-    if (!user) return null;
     return (
         <>
             <NavMenu title="Todo" />
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
-                    <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" className="content_field" />
+                    <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add Todo!</button>
                     <select onChange={field => setCardSizeView(field.target.value)} value={cardSizeView}>
                         <option>Default</option>
@@ -222,5 +103,166 @@ const TodoPage = (props) => {
         </>
     );
 };
+
+const TodoCard = (props) => {
+    const { ready, updateObject, removeObject } = useContext(DBContext);
+    
+    const card = props.card;
+    const cardSizeView = props.cardSizeView;
+    
+    const [isEditing, setEditing] = useState(false);
+
+    const [titleInput, setTitleInput] = useState(card.title || "");
+    const [descriptionInput, setDescriptionInput] = useState(card.description || "");
+    const [statusInput, setStatusInput] = useState(card.status || "Todo");
+    const [checklistInput, setChecklistInput] = useState(card.checklist || []);
+    const [dueDateInput, setDueDateInput] = useState(card.dueDate || "");
+
+    const isDefault = (cardSizeView == "Default");
+
+    const [draggedOver, setDraggedOver] = useState(false);
+    const [dragging, setDragging] = useState(false);
+
+    function updateContent() {
+        updateObject(`todo/${card.key}`, "title", titleInput)
+        updateObject(`todo/${card.key}`, "description", descriptionInput)
+        updateObject(`todo/${card.key}`, "status", statusInput)
+        updateObject(`todo/${card.key}`, "checklist", checklistInput)
+        updateObject(`todo/${card.key}`, "dueDate", dueDateInput)
+        
+        setEditing(false);
+    }
+
+    function deleteCard() {
+        if (confirm(`Delete \"${card.title}\"?`)) {
+            removeObject(`priorities/${card.key}`)
+            setEditing(false);
+        } else {
+            console.log("Not deleting");
+        }
+    }
+
+    function handleCheckBox(value, index) {
+        let workingArray = [...checklistInput];
+        workingArray[index].checked = value;
+        setChecklistInput(workingArray);
+    }
+
+    function handleCheckBoxValue(value, index) {
+        let workingArray = [...checklistInput];
+        workingArray[index].value = value;
+        setChecklistInput(workingArray);
+    }
+
+    function addChecklistItem() {
+        let workingArray = [...checklistInput];
+        workingArray.push({
+            checked: false,
+            value: ""
+        });
+        setChecklistInput(workingArray);
+    }
+
+    function generateChecklistContent() {
+        if (checklistInput.length == 0) {
+            return;
+        }
+        return <>{
+            checklistInput.map((checklistObject, index) => (
+                <div key={`${index}Container`}>
+                    <input className="inline-input" type="checkbox" checked={checklistObject.checked} onChange={field => handleCheckBox(field.target.checked, index)} />
+                    <input className="inline-input" type="text" value={checklistObject.value} onChange={field => handleCheckBoxValue(field.target.value, index)} />
+                </div>
+            ))}
+        </>;
+
+    }
+
+    function generateDatePassed(dateToCheck) {
+        let date = new Date(new Date(dateToCheck).toDateString()).getTime();
+        let today = new Date(new Date().toDateString()).getTime();
+        // console.log("Date: " + date + " today: " + today + "(" + (today - date) + ") ");
+        if (date < today) {
+            //Day is before today
+            return "date-passed ";
+        } else if (date == today) {
+            //Day is today
+            return "date-today ";
+        } else {
+            //Day is after today
+            return "date-future ";
+        }
+    }
+
+    function handleDrop(e) {
+        let targetKey = e.dataTransfer.getData("key");
+
+        updateObject(`todo/${targetKey}`, "status", card.status)
+
+        setDraggedOver(false);
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        setDraggedOver(true);
+    }
+
+    function handleDragLeave(e) {
+        setDraggedOver(false);
+    }
+
+    function handleDragStart(e, key, status) {
+        e.dataTransfer.setData("key", key);
+        e.dataTransfer.setData("status", status);
+        setDragging(true);
+    }
+
+    function handleDragEnd(e) {
+        setDragging(false);
+    }
+
+
+    return (
+        <div draggable className={(isDefault ? "condensed_card " : "content_card ") + (dragging ? "brdr-red " : " ") + (draggedOver ? "brdr-blue " : " ")}
+            onClick={() => (!isEditing && setEditing(true))}
+            onDrop={(e) => { handleDrop(e); }}
+            onDragStart={(e) => { handleDragStart(e, card.key, card.status); }}
+            onDragEnd={(e) => { handleDragEnd(e); }}
+            onDragOver={(e) => { handleDragOver(e); }}
+            onDragLeave={(e) => { handleDragLeave(e); }}
+            onTouchMove={(e) => { handleDragStart(e, card.key, card.status); }}
+            onTouchEnd={(e) => { handleDragEnd(e); }}>
+            { isEditing ?
+                <>
+                    <label htmlFor="contentTitleInput">Title</label>
+                    <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
+                    <label htmlFor="contentDescriptionInput">Description</label>
+                    <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
+                    {generateChecklistContent()}
+                    <div id="formButtonContainer">
+                        <button onClick={() => { addChecklistItem(); }}>Add Checklist item</button>
+                    </div>
+                    <StatusSelector value={statusInput} setValue={(value) => setStatusInput(value)} />
+                    <label htmlFor="contentDueDateInput">Due Date</label>
+                    <input id="contentDueDateInput" type="date" onChange={field => setDueDateInput(field.target.value)} value={dueDateInput}></input>
+                    <div id="formButtonContainer">
+                        <button onClick={updateContent}>Save</button>
+                        <a id="deleteButton" onClick={deleteCard}>Delete</a>
+                    </div>
+                </> :
+                <div className="cardContentContainer">
+                    <div id="col1">
+                        <h3>{card.title}</h3>
+                        {!isDefault && <p>{description}</p>}
+                    </div>
+                    <div id="col2">
+                        {card.dueDate && <p id="dueDateDisplay" className={generateDatePassed(card.dueDate)} >{ card.dueDate}</p>}
+                    </div>
+                </div>
+            }
+        </div >
+    );
+};
+
 
 export default TodoPage;
