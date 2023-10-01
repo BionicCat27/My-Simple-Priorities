@@ -11,7 +11,7 @@ import './todoPage.css';
 import './TodoCard.css';
 
 const TodoPage = (props) => {
-    const { ready, addDataListener, pushObject } = useContext(DBContext);
+    const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);
 
     const DEFAULT_STATUS_VIEW = "Planning";
     const DEFAULT_SIZE_VIEW = "Default";
@@ -59,9 +59,21 @@ const TodoPage = (props) => {
         return false;
     }
 
+    function handleDrop(e, status) {
+        let targetKey = e.dataTransfer.getData("key");
+        updateObject(`todo/${targetKey}`, "status", status)
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+    }
+
     function getStatusBlock(status) {
         return (
-            <div className='statusBlock'>
+            <div className='statusBlock' 
+                onDrop={(e) => { handleDrop(e, status); }}
+                onDragOver={handleDragOver}>
+
                 <h3>{status}</h3>
                     {contentList && contentList.map(card => {
                         if (statusMatch(card.status, status)) {
