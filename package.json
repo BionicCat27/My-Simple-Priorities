@@ -4,7 +4,7 @@
   "description": "My Simple Priorities is a simple priority management website.",
   "main": "src/app.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --config webpack.config.js",
     "build_dev": "webpack --env MODE=development --config webpack.config.js",
     "emulators": "firebase emulators:start --project demo-test --import emulatorDataExport",
     "watch": "nodemon --exec \"npm run build_dev\"",
