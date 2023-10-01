@@ -104,47 +104,11 @@ const PrioritiesPage = (props) => {
                 <>
                     <div id="leftHalf">
                         <h3>Todo</h3>
-                        {todoA.map(
-                            (card, index) =>
-                                <PrioritiesCard
-                                    cardType="priorities"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    hours={card.hours}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={user}
-                                />)}
+                        {todoA.map(card => generateCard(card))}
                     </div>
                     <div id="rightHalf">
                         <h3>In Progress</h3>
-                        {inprog.map(
-                            (card, index) =>
-                                <PrioritiesCard
-                                    cardType="priorities"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    hours={card.hours}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={user}
-                                />)}
+                        {inprog.map(card => generateCard(card))}
                     </div>
                 </>
             );
@@ -161,72 +125,37 @@ const PrioritiesPage = (props) => {
                 <>
                     <div id="leftHalf">
                         <h3>In Progress</h3>
-                        {inprog.map(
-                            (card, index) =>
-                                <PrioritiesCard
-                                    cardType="priorities"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    hours={card.hours}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={user}
-                                />)}
+                        {inprog.map(card => generateCard(card))}
                     </div>
                     <div id="rightHalf">
                         <h3>Done</h3>
-                        {done.map(
-                            (card, index) =>
-                                <PrioritiesCard
-                                    cardType="priorities"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    hours={card.hours}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={user}
-                                />)}
+                        {done.map(card => generateCard(card))}
                     </div>
                 </>
             );
         } else {
-            setRenderedContent(workingCards.map(
-                (card, index) =>
-                    <PrioritiesCard
-                        cardType="priorities"
-                        title={card.title}
-                        description={card.description}
-                        progress={card.progress}
-                        status={card.status}
-                        hours={card.hours}
-                        key={`${card.index}${card.title}`}
-                        index={card.index}
-                        moveCard={moveContent}
-                        deleteCard={deleteContent}
-                        updateCard={updateContent}
-                        cardSizeView={cardSizeView}
-                        cardStatusView={cardStatusView}
-                        database={database}
-                        user={user}
-                    />)
-            );
+            setRenderedContent(workingCards.map(card => generateCard(card)));
         }
+    }
+
+    function generateCard(card) {
+        return <PrioritiesCard
+            cardType="priorities"
+            title={card.title}
+            description={card.description}
+            progress={card.progress}
+            status={card.status}
+            hours={card.hours}
+            key={`${card.index}${card.title}`}
+            index={card.index}
+            moveCard={moveContent}
+            deleteCard={deleteContent}
+            updateCard={updateContent}
+            cardSizeView={cardSizeView}
+            cardStatusView={cardStatusView}
+            database={database}
+            user={user}
+        />;
     }
 
     function writeContent(content) {
