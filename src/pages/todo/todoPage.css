@@ -31,15 +31,7 @@
     margin-left: 0.5rem;
 }
 
-#leftHalf {
-    margin-right: 1%;
-    display: inline-block;
-    width: 49%;
-    margin-top: 0;
-    vertical-align: top
-}
-
-#rightHalf {
+.statusBlock {
     margin-left: 1%;
     display: inline-block;
     width: 49%;

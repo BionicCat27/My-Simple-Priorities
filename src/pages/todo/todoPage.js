@@ -42,9 +42,6 @@ const TodoPage = (props) => {
         }
     }, [user]);
 
-    useEffect(() => {
-        generateCards();
-    }, [contentList, cardSizeView, cardStatusView]);
 
     useEffect(() => {
         if (!dbRef) {
@@ -95,70 +92,6 @@ const TodoPage = (props) => {
             setContentList(data);
         });
     }, [dbRef]);
-
-    function generateCards() {
-        if (!contentList) {
-            setRenderedContent(null);
-            return;
-        }
-
-        let workingCards = [...contentList];
-        if (workingCards.length == 0) {
-            return;
-        }
-
-        if (cardStatusView == "Planning") {
-            let todoA = workingCards.filter(card => {
-                if (!statusMatch(card.status, "Todo")) return null;
-                return card;
-            });
-            let inprog = workingCards.filter(card => {
-                if (!statusMatch(card.status, "In Progress")) return null;
-                return card;
-            });
-            setRenderedContent(
-                <>
-                    <div id="leftHalf">
-                        <h3>Todo</h3>
-                        {todoA.map(card => generateCard(card))}
-                    </div>
-                    <div id="rightHalf">
-                        <h3>In Progress</h3>
-                        {inprog.map(card => generateCard(card))}
-                    </div>
-                </>
-            );
-        } else if (cardStatusView == "Focus") {
-            let inprog = workingCards.filter(card => {
-                if (!statusMatch(card.status, "In Progress")) return null;
-                return card;
-            });
-            let done = workingCards.filter(card => {
-                if (!statusMatch(card.status, "Done")) return null;
-                return card;
-            });
-            setRenderedContent(
-                <>
-                    <div id="leftHalf">
-                        <h3>In Progress</h3>
-                        {inprog.map(card => generateCard(card))}
-                    </div>
-                    <div id="rightHalf">
-                        <h3>Done</h3>
-                        {done.map(card => generateCard(card))}
-                    </div>
-                </>
-            );
-        } else {
-            workingCards = workingCards.filter(card => {
-                if (!statusMatch(card.status, cardStatusView)) return null;
-                return card;
-            });
-            setRenderedContent(workingCards.map(
-                card => generateCard(card))
-            );
-        }
-    }
 
     function generateCard(card) {
         return <TodoCard
@@ -244,6 +177,20 @@ const TodoPage = (props) => {
         return false;
     }
 
+    function getStatusBlock(status) {
+        return (
+            <div className='statusBlock'>
+                <h3>{status}</h3>
+                    {contentList.map(card => {
+                        if (statusMatch(card.status, status)) {
+                            return generateCard(card);
+                        }
+                    })
+                }
+            </div>
+        );
+    }
+
     if (!user) return null;
     return (
         <>
@@ -267,8 +214,9 @@ const TodoPage = (props) => {
                     </select>
                 </form>
                 <div className="cards_container">
-                    
-                    {renderedContent}
+                    { statusMatch("Todo", cardStatusView) && getStatusBlock("Todo") }
+                    { statusMatch("In Progress", cardStatusView) && getStatusBlock("In Progress") }
+                    { statusMatch("Done", cardStatusView) && getStatusBlock("Done") }
                 </div>
             </div>
         </>
