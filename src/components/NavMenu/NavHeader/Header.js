@@ -33,6 +33,7 @@ const Header = (props) => {
                 </button>
             </div>
             <nav className={`nav-list ${showMenu ? 'show' : ''}`}>
+                <a className={"nav-button"} onClick={() => navigate("/capture")}>Capture</a>
                 <a className={"nav-button"} onClick={() => navigate("/priorities")}>Priorities</a>
                 <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
                 <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>

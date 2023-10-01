@@ -1,315 +1,176 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
-//Firebase
-import { ref, update, onValue, off } from "firebase/database";
 //Contexts
-import { AuthContext } from "../../contexts/AuthContext";
 import { DBContext } from '../../contexts/DBContext';
 //Components
 import NavMenu from '../../components/NavMenu/NavMenu';
-import PrioritiesCard from '../../components/PrioritiesCard/PrioritiesCard';
 //Styles
 import './prioritiesPage.css';
+import './PrioritiesCard.css';
 
 const PrioritiesPage = (props) => {
-    const authContext = useContext(AuthContext);
-    const { database } = useContext(DBContext);
-    const user = authContext.user;
+    const { ready, addDataListener, pushObject } = useContext(DBContext);
 
-    const DEFAULT_STATUS_VIEW = "In Progress";
     const DEFAULT_SIZE_VIEW = "Default";
 
     const [contentList, setContentList] = useState([]);
     const [contentInput, setContentInput] = useState("");
-    const [renderedContent, setRenderedContent] = useState(null);
-    const [dbRef, setDbRef] = useState(undefined);
     const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
-    const [cardStatusView, setCardStatusView] = useState(DEFAULT_STATUS_VIEW);
-    const [expectedHours, setExpectedHours] = useState(0);
-
-    function onContentInputChange(value) {
-        setContentInput(value);
-    }
 
     useEffect(() => {
-        if (user) {
-            if (dbRef) {
-                off(dbRef);
-            }
-            setDbRef(ref(database, `users/${user.uid}/priorities`));
-            setRenderedContent(null);
-            setContentList([]);
-            setCardStatusView(DEFAULT_STATUS_VIEW);
-        } else {
-            setRenderedContent(<p>Not logged in.</p>);
+        if(ready) {
+            addDataListener("priorities", setContentList)
         }
-    }, [user]);
-
-    useEffect(() => {
-        generateCards();
-    }, [contentList, cardSizeView, cardStatusView]);
-
-    useEffect(() => {
-        if (!dbRef) {
-            console.log("Not logged in/no type");
-            return;
-        }
-        if (!user) {
-            console.log("Can't load content - no user found.");
-            return;
-        }
-        onValue(dbRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data == null) {
-                console.log("An error occurred.");
-                setContentList([]);
-                return;
-            }
-            let filtering = data.forEach((card, index) => {
-                card.index = index;
-                return card;
-            });
-            setContentList(data);
-        });
-    }, [dbRef]);
-
-    function generateCards() {
-        if (!contentList) {
-            setRenderedContent(null);
-            return;
-        }
-
-        let workingCards = [...contentList];
-        if (workingCards.length == 0) {
-            return;
-        }
-        let calcHours = 0;
-        workingCards.map((card) => {
-            if (card.hours) {
-                calcHours += parseInt(card.hours);
-            }
-        });
-        setExpectedHours(calcHours);
-
-        if (cardStatusView == "Planning") {
-            let todoA = workingCards.filter(card => {
-                if (!statusMatch(card.status, "Todo")) return null;
-                return card;
-            });
-            let inprog = workingCards.filter(card => {
-                if (!statusMatch(card.status, "In Progress")) return null;
-                return card;
-            });
-            setRenderedContent(
-                <>
-                    <div id="leftHalf">
-                        <h3>Todo</h3>
-                        {todoA.map(
-                            (card, index) =>
-                                <PrioritiesCard
-                                    cardType="priorities"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    hours={card.hours}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={user}
-                                />)}
-                    </div>
-                    <div id="rightHalf">
-                        <h3>In Progress</h3>
-                        {inprog.map(
-                            (card, index) =>
-                                <PrioritiesCard
-                                    cardType="priorities"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    hours={card.hours}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={user}
-                                />)}
-                    </div>
-                </>
-            );
-        } else if (cardStatusView == "Focus") {
-            let inprog = workingCards.filter(card => {
-                if (!statusMatch(card.status, "In Progress")) return null;
-                return card;
-            });
-            let done = workingCards.filter(card => {
-                if (!statusMatch(card.status, "Done")) return null;
-                return card;
-            });
-            setRenderedContent(
-                <>
-                    <div id="leftHalf">
-                        <h3>In Progress</h3>
-                        {inprog.map(
-                            (card, index) =>
-                                <PrioritiesCard
-                                    cardType="priorities"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    hours={card.hours}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={user}
-                                />)}
-                    </div>
-                    <div id="rightHalf">
-                        <h3>Done</h3>
-                        {done.map(
-                            (card, index) =>
-                                <PrioritiesCard
-                                    cardType="priorities"
-                                    title={card.title}
-                                    description={card.description}
-                                    progress={card.progress}
-                                    status={card.status}
-                                    hours={card.hours}
-                                    key={`${card.index}${card.title}`}
-                                    index={card.index}
-                                    moveCard={moveContent}
-                                    deleteCard={deleteContent}
-                                    updateCard={updateContent}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                    database={database}
-                                    user={user}
-                                />)}
-                    </div>
-                </>
-            );
-        } else {
-            setRenderedContent(workingCards.map(
-                (card, index) =>
-                    <PrioritiesCard
-                        cardType="priorities"
-                        title={card.title}
-                        description={card.description}
-                        progress={card.progress}
-                        status={card.status}
-                        hours={card.hours}
-                        key={`${card.index}${card.title}`}
-                        index={card.index}
-                        moveCard={moveContent}
-                        deleteCard={deleteContent}
-                        updateCard={updateContent}
-                        cardSizeView={cardSizeView}
-                        cardStatusView={cardStatusView}
-                        database={database}
-                        user={user}
-                    />)
-            );
-        }
-    }
-
-    function writeContent(content) {
-        if (!user) {
-            console.log("Can't write content - no user found: " + user);
-            return;
-        }
-        update(ref(database, 'users/' + user.uid), {
-            priorities: content
-        });
-    };
+    }, [ready])
 
     function addContent(event) {
         event.preventDefault();
         if (contentInput.length == 0) {
             return;
         }
-        writeContent([{
+        pushObject(`priorities`, {
             title: contentInput,
-            description: ""
-        }, ...contentList]);
+            description: "",
+            hours: 0
+        })
         setContentInput("");
     }
 
-    function moveContent(fromIndex, toIndex) {
-        if (fromIndex < 0 || toIndex < 0 || fromIndex > contentList.length || toIndex > contentList.length) {
-            console.log("An error occurred (" + fromIndex + " " + toIndex + " " + contentList + ")");
-            return;
-        }
-        let workingList = contentList.slice();
-        var element = workingList[fromIndex];
-        workingList.splice(fromIndex, 1);
-        workingList.splice(toIndex, 0, element);
-        writeContent(workingList);
+    function getTotalHours() {
+        if (!contentList) return 0;
+        return contentList.reduce((totalHours, card) => {
+            if (!card.hours) return totalHours;
+            return totalHours + parseInt(card.hours);
+        }, 0)
     }
 
-    function deleteContent(index) {
-        if (index < 0 || index > contentList.length) {
-            console.log("An error occurred (" + index + " " + contentList + ")");
-            return;
-        }
-        let workingList = contentList.slice();
-        workingList.splice(index, 1);
-        writeContent(workingList);
-    }
-
-    function updateContent(index, value) {
-        if (index < 0 || index > contentList.length) {
-            console.log("An error occurred (" + index + " " + contentList + ")");
-        }
-        let workingList = contentList.slice();
-        workingList[index] = value;
-        writeContent(workingList);
-    }
-
-    function statusMatch(status, targetstatus) {
-        if (targetstatus === "All") return true;
-        if (targetstatus === "Planning" && (status === "Todo" || status === "In Progress")) return true;
-        if (targetstatus === "Focus" && (status === "In Progress" || status === "Done")) return true;
-        if (targetstatus === status) return true;
-        return false;
-    }
-
-    if (!user) return null;
     return (
         <>
             <NavMenu title="Priorities" />
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
-                    <input value={contentInput} onChange={field => onContentInputChange(field.target.value)} type="text" className="content_field" />
+                    <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add priority!</button>
                     <select onChange={field => setCardSizeView(field.target.value)} value={cardSizeView}>
                         <option>Default</option>
                         <option>Expanded</option>
                         <option>List</option>
                     </select>
-                    <h3>Expected weekly hours: {expectedHours}/168</h3>
+                    <h3>Expected weekly hours: {getTotalHours()}/168</h3>
                 </form>
                 <div className="cards_container">
-                    {renderedContent}
+                    {contentList && contentList.map(card => 
+                    <PrioritiesCard
+                        card={card}
+                        key={`${card.key}/${card.title}`}
+                        cardSizeView={cardSizeView}
+                    />)}
                 </div>
             </div>
         </>
+    );
+};
+
+const PrioritiesCard = (props) => {
+    const { ready, updateObject, removeObject } = useContext(DBContext);
+
+    const card = props.card;
+    const cardSizeView = props.cardSizeView;
+
+    const [isEditing, setEditing] = useState(false);
+    
+    const [titleInput, setTitleInput] = useState(card.title || "");
+    const [descriptionInput, setDescriptionInput] = useState(card.description || "");
+    const [hoursInput, setHoursInput] = useState(card.hours || 0);
+
+    const [draggedOver, setDraggedOver] = useState(false);
+    const [dragging, setDragging] = useState(false);
+
+    function updateContent() {
+        if (!ready) return;
+        updateObject(`priorities/${card.key}`, "title", titleInput)
+        updateObject(`priorities/${card.key}`, "description", descriptionInput)
+        updateObject(`priorities/${card.key}`, "hours", hoursInput)
+
+        setEditing(false);
+    }
+
+    function deleteCard() {
+        if (confirm(`Delete \"${card.title}\"?`)) {
+            removeObject(`priorities/${card.key}`)
+            setEditing(false);
+        } else {
+            console.log("Not deleting");
+        }
+    }
+
+    function handleDrop(e, index) {
+        let targetIndex = e.dataTransfer.getData("index");
+        let targetStatus = e.dataTransfer.getData("status");
+
+        if (targetStatus === status) {
+            props.moveCard(targetIndex, index);
+        } else {
+            update(ref(props.database, 'users/' + props.user.uid + '/priorities/' + targetIndex), {
+                status: status
+            });
+        }
+        setDraggedOver(false);
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        setDraggedOver(true);
+    }
+
+    function handleDragLeave(e) {
+        setDraggedOver(false);
+    }
+
+    function handleDragStart(e, index, status) {
+        e.dataTransfer.setData("index", index);
+        e.dataTransfer.setData("status", status);
+        setDragging(true);
+    }
+
+    function handleDragEnd(e) {
+        setDragging(false);
+    }
+
+    return (
+        <div draggable className={(cardSizeView == "Default" ? "condensed_card " : "content_card ") + (dragging ? "brdr-red " : " ") + (draggedOver ? "brdr-blue " : " ")}
+            onClick={() => (!isEditing && setEditing(true))}
+            onDrop={(e) => { handleDrop(e, props.index); }}
+            onDragStart={(e) => { handleDragStart(e, props.index, props.status); }}
+            onDragEnd={(e) => { handleDragEnd(e); }}
+            onDragOver={(e) => { handleDragOver(e); }}
+            onDragLeave={(e) => { handleDragLeave(e); }}
+            onTouchMove={(e) => { handleDragStart(e, props.index, props.status); }}
+            onTouchEnd={(e) => { handleDragEnd(e); }}>
+            { isEditing ?
+            <>
+                <label htmlFor="contentTitleInput">Title</label>
+                <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
+                <label htmlFor="contentDescriptionInput">Description</label>
+                <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
+                <label htmlFor="contentHoursInput">Hours</label>
+                <input id="contentHoursInput" className="margin-y-1" onChange={field => setHoursInput(field.target.value)} value={hoursInput}></input>
+                <div id="formButtonContainer">
+                    <button onClick={updateContent}>Save</button>
+                    <a id="deleteButton" onClick={deleteCard}>Delete</a>
+                </div>
+            </> :
+            <div className="cardContentContainer">
+                <div id="col1">
+                    <h3>{card.title}</h3>
+                    {cardSizeView != "Default" && <p>{card.description}</p>}
+                </div>
+                <div id="col2">
+                    <p id="hoursDisplay">{card?.hours}</p>
+                </div>
+            </div>
+            }
+        </div >
     );
 };
 
