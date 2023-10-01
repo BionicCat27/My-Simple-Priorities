@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "build_dev": "webpack --env MODE=development --config webpack.config.js",
-    "emulators": "npm run watch & firebase emulators:start --project demo-test --import emulatorDataExport",
+    "emulators": "firebase emulators:start --project demo-test --import emulatorDataExport",
     "watch": "nodemon --exec \"npm run build_dev\"",
     "test": "jest --detectOpenHandles",
     "firebaselogin": "firebase login",
