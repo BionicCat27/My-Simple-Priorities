@@ -48,8 +48,13 @@ const CapturePage = () => {
                         {showNotes && 
                         <div>
                             {notes ? Object.keys(notes).map((noteKey, index) => {
-                                return <div className="card column-card" key={index}><button>Task</button><p className="">{notes[noteKey]["value"]}</p><button>Note</button></div>
-                            }) : <p>No notes found.</p>}
+                                return (
+                                    <div className="card column-card" key={index}>
+                                        <button>Task</button>
+                                        <p className="capture-note_text">{notes[noteKey]["value"]}</p>
+                                        <button>Note</button>
+                                    </div>
+                                )}) : <p>No notes found.</p>}
                         </div>
                         }
                     </div>
