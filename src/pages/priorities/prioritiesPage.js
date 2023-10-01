@@ -91,51 +91,7 @@ const PrioritiesPage = (props) => {
         });
         setExpectedHours(calcHours);
 
-        if (cardStatusView == "Planning") {
-            let todoA = workingCards.filter(card => {
-                if (!statusMatch(card.status, "Todo")) return null;
-                return card;
-            });
-            let inprog = workingCards.filter(card => {
-                if (!statusMatch(card.status, "In Progress")) return null;
-                return card;
-            });
-            setRenderedContent(
-                <>
-                    <div id="leftHalf">
-                        <h3>Todo</h3>
-                        {todoA.map(card => generateCard(card))}
-                    </div>
-                    <div id="rightHalf">
-                        <h3>In Progress</h3>
-                        {inprog.map(card => generateCard(card))}
-                    </div>
-                </>
-            );
-        } else if (cardStatusView == "Focus") {
-            let inprog = workingCards.filter(card => {
-                if (!statusMatch(card.status, "In Progress")) return null;
-                return card;
-            });
-            let done = workingCards.filter(card => {
-                if (!statusMatch(card.status, "Done")) return null;
-                return card;
-            });
-            setRenderedContent(
-                <>
-                    <div id="leftHalf">
-                        <h3>In Progress</h3>
-                        {inprog.map(card => generateCard(card))}
-                    </div>
-                    <div id="rightHalf">
-                        <h3>Done</h3>
-                        {done.map(card => generateCard(card))}
-                    </div>
-                </>
-            );
-        } else {
-            setRenderedContent(workingCards.map(card => generateCard(card)));
-        }
+        setRenderedContent(workingCards.map(card => generateCard(card)));
     }
 
     function generateCard(card) {
@@ -209,14 +165,6 @@ const PrioritiesPage = (props) => {
         let workingList = contentList.slice();
         workingList[index] = value;
         writeContent(workingList);
-    }
-
-    function statusMatch(status, targetstatus) {
-        if (targetstatus === "All") return true;
-        if (targetstatus === "Planning" && (status === "Todo" || status === "In Progress")) return true;
-        if (targetstatus === "Focus" && (status === "In Progress" || status === "Done")) return true;
-        if (targetstatus === status) return true;
-        return false;
     }
 
     if (!user) return null;
