@@ -30,11 +30,3 @@
 #deleteButton {
     margin-left: 0.5rem;
 }
-
-.statusBlock {
-    margin-left: 1%;
-    display: inline-block;
-    width: 49%;
-    margin-top: 0;
-    vertical-align: top
-}

@@ -9,6 +9,7 @@ import StatusSelector from '../../components/StatusSelector'
 //Styles
 import './todoPage.css';
 import './TodoCard.css';
+import '../common.css'
 
 const TodoPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);
@@ -27,15 +28,6 @@ const TodoPage = (props) => {
         }
     }, [ready])
 
-    function generateCard(card) {
-        return <TodoCard
-            card={card}
-            key={`${card.index}${card.title}`}
-            cardSizeView={cardSizeView}
-            cardStatusView={cardStatusView}
-        />;
-    }
-
     function addContent(event) {
         event.preventDefault();
         if (contentInput.length == 0) {
@@ -51,14 +43,6 @@ const TodoPage = (props) => {
         setContentInput("");
     }
 
-    function statusMatch(status, targetstatus) {
-        if (targetstatus === "All") return true;
-        if (targetstatus === "Planning" && (status === "Todo" || status === "In Progress")) return true;
-        if (targetstatus === "Focus" && (status === "In Progress" || status === "Done")) return true;
-        if (targetstatus === status) return true;
-        return false;
-    }
-
     function handleDrop(e, status) {
         let targetKey = e.dataTransfer.getData("key");
         updateObject(`todo/${targetKey}`, "status", status)
@@ -66,6 +50,14 @@ const TodoPage = (props) => {
 
     function handleDragOver(e) {
         e.preventDefault();
+    }
+
+    function statusMatch(status, targetstatus) {
+        if (targetstatus === "All") return true;
+        if (targetstatus === "Planning" && (status === "Todo" || status === "In Progress")) return true;
+        if (targetstatus === "Focus" && (status === "In Progress" || status === "Done")) return true;
+        if (targetstatus === status) return true;
+        return false;
     }
 
     function getStatusBlock(status) {
@@ -77,7 +69,14 @@ const TodoPage = (props) => {
                 <h3>{status}</h3>
                     {contentList && contentList.map(card => {
                         if (statusMatch(card.status, status)) {
-                            return generateCard(card);
+                            return (
+                                <TodoCard
+                                    card={card}
+                                    key={`${card.key}${card.title}`}
+                                    cardSizeView={cardSizeView}
+                                    cardStatusView={cardStatusView}
+                                />
+                            );
                         }
                     })
                 }
@@ -147,7 +146,7 @@ const TodoCard = (props) => {
 
     function deleteCard() {
         if (confirm(`Delete \"${card.title}\"?`)) {
-            removeObject(`priorities/${card.key}`)
+            removeObject(`todo/${card.key}`)
             setEditing(false);
         } else {
             console.log("Not deleting");
