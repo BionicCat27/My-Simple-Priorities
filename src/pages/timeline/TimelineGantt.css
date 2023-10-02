@@ -16,11 +16,23 @@
 }
 
 .ganttBar {
-    background-color: red;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 5px;
+    color: white;
+    background: #e62d2d;
+    box-shadow:  7px 7px 10px #cf2929,
+                -7px -7px 10px #fd3232;
 }
 
 .ganttCardName {
     text-align: center;
+}
+
+.ganttBlock {
+    padding: 0.5rem;
+    background-color: #db0000;
 }
 
 /* .ganttBlock {
