@@ -1,17 +1,12 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
-//Firebase
-import { ref, update, onValue, off } from "firebase/database";
 //Contexts
-import { DBContext } from '../../contexts/DBContext';
+import { DBContext } from '../contexts/DBContext';
 //Components
-import NavMenu from '../../components/NavMenu/NavMenu';
-import StatusSelector from "../../components/StatusSelector";
+import NavMenu from '../components/NavMenu/NavMenu';
+import StatusSelector from "../components/StatusSelector";
 //Styles
-import './ReviewCard.css';
-import './reviewPage.css';
-import '../common.css'
-
+import './common.css'
 
 const ReviewPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);

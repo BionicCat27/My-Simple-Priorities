@@ -1,12 +1,11 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
 //Contexts
-import { DBContext } from '../../contexts/DBContext';
+import { DBContext } from '../contexts/DBContext';
 //Components
-import NavMenu from '../../components/NavMenu/NavMenu';
+import NavMenu from '../components/NavMenu/NavMenu';
 //Styles
-import './prioritiesPage.css';
-import './PrioritiesCard.css';
+import './common.css';
 
 const PrioritiesPage = (props) => {
     const { ready, addDataListener, pushObject } = useContext(DBContext);

@@ -2,14 +2,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 //Firebase
 //Contexts
-import { DBContext } from '../../contexts/DBContext';
+import { DBContext } from '../contexts/DBContext';
 //Components
-import NavMenu from '../../components/NavMenu/NavMenu';
-import StatusSelector from '../../components/StatusSelector'
+import NavMenu from '../components/NavMenu/NavMenu';
+import StatusSelector from '../components/StatusSelector'
 //Styles
-import './todoPage.css';
-import './TodoCard.css';
-import '../common.css'
+import './common.css'
 
 const TodoPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);

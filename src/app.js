@@ -8,13 +8,13 @@ import './firebaseConfig';
 import LoginPage from './pages/login/loginPage.js';
 import SignupPage from './pages/signup/signupPage.js';
 import NotFoundPage from './pages/notFound/notFoundPage.js';
-import TodoPage from './pages/todo/todoPage.js';
-import PrioritiesPage from './pages/priorities/prioritiesPage';
-import ReviewPage from './pages/review/reviewPage';
+import TodoPage from './pages/todoPage.js';
+import PrioritiesPage from './pages/prioritiesPage';
+import ReviewPage from './pages/reviewPage';
 import TimelinePage from './pages/timeline/timelinePage';
 import { AuthProvider } from './contexts/AuthContext';
 import { DBProvider } from './contexts/DBContext';
-import CapturePage from './pages/capture/capturePage';
+import CapturePage from './pages/capturePage';
 
 const App = () => {
     return (

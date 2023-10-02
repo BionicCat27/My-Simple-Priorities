@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import NavMenu from "../../components/NavMenu/NavMenu";
-import '../common.css';
-import {DBContext} from '../../contexts/DBContext'
+import NavMenu from "../components/NavMenu/NavMenu";
+import './common.css';
+import {DBContext} from '../contexts/DBContext'
 
 const CapturePage = () => {
     const {pushObject, ready, addDataListener} = useContext(DBContext);
