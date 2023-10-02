@@ -51,6 +51,7 @@ const TimelinePage = (props) => {
                         <tbody>
                             {cards.map((card)=> {
                                 let daysUntilDue = getDaysDiff(card.dueDate, new Date());
+                                if (daysUntilDue < 0 || card.status == "Done") return;
                                 return (
                                     <tr key={`${card.key}`}>
                                         <td className="ganttCardName ganttBlock" colSpan={daysUntilDue}>
