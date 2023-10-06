@@ -5,8 +5,6 @@ import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/aut
 //Contexts
 import { AuthContext } from "../../contexts/AuthContext";
 //Components
-import PageTitle from '../../components/PageTitle';
-import Footer from '../../components/Footer';
 //Styles
 import './signupPage.css';
 

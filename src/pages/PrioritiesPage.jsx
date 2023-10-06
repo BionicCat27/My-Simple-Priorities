@@ -3,9 +3,9 @@ import React, { useEffect, useState, useContext } from 'react';
 //Contexts
 import { DBContext } from '../contexts/DBContext';
 //Components
-import NavMenu from '../components/NavMenu/NavMenu';
 //Styles
 import './common.css';
+import NavMenu from './components/NavMenu/NavMenu';
 
 const PrioritiesPage = (props) => {
     const { ready, addDataListener, pushObject } = useContext(DBContext);

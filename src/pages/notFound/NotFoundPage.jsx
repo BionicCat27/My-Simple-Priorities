@@ -1,5 +1,4 @@
 import React from 'react';
-import PageTitle from '../../components/PageTitle';
 
 const NotFoundPage = () => {
     if (!window.location.pathname.startsWith("/notfound")) {

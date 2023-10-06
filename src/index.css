@@ -1,11 +1,11 @@
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 body {
-    color: black;
-    font-size: 1rem;
-    margin: 0;
+  color: black;
+  font-size: 1rem;
+  margin: 0;
 }
 
 body,
@@ -14,105 +14,105 @@ textarea,
 button,
 select,
 option {
-    font-family: 'Arial', sans-serif;
-    font-family: 'Lato', sans-serif;
+  font-family: 'Arial', sans-serif;
+  font-family: 'Lato', sans-serif;
 }
 
 button,
 select {
-    line-height: 1rem;
-    font-size: .8rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    margin-right: 0.2rem;
-    background-color: white;
-    color: black;
-    border: none;
-    border: 1.5px solid black;
-    border-radius: 2px;
-    display: inline-block;
+  line-height: 1rem;
+  font-size: .8rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  margin-right: 0.2rem;
+  background-color: white;
+  color: black;
+  border: none;
+  border: 1.5px solid black;
+  border-radius: 2px;
+  display: inline-block;
 }
 
 a {
-    color: black;
+  color: black;
 }
 
 button:hover {
-    color: white;
-    background-color: #374780;
+  color: white;
+  background-color: #374780;
 }
 
 .btn-active {
-    color: white;
-    background-color: black;
+  color: white;
+  background-color: black;
 }
 
 
 .main-content {
-    margin: 1rem 1rem;
+  margin: 1rem 1rem;
 }
 
 .div-card {
-    background-color: white;
-    padding: 1rem;
-    width: 100%;
+  background-color: white;
+  padding: 1rem;
+  width: 100%;
 }
 
 @media (max-width: 720px) {
-    .div-card {
-        width: auto;
-    }
+  .div-card {
+      width: auto;
+  }
 }
 
 .float-right {
-    float: right;
+  float: right;
 }
 
 .text-center {
-    text-align: center;
+  text-align: center;
 }
 
 .display-inline-block {
-    display: inline-block;
+  display: inline-block;
 }
 
 .display-none {
-    display: none;
+  display: none;
 }
 
 .margin-top-1 {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 .margin-y-1 {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .margin-x-1 {
-    margin-left: 1rem;
-    margin-right: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .vertical-center {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 #testClass {
-    color: #F5EE69;
-    color: #FCA360;
-    color: #E664DA;
-    color: #6E8EFF;
-    color: #69F5AE;
+  color: #F5EE69;
+  color: #FCA360;
+  color: #E664DA;
+  color: #6E8EFF;
+  color: #69F5AE;
 }
 
 .emptyTitle {
-    text-align: center;
+  text-align: center;
 }

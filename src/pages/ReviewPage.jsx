@@ -3,10 +3,9 @@ import React, { useEffect, useState, useContext } from 'react';
 //Contexts
 import { DBContext } from '../contexts/DBContext';
 //Components
-import NavMenu from '../components/NavMenu/NavMenu';
-import StatusSelector from "../components/StatusSelector";
 //Styles
 import './common.css'
+import NavMenu from './components/NavMenu/NavMenu';
 
 const ReviewPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);

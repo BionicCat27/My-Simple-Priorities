@@ -5,8 +5,13 @@ import {AuthContext} from "./AuthContext"
 export const DBContext = React.createContext();
 
 export const DBProvider = ({ children }) => {
-    const { user } = useContext(AuthContext);
-    const database = getDatabase();
+    const { app, user } = useContext(AuthContext);
+    const [database, setDatabase] = useState();
+
+    useEffect(()=>{
+        if(!app) return;
+        setDatabase(getDatabase());
+    }, [])
     
     const [ready, setReady] = useState(false);
     useEffect(() => {

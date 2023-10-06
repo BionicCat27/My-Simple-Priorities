@@ -1,23 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './Header.css';
 
-import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-
-const auth = getAuth();
+import { AuthContext } from '../../../../contexts/AuthContext';
 
 const Header = (props) => {
     const [showMenu, setShowMenu] = useState(false);
 
-    const navigate = useNavigate();
+    const {signOut} = useContext(AuthContext);
 
-    function userSignOut() {
-        signOut(auth).then(() => {
-            window.location = "/login";
-        }).catch((error) => {
-            console.log("An error occurred during signout: " + error);
-        });
-    }
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setShowMenu(!showMenu);
@@ -38,7 +30,7 @@ const Header = (props) => {
                 <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
                 <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
                 <a className={"nav-button"} onClick={() => navigate("/timeline")}>Timeline</a>
-                <a className={"nav-button"} onClick={userSignOut}>Logout</a>
+                <a className={"nav-button"} onClick={() => signOut()}>Logout</a>
             </nav>
         </header>
     );

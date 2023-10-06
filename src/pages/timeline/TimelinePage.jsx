@@ -3,10 +3,10 @@ import React, { useEffect, useState, useContext } from 'react';
 //Contexts
 import { DBContext } from '../../contexts/DBContext';
 //Components
-import NavMenu from '../../components/NavMenu/NavMenu';
 //Styles
 import './timelinePage.css';
 import './TimelineGantt.css';
+import NavMenu from '../components/NavMenu/NavMenu';
 
 const TimelinePage = (props) => {
     const { ready, addDataListener } = useContext(DBContext);

@@ -5,8 +5,6 @@ import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 //Contexts
 import { AuthContext } from "../../contexts/AuthContext";
 //Components
-import PageTitle from '../../components/PageTitle';
-import Footer from '../../components/Footer';
 //Styles
 import './loginPage.css';
 //Config
