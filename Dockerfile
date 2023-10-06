@@ -8,7 +8,7 @@ EXPOSE 9000
 EXPOSE 9000
 
 # Start emulators, watch for changes, and run tests
-CMD [ "npm", "run", "emulators"]
+CMD [ "npm install"]
 
 # Install JRE and JDK
 RUN apt-get update \
