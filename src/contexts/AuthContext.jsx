@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged, connectAuthEmulator } from "firebase/auth";
+import { getAuth, onAuthStateChanged, connectAuthEmulator, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { connectDatabaseEmulator, getDatabase } from "firebase/database";
 
@@ -33,7 +33,31 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    function signOut() {
+    function signIn(email, password, errorCallback) {
+        if(!auth) return;
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                window.location = "/";
+            })
+            .catch((error) => {
+                errorCallback("Incorrect username or password.");
+            });
+    }
+
+    function signUp(email, password, errorCallback) {
+        if(!auth) return;
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                window.location = "/";
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                errorCallback("Authentication Error: " + errorCode + " - " + errorMessage);
+            });
+    }
+
+    function signUserOut() {
         if (!auth) return;
         signOut(auth).then(() => {
             window.location = "/login";
@@ -52,6 +76,7 @@ export const AuthProvider = ({ children }) => {
             console.debug("Development mode enabled, connected to emulators");
         }
         setApp(initializedApp);
+        setAuth(getAuth());
         if (!auth) return;
         onAuthStateChanged(auth, (userResult) => {
             setUser(userResult);
@@ -60,6 +85,6 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ app, user, auth, signOut }}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ app, user, auth, signUserOut, signIn, signUp }}>{children}</AuthContext.Provider>
     );
 };

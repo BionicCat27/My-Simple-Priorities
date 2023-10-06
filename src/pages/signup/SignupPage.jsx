@@ -7,31 +7,18 @@ import { AuthContext } from "../../contexts/AuthContext";
 //Components
 //Styles
 import './signupPage.css';
+import PageTitle from '../components/PageTitle';
+import Footer from '../components/Footer';
 
 const SignupPage = () => {
-    const authContext = useContext(AuthContext);
-    const auth = authContext.auth;
+    const {auth, signUp} = useContext(AuthContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    onAuthStateChanged(auth, (userResult) => {
-        if (userResult) {
-            window.location = "/";
-        }
-    });
-
     function prepareCreateAccount(event) {
         event.preventDefault();
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                window.location = "/";
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log("Authentication Error: " + errorCode + " - " + errorMessage);
-            });
+        signUp(email, password, ()=>{});
     }
 
     return (

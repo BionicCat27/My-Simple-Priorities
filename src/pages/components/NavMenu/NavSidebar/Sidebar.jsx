@@ -2,15 +2,15 @@ import React, { useContext } from 'react';
 
 import './Sidebar.css';
 
-import githubLogo from '../../../../resources/GitHub_Logo.png'
-import liLogo from '../../../../resources/LI-Logo.png'
+import githubLogo from './GitHub_Logo.png'
+import liLogo from './LI-Logo.png'
 
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../contexts/AuthContext';
 
 const Sidebar = (props) => {
 
-    const {signOut} = useContext(AuthContext);
+    const {signUserOut} = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const Sidebar = (props) => {
                 <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
                 <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
                 <a className={"nav-button"} onClick={() => navigate("/timeline")}>Timeline</a>
-                <a className={"nav-button"} onClick={() => signOut()}>Logout</a>
+                <a className={"nav-button"} onClick={() => signUserOut()}>Logout</a>
             </div>
             <div id="sidebarCreditContainer">
                 <a href="https://aslanbb.vercel.app/">Aslan Bennington-Barr</a>

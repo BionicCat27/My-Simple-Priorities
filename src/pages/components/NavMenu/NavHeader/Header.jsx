@@ -7,7 +7,7 @@ import { AuthContext } from '../../../../contexts/AuthContext';
 const Header = (props) => {
     const [showMenu, setShowMenu] = useState(false);
 
-    const {signOut} = useContext(AuthContext);
+    const {signUserOut} = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -30,7 +30,7 @@ const Header = (props) => {
                 <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
                 <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
                 <a className={"nav-button"} onClick={() => navigate("/timeline")}>Timeline</a>
-                <a className={"nav-button"} onClick={() => signOut()}>Logout</a>
+                <a className={"nav-button"} onClick={() => signUserOut()}>Logout</a>
             </nav>
         </header>
     );

@@ -7,31 +7,20 @@ import { AuthContext } from "../../contexts/AuthContext";
 //Components
 //Styles
 import './loginPage.css';
+import PageTitle from '../components/PageTitle';
+import Footer from '../components/Footer';
 //Config
 
 const LoginPage = () => {
-    const authContext = useContext(AuthContext);
-    const auth = authContext.auth;
+    const { signIn} = useContext(AuthContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    onAuthStateChanged(auth, (userResult) => {
-        if (userResult) {
-            window.location = "/";
-        }
-    });
-
     function prepareSignIn(event) {
         event.preventDefault();
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                window.location = "/";
-            })
-            .catch((error) => {
-                setErrorMessage("Incorrect username or password.");
-            });
+        signIn(email, password, setErrorMessage);
     }
 
     return (
