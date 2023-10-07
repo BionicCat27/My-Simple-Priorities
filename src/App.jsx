@@ -6,11 +6,11 @@ import CapturePage from './pages/CapturePage'
 import TodoPage from './pages/TodoPage'
 import PrioritiesPage from './pages/PrioritiesPage'
 import ReviewPage from './pages/reviewPage'
-import LoginPage from './pages/login/loginPage'
-import SignupPage from './pages/signup/signupPage'
 import NotFoundPage from './pages/notFound/NotFoundPage'
 import TimelinePage from './pages/timeline/TimelinePage'
 import ProtectedPage from './pages/ProtectedPage'
+import LoginPage from './pages/LoginPage'
+import SignupPage from './pages/SignupPage'
 
 function App() {
   return (
