@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 
 import './Sidebar.css';
 
-import githubLogo from './GitHub_Logo.png'
-import liLogo from './LI-Logo.png'
+import githubLogo from '../../../../resources/GitHub_Logo.png'
+import liLogo from '../../../../resources/LI-Logo.png'
 
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../contexts/AuthContext';
