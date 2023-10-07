@@ -10,14 +10,9 @@ export const DBProvider = ({ children }) => {
     const [ready, setReady] = useState(false);
 
     useEffect(()=>{
-        console.log(`App changed: ${app}`)
         if(!app) return;
         setDatabase(getDatabase());
     }, [app])
-    
-    useEffect(()=> {
-        console.log(`database: ${database}`)
-    }, [database])
     
     useEffect(() => {
         if (user && database) {
