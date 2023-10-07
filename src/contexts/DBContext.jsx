@@ -1,52 +1,51 @@
+import { getDatabase, onValue, push, ref, remove, set, update } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
-import { getDatabase, onValue, push, ref, set, get, child, update, remove } from "firebase/database";
-import {AuthContext} from "./AuthContext"
+import { AuthContext } from "./AuthContext";
 
 export const DBContext = React.createContext();
 
 export const DBProvider = ({ children }) => {
     const { app, user } = useContext(AuthContext);
     const [database, setDatabase] = useState();
+    const [ready, setReady] = useState(false);
 
     useEffect(()=>{
+        console.log(`App changed: ${app}`)
         if(!app) return;
         setDatabase(getDatabase());
     }, [app])
     
-    const [ready, setReady] = useState(false);
+    useEffect(()=> {
+        console.log(`database: ${database}`)
+    }, [database])
+    
     useEffect(() => {
-        if (user) {
+        if (user && database) {
             setReady(true);
         } else {
             setReady(false);
         }
-    }, [user])
+    }, [user, database])
 
     const getRef = (path) => {
-        if(!path || !database || !user?.uid) {
-            return;
-        }
         return ref(database, `users/${user.uid}/${path}`)
     }
 
     const pushObject = (path, object) => {
-        let ref = getRef(path);
-        if (!ref) return;
+        if(!ready) return;
         set(push(getRef(path)), object);
     }
 
     const updateObject = (path, field, value) => {
-        let ref = getRef(path);
-        if (!ref) return;
+        if(!ready) return;
         let updateObject = {}
         updateObject[field] = value;
-        update(ref, updateObject)
+        update(getRef(path), updateObject)
     }
 
     const removeObject = (path) => {
-        let ref = getRef(path);
-        if (!ref) return;
-        remove(ref)
+        if(!ready) return;
+        remove(getRef(path))
     }
 
     const asKeyedList = (data) => {
@@ -60,9 +59,8 @@ export const DBProvider = ({ children }) => {
     }
 
     const addDataListener = async (path, resultFunction) => {
-        let ref = getRef(path);
-        if (!ref) return;
-        onValue(ref, (snapshot) => {
+        if(!ready) return;
+        onValue(getRef(path), (snapshot) => {
             let data = snapshot.val();
             data = asKeyedList(data);
             resultFunction(data);
