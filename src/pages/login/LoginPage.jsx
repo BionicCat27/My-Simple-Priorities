@@ -1,7 +1,5 @@
 //React
-import React, { useState, useContext } from 'react';
-//Firebase
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import React, { useState, useContext, useEffect } from 'react';
 //Contexts
 import { AuthContext } from "../../contexts/AuthContext";
 //Components
@@ -9,19 +7,26 @@ import { AuthContext } from "../../contexts/AuthContext";
 import './loginPage.css';
 import PageTitle from '../components/PageTitle';
 import Footer from '../components/Footer';
-//Config
+import { useNavigate } from 'react-router';
 
 const LoginPage = () => {
-    const { signIn} = useContext(AuthContext);
+    const { signIn, user } = useContext(AuthContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
+    const navigate = useNavigate();
+
     function prepareSignIn(event) {
         event.preventDefault();
         signIn(email, password, setErrorMessage);
     }
+
+    useEffect(()=> {
+        if(!user) return;
+        navigate("/");
+    }, [user]);
 
     return (
         <div className="main-content">

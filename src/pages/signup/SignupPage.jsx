@@ -1,5 +1,5 @@
 //React
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 //Firebase
 import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 //Contexts
@@ -9,17 +9,26 @@ import { AuthContext } from "../../contexts/AuthContext";
 import './signupPage.css';
 import PageTitle from '../components/PageTitle';
 import Footer from '../components/Footer';
+import { useNavigate } from 'react-router';
 
 const SignupPage = () => {
-    const {auth, signUp} = useContext(AuthContext);
+    const {user, signUp} = useContext(AuthContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
 
     function prepareCreateAccount(event) {
         event.preventDefault();
         signUp(email, password, ()=>{});
     }
+
+    useEffect(()=> {
+        if(!user) return;
+        navigate("/");
+    }, [user]);
+
 
     return (
         <div className="main-content">

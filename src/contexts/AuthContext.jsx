@@ -19,25 +19,13 @@ const firebaseConfig = {
 export const AuthProvider = ({ children }) => {
     const [app, setApp] = useState();
     const [auth, setAuth] = useState();
-    const [user, setUser] = useState(null);
-
-    function checkLoggedIn(user) {
-        if (!user) {
-            loginRedirectIfRestricted();
-        }
-    }
-
-    function loginRedirectIfRestricted() {
-        if (window.location.pathname != "/login" && window.location.pathname != "/signup" && window.location.pathname != "/notfound") {
-            window.location = "/login";
-        }
-    }
+    const [user, setUser] = useState();
 
     function signIn(email, password, errorCallback) {
         if(!auth) return;
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                window.location = "/";
+                setUser(userCredential);
             })
             .catch((error) => {
                 errorCallback("Incorrect username or password.");
@@ -48,7 +36,7 @@ export const AuthProvider = ({ children }) => {
         if(!auth) return;
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                window.location = "/";
+                setUser(userCredential);
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -60,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     function signUserOut() {
         if (!auth) return;
         signOut(auth).then(() => {
-            window.location = "/login";
+            setUser(undefined);
         }).catch((error) => {
             console.log("An error occurred during signout: " + error);
         });
@@ -79,8 +67,7 @@ export const AuthProvider = ({ children }) => {
         setAuth(getAuth());
         if (!auth) return;
         onAuthStateChanged(auth, (userResult) => {
-            setUser(userResult);
-            checkLoggedIn(userResult);
+            setUser(userResult)
         });
     }, []);
 

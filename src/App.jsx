@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import { AuthProvider } from './contexts/AuthContext'
 import { DBProvider } from './contexts/DBContext'
@@ -10,6 +10,7 @@ import LoginPage from './pages/login/loginPage'
 import SignupPage from './pages/signup/signupPage'
 import NotFoundPage from './pages/notFound/NotFoundPage'
 import TimelinePage from './pages/timeline/TimelinePage'
+import ProtectedPage from './pages/ProtectedPage'
 
 function App() {
   return (
@@ -17,12 +18,12 @@ function App() {
       <DBProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<CapturePage />} title="Capture"/>
-            <Route path="/capture" element={<CapturePage />} title="Capture" />
-            <Route path="/priorities" element={<PrioritiesPage />} title="Priorities" />
-            <Route path="/todo" element={<TodoPage />} title="Todo" />
-            <Route path="/review" element={<ReviewPage />} />
-            <Route path="/timeline" element={<TimelinePage />} />
+            <Route path="/" element={<Navigate to="/capture" />} />
+            <Route path="/capture" element={<ProtectedPage><CapturePage /></ProtectedPage>} title="Capture" />
+            <Route path="/priorities" element={<ProtectedPage><PrioritiesPage /></ProtectedPage>} title="Priorities" />
+            <Route path="/todo" element={<ProtectedPage><TodoPage /></ProtectedPage>} title="Todo" />
+            <Route path="/review" element={<ProtectedPage><ReviewPage /></ProtectedPage>} />
+            <Route path="/timeline" element={<ProtectedPage><TimelinePage /></ProtectedPage>} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="*" element={<NotFoundPage />} />

@@ -11,7 +11,7 @@ export const DBProvider = ({ children }) => {
     useEffect(()=>{
         if(!app) return;
         setDatabase(getDatabase());
-    }, [])
+    }, [app])
     
     const [ready, setReady] = useState(false);
     useEffect(() => {
@@ -23,24 +23,30 @@ export const DBProvider = ({ children }) => {
     }, [user])
 
     const getRef = (path) => {
+        if(!path || !database || !user?.uid) {
+            return;
+        }
         return ref(database, `users/${user.uid}/${path}`)
     }
 
     const pushObject = (path, object) => {
-        if(!(user?.uid)) return;
+        let ref = getRef(path);
+        if (!ref) return;
         set(push(getRef(path)), object);
     }
 
     const updateObject = (path, field, value) => {
-        if(!(user?.uid)) return;
+        let ref = getRef(path);
+        if (!ref) return;
         let updateObject = {}
         updateObject[field] = value;
-        update(getRef(path), updateObject)
+        update(ref, updateObject)
     }
 
     const removeObject = (path) => {
-        if(!(user?.uid)) return;
-        remove(getRef(path))
+        let ref = getRef(path);
+        if (!ref) return;
+        remove(ref)
     }
 
     const asKeyedList = (data) => {
@@ -53,16 +59,10 @@ export const DBProvider = ({ children }) => {
         return keyedList;
     }
 
-    const getData = (path) => {
-        get(getRef(path)).then((snapshot) =>{
-            if(snapshot.exists()) {
-                return snapshot.val()
-            }
-        });
-    }
-
     const addDataListener = async (path, resultFunction) => {
-        onValue(getRef(path), (snapshot) => {
+        let ref = getRef(path);
+        if (!ref) return;
+        onValue(ref, (snapshot) => {
             let data = snapshot.val();
             data = asKeyedList(data);
             resultFunction(data);
