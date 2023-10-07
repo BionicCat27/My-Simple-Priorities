@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, connectAuthEmulator, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { connectDatabaseEmulator, getDatabase } from "firebase/database";
+import { useCookies } from "react-cookie";
 
 export const AuthContext = React.createContext();
 
@@ -19,13 +20,18 @@ const firebaseConfig = {
 export const AuthProvider = ({ children }) => {
     const [app, setApp] = useState();
     const [auth, setAuth] = useState();
+    const [cookies, setCookie] = useCookies(["user"]);
     const [user, setUser] = useState();
+
+    useEffect(()=>{
+        setUser(cookies?.user);
+    }, [cookies])
 
     function signIn(email, password, errorCallback) {
         if(!auth) return;
         signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                setUser(userCredential);
+            .then((userResult) => {
+                setCookie("user", userResult)
             })
             .catch((error) => {
                 errorCallback("Incorrect username or password.");
@@ -35,8 +41,8 @@ export const AuthProvider = ({ children }) => {
     function signUp(email, password, errorCallback) {
         if(!auth) return;
         createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                setUser(userCredential);
+            .then((userResult) => {
+                setCookie("user", userResult)
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -48,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     function signUserOut() {
         if (!auth) return;
         signOut(auth).then(() => {
-            setUser(undefined);
+            setCookie("user", undefined)
         }).catch((error) => {
             console.log("An error occurred during signout: " + error);
         });
@@ -57,17 +63,18 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         //Get auth
         let initializedApp = initializeApp(firebaseConfig);
+        let auth = getAuth();
         if (import.meta.env.MODE === "development") {
             const hostname = "127.0.0.1";
-            connectAuthEmulator(getAuth(), `http://${hostname}:9099`);
+            connectAuthEmulator(auth, `http://${hostname}:9099`);
             connectDatabaseEmulator(getDatabase(), hostname, 9000);
             console.debug("Development mode enabled, connected to emulators");
         }
         setApp(initializedApp);
-        setAuth(getAuth());
+        setAuth(auth);
         if (!auth) return;
         onAuthStateChanged(auth, (userResult) => {
-            setUser(userResult)
+            setCookie("user", userResult)
         });
     }, []);
 
