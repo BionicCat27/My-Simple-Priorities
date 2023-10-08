@@ -30,6 +30,7 @@ const Header = (props) => {
                 <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
                 <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
                 <a className={"nav-button"} onClick={() => navigate("/timeline")}>Timeline</a>
+                <a className={"nav-button"} onClick={() => navigate("/health")}>Health</a>
                 <a className={"nav-button"} onClick={() => signUserOut()}>Logout</a>
             </nav>
         </header>

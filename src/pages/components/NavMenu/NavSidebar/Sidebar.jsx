@@ -23,6 +23,7 @@ const Sidebar = (props) => {
                 <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
                 <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
                 <a className={"nav-button"} onClick={() => navigate("/timeline")}>Timeline</a>
+                <a className={"nav-button"} onClick={() => navigate("/health")}>health</a>
                 <a className={"nav-button"} onClick={() => signUserOut()}>Logout</a>
             </div>
             <div id="sidebarCreditContainer">
