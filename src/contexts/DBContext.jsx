@@ -5,15 +5,14 @@ import { AuthContext } from "./AuthContext";
 export const DBContext = React.createContext();
 
 export const DBProvider = ({ children }) => {
-    const { app, user } = useContext(AuthContext);
     const [database, setDatabase] = useState();
+    const { user } = useContext(AuthContext);
     const [ready, setReady] = useState(false);
 
-    useEffect(()=>{
-        if(!app) return;
+    useEffect(()=> {
         setDatabase(getDatabase());
-    }, [app])
-    
+    }, [database])
+
     useEffect(() => {
         if (user && database) {
             setReady(true);
@@ -64,7 +63,6 @@ export const DBProvider = ({ children }) => {
 
     return (
         <DBContext.Provider value={{
-            database,
             ready,
             pushObject,
             updateObject,
