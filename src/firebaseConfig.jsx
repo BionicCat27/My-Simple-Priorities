@@ -11,19 +11,16 @@ const firebaseConfig = {
     messagingSenderId: "783456794609",
     appId: "1:783456794609:web:1ccfbec5791775a46ab650",
     measurementId: "G-MXL65K2JZC"
-};
+  };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const database = getDatabase();
 
-const enableDevelopmentMode = () => {
-    let hostname = "127.0.0.1";
-    connectAuthEmulator(getAuth(), `http://${hostname}:9099`);
-    connectDatabaseEmulator(getDatabase(), hostname, 9000);
-    console.debug("Development mode enabled, connected to emulators");
+if (import.meta.env.MODE === "development") {
+    connectAuthEmulator(auth, `http://127.0.0.1:9099`);
+    connectDatabaseEmulator(database, "127.0.0.1", 9000);
+    console.log("Development mode enabled, connected to emulators");
 }
 
-if (process.env.MODE === "development") {
-    enableDevelopmentMode();
-}
-
-export { app, enableDevelopmentMode };
+export {app, auth, database};

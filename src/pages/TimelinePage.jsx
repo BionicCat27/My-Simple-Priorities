@@ -1,12 +1,11 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
 //Contexts
-import { DBContext } from '../../contexts/DBContext';
 //Components
-import NavMenu from '../../components/NavMenu/NavMenu';
 //Styles
-import './timelinePage.css';
 import './TimelineGantt.css';
+import NavMenu from './components/NavMenu/NavMenu';
+import { DBContext } from '../contexts/DBContext';
 
 const TimelinePage = (props) => {
     const { ready, addDataListener } = useContext(DBContext);
@@ -49,9 +48,10 @@ const TimelinePage = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {cards.map((card)=> {
+                            {cards && cards.map((card)=> {
+                                if (!card.dueDate || card.status == "Done") return;
                                 let daysUntilDue = getDaysDiff(card.dueDate, new Date());
-                                if (daysUntilDue < 0 || card.status == "Done") return;
+                                if (daysUntilDue < 0) return;
                                 return (
                                     <tr key={`${card.key}`}>
                                         <td className="ganttCardName ganttBlock" colSpan={daysUntilDue}>

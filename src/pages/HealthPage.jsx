@@ -4,25 +4,26 @@ import React, { useEffect, useState, useContext } from 'react';
 //Contexts
 import { DBContext } from '../contexts/DBContext';
 //Components
-import NavMenu from '../components/NavMenu/NavMenu';
-import StatusSelector from '../components/StatusSelector'
 //Styles
 import './common.css'
+import NavMenu from './components/NavMenu/NavMenu';
+import StatusSelector from './components/StatusSelector';
 
-const TodoPage = (props) => {
+const HealthPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);
 
     const DEFAULT_STATUS_VIEW = "Planning";
     const DEFAULT_SIZE_VIEW = "Default";
 
     const [contentList, setContentList] = useState([]);
+    const [dateInput, setDateInput] = useState("");
     const [contentInput, setContentInput] = useState("");
     const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
     const [cardStatusView, setCardStatusView] = useState(DEFAULT_STATUS_VIEW);
 
     useEffect(() => {
         if(ready) {
-            addDataListener(`todo`, setContentList)
+            addDataListener(`health`, setContentList)
         }
     }, [ready])
 
@@ -31,11 +32,10 @@ const TodoPage = (props) => {
         if (contentInput.length == 0) {
             return;
         }
-        pushObject(`todo`, {
+        pushObject(`health`, {
             title: contentInput,
             description: "",
-            status: "Todo",
-            checklist: []
+            date: dateInput
         })
         
         setContentInput("");
@@ -43,7 +43,7 @@ const TodoPage = (props) => {
 
     function handleDrop(e, status) {
         let targetKey = e.dataTransfer.getData("key");
-        updateObject(`todo/${targetKey}`, "status", status)
+        updateObject(`health/${targetKey}`, "status", status)
     }
 
     function handleDragOver(e) {
@@ -87,26 +87,19 @@ const TodoPage = (props) => {
             <NavMenu title="Todo" />
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
-                    <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
-                    <button id="addContentButton" onClick={addContent}>Add Todo!</button>
-                    <select onChange={field => setCardSizeView(field.target.value)} value={cardSizeView}>
-                        <option>Default</option>
-                        <option>Expanded</option>
-                        <option>List</option>
-                    </select>
-                    <select onChange={field => setCardStatusView(field.target.value)} value={cardStatusView}>
-                        <option>All</option>
-                        <option>Planning</option>
-                        <option>Todo</option>
-                        <option>In Progress</option>
-                        <option>Focus</option>
-                        <option>Done</option>
-                    </select>
+                    <input value={contentInput} placeholder="Activity name" onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
+                    <input value={dateInput} onChange={field => setDateInput(field.target.value)} type="date" className="content_field" />
+                    <button id="addContentButton" onClick={addContent}>+</button>
                 </form>
                 <div className="cards_container">
-                    { statusMatch("Todo", cardStatusView) && getStatusBlock("Todo") }
-                    { statusMatch("In Progress", cardStatusView) && getStatusBlock("In Progress") }
-                    { statusMatch("Done", cardStatusView) && getStatusBlock("Done") }
+                    {contentList && contentList.map((card)=> {
+                        return (
+                            <div>
+                                <p>{card?.title}</p>
+                                <p>{card?.date}</p>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </>
@@ -190,7 +183,6 @@ const TodoCard = (props) => {
     function generateDatePassed(dateToCheck) {
         let date = new Date(new Date(dateToCheck).toDateString()).getTime();
         let today = new Date(new Date().toDateString()).getTime();
-        // console.log("Date: " + date + " today: " + today + "(" + (today - date) + ") ");
         if (date < today) {
             //Day is before today
             return "date-passed ";
@@ -274,4 +266,4 @@ const TodoCard = (props) => {
 };
 
 
-export default TodoPage;
+export default HealthPage;

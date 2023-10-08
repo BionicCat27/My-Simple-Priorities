@@ -1,14 +1,17 @@
 //React
 import React, { useEffect, useState, useContext } from 'react';
+//Firebase
 //Contexts
 import { DBContext } from '../contexts/DBContext';
 //Components
-import NavMenu from '../components/NavMenu/NavMenu';
-import StatusSelector from "../components/StatusSelector";
 //Styles
 import './common.css'
+import NavMenu from './components/NavMenu/NavMenu';
+import StatusSelector from './components/StatusSelector';
+import CardSizeViewSelector from './components/CardSizeViewSelector';
+import CardStatusViewSelector from './components/CardStatusViewSelector';
 
-const ReviewPage = (props) => {
+const TodoPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);
 
     const DEFAULT_STATUS_VIEW = "Planning";
@@ -21,7 +24,7 @@ const ReviewPage = (props) => {
 
     useEffect(() => {
         if(ready) {
-            addDataListener(`review`, setContentList)
+            addDataListener(`todo`, setContentList)
         }
     }, [ready])
 
@@ -30,18 +33,19 @@ const ReviewPage = (props) => {
         if (contentInput.length == 0) {
             return;
         }
-        pushObject(`review`, {
+        pushObject(`todo`, {
             title: contentInput,
             description: "",
-            progress: [],
-            status: "Todo"
-        });
+            status: "Todo",
+            checklist: []
+        })
+        
         setContentInput("");
     }
-    
+
     function handleDrop(e, status) {
         let targetKey = e.dataTransfer.getData("key");
-        updateObject(`review/${targetKey}`, "status", status)
+        updateObject(`todo/${targetKey}`, "status", status)
     }
 
     function handleDragOver(e) {
@@ -56,7 +60,6 @@ const ReviewPage = (props) => {
         return false;
     }
 
-
     function getStatusBlock(status) {
         return (
             <div className='statusBlock' 
@@ -67,7 +70,7 @@ const ReviewPage = (props) => {
                     {contentList && contentList.map(card => {
                         if (statusMatch(card.status, status)) {
                             return (
-                                <ReviewCard
+                                <TodoCard
                                     card={card}
                                     key={`${card.key}${card.title}`}
                                     cardSizeView={cardSizeView}
@@ -83,24 +86,13 @@ const ReviewPage = (props) => {
 
     return (
         <>
-            <NavMenu title="Review" />
+            <NavMenu title="Todo" />
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
-                    <button id="addContentButton" onClick={addContent}>Add review!</button>
-                    <select onChange={field => setCardSizeView(field.target.value)} value={cardSizeView}>
-                        <option>Default</option>
-                        <option>Expanded</option>
-                        <option>List</option>
-                    </select>
-                    <select onChange={field => setCardStatusView(field.target.value)} value={cardStatusView}>
-                        <option>All</option>
-                        <option>Planning</option>
-                        <option>Todo</option>
-                        <option>In Progress</option>
-                        <option>Focus</option>
-                        <option>Done</option>
-                    </select>
+                    <button id="addContentButton" onClick={addContent}>Add Todo!</button>
+                    <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
+                    <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />
                 </form>
                 <div className="cards_container">
                     { statusMatch("Todo", cardStatusView) && getStatusBlock("Todo") }
@@ -112,9 +104,9 @@ const ReviewPage = (props) => {
     );
 };
 
-const ReviewCard = (props) => {
+const TodoCard = (props) => {
     const { ready, updateObject, removeObject } = useContext(DBContext);
-
+    
     const card = props.card;
     const cardSizeView = props.cardSizeView;
     
@@ -122,72 +114,89 @@ const ReviewCard = (props) => {
 
     const [titleInput, setTitleInput] = useState(card.title || "");
     const [descriptionInput, setDescriptionInput] = useState(card.description || "");
-    const [progressInput, setProgressInput] = useState(card.progress || []);
     const [statusInput, setStatusInput] = useState(card.status || "Todo");
+    const [checklistInput, setChecklistInput] = useState(card.checklist || []);
+    const [dueDateInput, setDueDateInput] = useState(card.dueDate || "");
 
     const isDefault = (cardSizeView == "Default");
 
     const [draggedOver, setDraggedOver] = useState(false);
     const [dragging, setDragging] = useState(false);
 
-    function calculateProgressValue() {
-        if (!card.progress || card.progress.length == 0) return 0;
-
-        let value = card.progress.reduce((previousValue, currentValue) => {
-            return {
-                progress: (parseInt(previousValue.progress) + parseInt(currentValue.progress)),
-                total: (parseInt(previousValue.total) + parseInt(currentValue.total)),
-            };
-        });
-        return ((value.progress / value.total) * 100).toFixed(2);
-    }
-
     function updateContent() {
-        updateObject(`review/${card.key}`, "title", titleInput)
-        updateObject(`review/${card.key}`, "description", descriptionInput)
-        updateObject(`review/${card.key}`, "progress", progressInput)
-        updateObject(`review/${card.key}`, "status", statusInput)
+        updateObject(`todo/${card.key}`, "title", titleInput)
+        updateObject(`todo/${card.key}`, "description", descriptionInput)
+        updateObject(`todo/${card.key}`, "status", statusInput)
+        updateObject(`todo/${card.key}`, "checklist", checklistInput)
+        updateObject(`todo/${card.key}`, "dueDate", dueDateInput)
+        
         setEditing(false);
     }
 
     function deleteCard() {
         if (confirm(`Delete \"${card.title}\"?`)) {
-            removeObject(`review/${card.key}`);
+            removeObject(`todo/${card.key}`)
             setEditing(false);
         } else {
             console.log("Not deleting");
         }
     }
 
-    function handleTotalInput(value, index) {
-        let workingArray = [...progressInput];
-        workingArray[index].total = value;
-        setProgressInput(workingArray);
+    function handleCheckBox(value, index) {
+        let workingArray = [...checklistInput];
+        workingArray[index].checked = value;
+        setChecklistInput(workingArray);
     }
 
-    function handleProgressInput(value, index) {
-        let workingArray = [...progressInput];
-        workingArray[index].progress = value;
-        setProgressInput(workingArray);
+    function handleCheckBoxValue(value, index) {
+        let workingArray = [...checklistInput];
+        workingArray[index].value = value;
+        setChecklistInput(workingArray);
     }
 
-    function handleAddStage() {
-        setProgressInput([...progressInput, {
-            progress: 0,
-            total: 100
-        }]);
+    function addChecklistItem() {
+        let workingArray = [...checklistInput];
+        workingArray.push({
+            checked: false,
+            value: ""
+        });
+        setChecklistInput(workingArray);
     }
 
-    function handleRemoveStage(index) {
-        let workingArray = [...progressInput];
-        workingArray.splice(index, 1);
-        setProgressInput(workingArray);
+    function generateChecklistContent() {
+        if (checklistInput.length == 0) {
+            return;
+        }
+        return <>{
+            checklistInput.map((checklistObject, index) => (
+                <div key={`${index}Container`}>
+                    <input className="inline-input" type="checkbox" checked={checklistObject.checked} onChange={field => handleCheckBox(field.target.checked, index)} />
+                    <input className="inline-input" type="text" value={checklistObject.value} onChange={field => handleCheckBoxValue(field.target.value, index)} />
+                </div>
+            ))}
+        </>;
+
+    }
+
+    function generateDatePassed(dateToCheck) {
+        let date = new Date(new Date(dateToCheck).toDateString()).getTime();
+        let today = new Date(new Date().toDateString()).getTime();
+        if (date < today) {
+            //Day is before today
+            return "date-passed ";
+        } else if (date == today) {
+            //Day is today
+            return "date-today ";
+        } else {
+            //Day is after today
+            return "date-future ";
+        }
     }
 
     function handleDrop(e) {
         let targetKey = e.dataTransfer.getData("key");
 
-        updateObject(`review/${targetKey}`, "status", card.status)
+        updateObject(`todo/${targetKey}`, "status", card.status)
 
         setDraggedOver(false);
     }
@@ -211,6 +220,7 @@ const ReviewCard = (props) => {
         setDragging(false);
     }
 
+
     return (
         <div draggable className={(isDefault ? "condensed_card " : "content_card ") + (dragging ? "brdr-red " : " ") + (draggedOver ? "brdr-blue " : " ")}
             onClick={() => (!isEditing && setEditing(true))}
@@ -227,36 +237,31 @@ const ReviewCard = (props) => {
                     <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
                     <label htmlFor="contentDescriptionInput">Description</label>
                     <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
-                    {progressInput.map((progressObject, index) => (
-                        <div key={`${index}Container`}>
-                            <div className="inlineContainer" key={`${index}ProgressContainer`}>
-                                <label htmlFor="contentProgressInput" key={`${index}ProgressLabel`}>Progress</label>
-                                <input id="contentProgressInput" className="margin-y-1" type="number" max="100" key={`${index}ProgressInput`} onChange={field => handleProgressInput(field.target.value, index)} value={progressObject.progress}></input>
-                            </div>
-                            <div className="inlineContainer" key={`${index}TotalContainer`}>
-                                <label htmlFor="contentTotalInput" key={`${index}TotalLabel`}>Total</label>
-                                <input id="contentTotalInput" className="margin-y-1" type="number" max="100" key={`${index}TotalInput`} onChange={field => handleTotalInput(field.target.value, index)} value={progressObject.total}></input>
-                            </div>
-                            <div className="inlineContainer" key={`${index}RemoveContainer`}>
-                                <p onClick={() => handleRemoveStage(index)} >Remove</p>
-                            </div>
-                        </div>
-                    ))}
-                    <p onClick={handleAddStage}>Add progress stage</p>
+                    {generateChecklistContent()}
+                    <div id="formButtonContainer">
+                        <button onClick={() => { addChecklistItem(); }}>Add Checklist item</button>
+                    </div>
                     <StatusSelector value={statusInput} setValue={(value) => setStatusInput(value)} />
+                    <label htmlFor="contentDueDateInput">Due Date</label>
+                    <input id="contentDueDateInput" type="date" onChange={field => setDueDateInput(field.target.value)} value={dueDateInput}></input>
                     <div id="formButtonContainer">
                         <button onClick={updateContent}>Save</button>
                         <a id="deleteButton" onClick={deleteCard}>Delete</a>
                     </div>
                 </> :
-                <>
-                    <h3>{card.title}</h3>
-                    {!isDefault && <p>{card.description}</p>}
-                    <p>{calculateProgressValue()}%</p>
-                </>
+                <div className="cardContentContainer">
+                    <div id="col1">
+                        <h3>{card.title}</h3>
+                        {!isDefault && <p>{description}</p>}
+                    </div>
+                    <div id="col2">
+                        {card.dueDate && <p id="dueDateDisplay" className={generateDatePassed(card.dueDate)} >{ card.dueDate}</p>}
+                    </div>
+                </div>
             }
         </div >
     );
 };
 
-export default ReviewPage;
+
+export default TodoPage;

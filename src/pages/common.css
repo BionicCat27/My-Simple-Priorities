@@ -215,3 +215,14 @@ button {
 #deleteButton {
     margin-left: 0.5rem;
 }
+
+#centeredForm {
+    padding: 1rem;
+}
+
+.centeredFormElement {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1rem;
+    display: block;
+}
