@@ -10,7 +10,7 @@
     "emulators": "firebase emulators:start --project demo-test --import emulatorDataExport",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "deploy": "firebase deploy --only hosting"
+    "deploy": "npm run build && firebase deploy --only hosting"
   },
   "dependencies": {
     "firebase": "^10.4.0",
