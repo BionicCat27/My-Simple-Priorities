@@ -18,7 +18,6 @@ export const DBProvider = ({ children }) => {
     }, [user, database])
 
     const getRef = (path) => {
-        console.log(`${JSON.stringify(user)}`)
         return ref(database, `users/${user.uid}/${path}`)
     }
 

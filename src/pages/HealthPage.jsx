@@ -183,7 +183,6 @@ const TodoCard = (props) => {
     function generateDatePassed(dateToCheck) {
         let date = new Date(new Date(dateToCheck).toDateString()).getTime();
         let today = new Date(new Date().toDateString()).getTime();
-        // console.log("Date: " + date + " today: " + today + "(" + (today - date) + ") ");
         if (date < today) {
             //Day is before today
             return "date-passed ";
