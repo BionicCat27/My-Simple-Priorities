@@ -5,7 +5,10 @@ import { DBContext } from '../contexts/DBContext';
 //Components
 //Styles
 import './common.css'
+import StatusSelector from './components/StatusSelector';
 import NavMenu from './components/NavMenu/NavMenu';
+import CardSizeViewSelector from './components/CardSizeViewSelector';
+import CardStatusViewSelector from './components/CardStatusViewSelector';
 
 const ReviewPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);
@@ -87,19 +90,8 @@ const ReviewPage = (props) => {
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add review!</button>
-                    <select onChange={field => setCardSizeView(field.target.value)} value={cardSizeView}>
-                        <option>Default</option>
-                        <option>Expanded</option>
-                        <option>List</option>
-                    </select>
-                    <select onChange={field => setCardStatusView(field.target.value)} value={cardStatusView}>
-                        <option>All</option>
-                        <option>Planning</option>
-                        <option>Todo</option>
-                        <option>In Progress</option>
-                        <option>Focus</option>
-                        <option>Done</option>
-                    </select>
+                    <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
+                    <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />
                 </form>
                 <div className="cards_container">
                     { statusMatch("Todo", cardStatusView) && getStatusBlock("Todo") }

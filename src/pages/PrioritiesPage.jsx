@@ -6,6 +6,7 @@ import { DBContext } from '../contexts/DBContext';
 //Styles
 import './common.css';
 import NavMenu from './components/NavMenu/NavMenu';
+import CardSizeViewSelector from './components/CardSizeViewSelector';
 
 const PrioritiesPage = (props) => {
     const { ready, addDataListener, pushObject } = useContext(DBContext);
@@ -50,11 +51,7 @@ const PrioritiesPage = (props) => {
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add priority!</button>
-                    <select onChange={field => setCardSizeView(field.target.value)} value={cardSizeView}>
-                        <option>Default</option>
-                        <option>Expanded</option>
-                        <option>List</option>
-                    </select>
+                    <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
                     <h3>Expected weekly hours: {getTotalHours()}/168</h3>
                 </form>
                 <div className="cards_container">

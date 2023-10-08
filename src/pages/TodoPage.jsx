@@ -8,6 +8,8 @@ import { DBContext } from '../contexts/DBContext';
 import './common.css'
 import NavMenu from './components/NavMenu/NavMenu';
 import StatusSelector from './components/StatusSelector';
+import CardSizeViewSelector from './components/CardSizeViewSelector';
+import CardStatusViewSelector from './components/CardStatusViewSelector';
 
 const TodoPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);
@@ -89,19 +91,8 @@ const TodoPage = (props) => {
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add Todo!</button>
-                    <select onChange={field => setCardSizeView(field.target.value)} value={cardSizeView}>
-                        <option>Default</option>
-                        <option>Expanded</option>
-                        <option>List</option>
-                    </select>
-                    <select onChange={field => setCardStatusView(field.target.value)} value={cardStatusView}>
-                        <option>All</option>
-                        <option>Planning</option>
-                        <option>Todo</option>
-                        <option>In Progress</option>
-                        <option>Focus</option>
-                        <option>Done</option>
-                    </select>
+                    <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
+                    <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />
                 </form>
                 <div className="cards_container">
                     { statusMatch("Todo", cardStatusView) && getStatusBlock("Todo") }
