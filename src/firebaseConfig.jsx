@@ -18,9 +18,9 @@ const auth = getAuth();
 const database = getDatabase();
 
 if (import.meta.env.MODE === "development") {
-    connectAuthEmulator(auth, `http://127.0.0.1:9099`);
-    connectDatabaseEmulator(database, "127.0.0.1", 9000);
-    console.log("Development mode enabled, connected to emulators");
+  console.log("Development mode enabled, connected to emulators");
+  connectAuthEmulator(auth, `http://127.0.0.1:9099`);
+  connectDatabaseEmulator(database, "127.0.0.1", 9000);
 }
 
 export {app, auth, database};
