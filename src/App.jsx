@@ -1,5 +1,4 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import './App.css'
 import { AuthProvider } from './contexts/AuthContext'
 import { DBProvider } from './contexts/DBContext'
 import CapturePage from './pages/CapturePage'

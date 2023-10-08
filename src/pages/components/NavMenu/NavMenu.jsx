@@ -1,6 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Sidebar from './NavSidebar/Sidebar';
-import Header from './NavHeader/Header';
+import React, { useState, useEffect, useContext } from 'react';
+
+import githubLogo from '../../../resources/GitHub_Logo.png'
+import liLogo from '../../../resources/LI-Logo.png'
+
+import './Sidebar.css';
+import './Header.css';
+import { useNavigate } from 'react-router';
+import { AuthContext } from '../../../contexts/AuthContext';
+
 
 function NavMenu(props) {
     const [isMobile, setIsMobile] = useState(false);
@@ -26,6 +33,69 @@ function NavMenu(props) {
     }, []);
 
     return isMobile ? <Header title={title} /> : <Sidebar title={title} />;
+}
+
+const Sidebar = (props) => {
+
+    return (
+        <div id="sidebar">
+            <div id="sidebarLinksContainer">
+                <h2 id="sidebarTitle">My Simple<br />{props.title}</h2>
+                <LinksList />
+            </div>
+            <div id="sidebarCreditContainer">
+                <a href="https://aslanbb.vercel.app/">Aslan Bennington-Barr</a>
+                <br />
+                <a href="https://github.com/BionicCat27">
+                    <img id="githubLogo" src={githubLogo} />
+                </a>
+                <a href="https://www.linkedin.com/in/aslan-bennington-barr/">
+                    <img id="linkedinLogo" src={liLogo} />
+                </a>
+            </div>
+        </div >
+    );
+};
+
+const Header = (props) => {
+    const [showMenu, setShowMenu] = useState(false);
+
+    const toggleMenu = () => {
+        setShowMenu(!showMenu);
+    };
+    return (
+        <header className="nav-header">
+            <div className="title-container">
+                <h1 id="title">My Simple {props.title}</h1>
+                <button className="hamburger-btn" onClick={toggleMenu}>
+                    <span className="hamburger-icon"></span>
+                    <span className="hamburger-icon"></span>
+                    <span className="hamburger-icon"></span>
+                </button>
+            </div>
+            <nav className={`nav-list ${showMenu ? 'show' : ''}`}>
+                <LinksList />
+            </nav>
+        </header>
+    );
+
+};
+
+const LinksList = () => {
+    const {signUserOut} = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    return (
+        <>
+            <a className={"nav-button"} onClick={() => navigate("/capture")}>Capture</a>
+            <a className={"nav-button"} onClick={() => navigate("/priorities")}>Priorities</a>
+            <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
+            <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
+            <a className={"nav-button"} onClick={() => navigate("/timeline")}>Timeline</a>
+            <a className={"nav-button"} onClick={() => navigate("/health")}>Health</a>
+            <a className={"nav-button"} onClick={() => signUserOut()}>Logout</a>
+        </>
+    )
 }
 
 export default NavMenu;
