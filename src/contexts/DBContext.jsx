@@ -1,17 +1,13 @@
 import { getDatabase, onValue, push, ref, remove, set, update } from "firebase/database";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
+import { database } from "../firebaseConfig";
 
 export const DBContext = React.createContext();
 
 export const DBProvider = ({ children }) => {
-    const [database, setDatabase] = useState();
     const { user } = useContext(AuthContext);
     const [ready, setReady] = useState(false);
-
-    useEffect(()=> {
-        setDatabase(getDatabase());
-    }, [database])
 
     useEffect(() => {
         if (user && database) {
@@ -22,6 +18,7 @@ export const DBProvider = ({ children }) => {
     }, [user, database])
 
     const getRef = (path) => {
+        console.log(`${JSON.stringify(user)}`)
         return ref(database, `users/${user.uid}/${path}`)
     }
 

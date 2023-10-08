@@ -7,7 +7,7 @@
     "dev": "vite --mode development",
     "prod": "vite",
     "build": "vite build",
-    "emulators": "",
+    "emulators": "firebase emulators:start --project demo-test --import emulatorDataExport",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "deploy": "firebase deploy --only hosting"

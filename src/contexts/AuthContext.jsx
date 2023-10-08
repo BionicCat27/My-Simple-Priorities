@@ -3,17 +3,13 @@ import { getAuth, onAuthStateChanged, connectAuthEmulator, createUserWithEmailAn
 import { initializeApp } from "firebase/app";
 import { connectDatabaseEmulator, getDatabase } from "firebase/database";
 import { useCookies } from "react-cookie";
+import { auth } from "../firebaseConfig";
 
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState();
     const [cookies, setCookie] = useCookies(["user"]);
     const [user, setUser] = useState();
-
-    useEffect(()=>{
-        setAuth(getAuth());
-    }, [])
 
     useEffect(()=>{
         setUser(cookies?.user);
