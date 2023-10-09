@@ -1,19 +1,19 @@
 //React
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 //Firebase
 //Contexts
 import { DBContext } from '../contexts/DBContext';
 //Components
 //Styles
 import './common.css';
-import NavMenu from './components/NavMenu/NavMenu';
-import StatusSelector from './components/StatusSelector';
+import { Card } from './components/Card';
 import CardSizeViewSelector from './components/CardSizeViewSelector';
 import CardStatusViewSelector from './components/CardStatusViewSelector';
+import { EditableChecklist } from './components/EditableChecklist';
 import { EditableInput } from './components/EditableInput';
 import { EditableTextarea } from './components/EditableTextarea';
-import { Card } from './components/Card';
-import { EditableChecklist } from './components/EditableChecklist';
+import NavMenu from './components/NavMenu/NavMenu';
+import StatusSelector from './components/StatusSelector';
 
 const TodoPage = () => {
     const { ready, addDataListener, pushObject } = useContext(DBContext);

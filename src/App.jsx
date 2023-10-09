@@ -1,19 +1,16 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { AuthProvider } from './contexts/AuthContext'
-import { DBProvider } from './contexts/DBContext'
-import CapturePage from './pages/CapturePage'
-import TodoPage from './pages/TodoPage'
-import PrioritiesPage from './pages/PrioritiesPage'
-import ReviewPage from './pages/reviewPage'
-import TimelinePage from './pages/TimelinePage'
-import ProtectedPage from './pages/ProtectedPage'
-import LoginPage from './pages/LoginPage'
-import SignupPage from './pages/SignupPage'
-import NotFoundPage from './pages/NotFoundPage'
-import { connectDatabaseEmulator, getDatabase } from 'firebase/database'
-import { connectAuthEmulator, getAuth } from 'firebase/auth'
-import { initializeApp } from 'firebase/app'
-import HealthPage from './pages/HealthPage'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { DBProvider } from './contexts/DBContext';
+import CapturePage from './pages/CapturePage';
+import GoalsPage from './pages/GoalsPage';
+import HealthPage from './pages/HealthPage';
+import LoginPage from './pages/LoginPage';
+import NotFoundPage from './pages/NotFoundPage';
+import ProtectedPage from './pages/ProtectedPage';
+import SignupPage from './pages/SignupPage';
+import TimelinePage from './pages/TimelinePage';
+import TodoPage from './pages/TodoPage';
+import ReviewPage from './pages/reviewPage';
 
 function App() {
   return (
@@ -23,7 +20,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/capture" />} />
             <Route path="/capture" element={<ProtectedPage><CapturePage /></ProtectedPage>} title="Capture" />
-            <Route path="/priorities" element={<ProtectedPage><PrioritiesPage /></ProtectedPage>} title="Priorities" />
+            <Route path="/goals" element={<ProtectedPage><GoalsPage /></ProtectedPage>} title="Priorities" />
             <Route path="/todo" element={<ProtectedPage><TodoPage /></ProtectedPage>} title="Todo" />
             <Route path="/review" element={<ProtectedPage><ReviewPage /></ProtectedPage>} />
             <Route path="/timeline" element={<ProtectedPage><TimelinePage /></ProtectedPage>} />
@@ -35,7 +32,7 @@ function App() {
         </BrowserRouter>
       </DBProvider>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;

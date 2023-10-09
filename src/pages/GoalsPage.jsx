@@ -1,24 +1,20 @@
 //React
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 //Contexts
 import { DBContext } from '../contexts/DBContext';
 //Components
 //Styles
 import './common.css';
-import NavMenu from './components/NavMenu/NavMenu';
-import CardSizeViewSelector from './components/CardSizeViewSelector';
+import { Card } from './components/Card';
 import { EditableInput } from './components/EditableInput';
 import { EditableTextarea } from './components/EditableTextarea';
-import { Card } from './components/Card';
+import NavMenu from './components/NavMenu/NavMenu';
 
-const PrioritiesPage = (props) => {
+const GoalsPage = (props) => {
     const { ready, addDataListener, pushObject } = useContext(DBContext);
-
-    const DEFAULT_SIZE_VIEW = "Default";
 
     const [contentList, setContentList] = useState([]);
     const [contentInput, setContentInput] = useState("");
-    const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
 
     useEffect(() => {
         if (ready) {
@@ -49,20 +45,18 @@ const PrioritiesPage = (props) => {
 
     return (
         <>
-            <NavMenu title="Priorities" />
+            <NavMenu title="Goals" />
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add priority!</button>
-                    <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
                     <h3>Expected weekly hours: {getTotalHours()}/168</h3>
                 </form>
                 <div className="cards_container">
                     {contentList && contentList.map(card =>
-                        <PrioritiesCard
+                        <GoalsCard
                             card={card}
                             key={`${card.key}/${card.title}`}
-                            cardSizeView={cardSizeView}
                         />)}
                 </div>
             </div>
@@ -70,11 +64,10 @@ const PrioritiesPage = (props) => {
     );
 };
 
-const PrioritiesCard = (props) => {
+const GoalsCard = (props) => {
     const { updateObject } = useContext(DBContext);
 
     const card = props.card;
-    const cardSizeView = props.cardSizeView;
 
     const [titleInput, setTitleInput] = useState(card.title || "");
     const [descriptionInput, setDescriptionInput] = useState(card.description || "");
@@ -102,10 +95,10 @@ const PrioritiesCard = (props) => {
                 <div className="cardContentContainer">
                     <div id="col1">
                         <h3>{card.title}</h3>
-                        {cardSizeView != "Default" && <p>{card.description}</p>}
+                        <p>{card.description}</p>
                     </div>
                     <div id="col2">
-                        <p id="hoursDisplay">{card?.hours}</p>
+                        <p id="hoursDisplay">{card?.hours} hours</p>
                     </div>
                 </div>
             }
@@ -119,4 +112,4 @@ const PrioritiesCard = (props) => {
     );
 };
 
-export default PrioritiesPage;
+export default GoalsPage;
