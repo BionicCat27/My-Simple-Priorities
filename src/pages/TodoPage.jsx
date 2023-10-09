@@ -93,6 +93,14 @@ const TodoCard = (props) => {
         updateObject(cardPath, "dueDate", dueDateInput);
     }
 
+    function resetContent() {
+        setTitleInput(card.title);
+        setDescriptionInput(card.description);
+        setStatusInput(card.status);
+        setChecklistInput(card.checklist);
+        setDueDateInput(card.dueDate);
+    }
+
     function generateDatePassed(dateToCheck) {
         let date = new Date(new Date(dateToCheck).toDateString()).getTime();
         let today = new Date(new Date().toDateString()).getTime();
@@ -116,6 +124,7 @@ const TodoCard = (props) => {
         <Card dropHandler={(targetKey) => dropHandler(`${path}/${targetKey}`)}
             isDefault={isDefault}
             updateContent={updateContent}
+            resetContent={resetContent}
             cardPath={cardPath}
             card={card}
             viewComponent={

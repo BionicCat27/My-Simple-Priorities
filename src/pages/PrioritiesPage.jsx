@@ -87,11 +87,17 @@ const PrioritiesCard = (props) => {
         updateObject(cardPath, "description", descriptionInput);
         updateObject(cardPath, "hours", hoursInput);
     }
+    function resetContent() {
+        setTitleInput(card.title);
+        setDescriptionInput(card.description);
+        setHoursInput(card.hours);
+    }
 
     return (
-        <Card updateContent={updateContent}
+        <Card card={card}
+            updateContent={updateContent}
+            resetContent={resetContent}
             cardPath={cardPath}
-            card={card}
             viewComponent={
                 <div className="cardContentContainer">
                     <div id="col1">

@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { DBContext } from "../../contexts/DBContext";
+import { update } from "firebase/database";
 
 export const Card = (props) => {
     const { removeObject } = useContext(DBContext);
@@ -10,6 +11,7 @@ export const Card = (props) => {
 
     const dropHandler = props.dropHandler;
     const updateContent = props.updateContent;
+    const resetContent = props.resetContent;
 
     const viewComponent = props.viewComponent;
     const editComponent = props.editComponent;
@@ -29,13 +31,24 @@ export const Card = (props) => {
     }
 
     function handleSave() {
-        updateContent();
+        if (updateContent) {
+            updateContent();
+        }
+        setEditing(false);
+    }
+
+    function handleCancel() {
+        if (resetContent) {
+            resetContent();
+        }
         setEditing(false);
     }
 
     function handleDrop(e) {
         let targetKey = e.dataTransfer.getData("key");
-        dropHandler(targetKey);
+        if (dropHandler) {
+            dropHandler(targetKey);
+        }
         setDraggedOver(false);
     }
 
@@ -80,7 +93,8 @@ export const Card = (props) => {
             }
             {editing &&
                 <div id="formButtonContainer">
-                    <button onClick={handleSave}>Save</button>
+                    {updateContent && <button onClick={handleSave}>Save</button>}
+                    {resetContent && <button onClick={handleCancel}>Cancel</button>}
                     <a id="deleteButton" onClick={deleteCard}>Delete</a>
                 </div>
             }

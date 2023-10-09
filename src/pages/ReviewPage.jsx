@@ -137,7 +137,12 @@ const ReviewCard = (props) => {
         updateObject(cardPath, "description", descriptionInput);
         updateObject(cardPath, "progress", progressInput);
         updateObject(cardPath, "status", statusInput);
-        setEditing(false);
+    }
+    function resetContent() {
+        setTitleInput(card.title);
+        setDescriptionInput(card.description);
+        setProgressInput(card.progress);
+        setStatusInput(card.status);
     }
 
     function handleTotalInput(value, index) {
@@ -173,6 +178,7 @@ const ReviewCard = (props) => {
         <Card dropHandler={dropHandler}
             isDefault={isDefault}
             updateContent={updateContent}
+            resetContent={resetContent}
             cardPath={cardPath}
             card={card}
             viewComponent={
