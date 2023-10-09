@@ -1,17 +1,17 @@
 //React
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 //Contexts
 import { DBContext } from '../contexts/DBContext';
 //Components
 //Styles
 import './common.css';
-import NavMenu from './components/NavMenu/NavMenu';
+import { Card } from './components/Card';
 import CardSizeViewSelector from './components/CardSizeViewSelector';
 import { EditableInput } from './components/EditableInput';
 import { EditableTextarea } from './components/EditableTextarea';
-import { Card } from './components/Card';
+import NavMenu from './components/NavMenu/NavMenu';
 
-const PrioritiesPage = (props) => {
+const GoalsPage = (props) => {
     const { ready, addDataListener, pushObject } = useContext(DBContext);
 
     const DEFAULT_SIZE_VIEW = "Default";
@@ -49,7 +49,7 @@ const PrioritiesPage = (props) => {
 
     return (
         <>
-            <NavMenu title="Priorities" />
+            <NavMenu title="Goals" />
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
@@ -59,7 +59,7 @@ const PrioritiesPage = (props) => {
                 </form>
                 <div className="cards_container">
                     {contentList && contentList.map(card =>
-                        <PrioritiesCard
+                        <GoalsCard
                             card={card}
                             key={`${card.key}/${card.title}`}
                             cardSizeView={cardSizeView}
@@ -70,7 +70,7 @@ const PrioritiesPage = (props) => {
     );
 };
 
-const PrioritiesCard = (props) => {
+const GoalsCard = (props) => {
     const { updateObject } = useContext(DBContext);
 
     const card = props.card;
@@ -105,7 +105,7 @@ const PrioritiesCard = (props) => {
                         {cardSizeView != "Default" && <p>{card.description}</p>}
                     </div>
                     <div id="col2">
-                        <p id="hoursDisplay">{card?.hours}</p>
+                        <p id="hoursDisplay">{card.description && `${card.description} -`} {card?.hours} hours</p>
                     </div>
                 </div>
             }
@@ -119,4 +119,4 @@ const PrioritiesCard = (props) => {
     );
 };
 
-export default PrioritiesPage;
+export default GoalsPage;

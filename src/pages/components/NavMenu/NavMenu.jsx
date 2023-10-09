@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
-import githubLogo from '../../../resources/GitHub_Logo.png'
-import liLogo from '../../../resources/LI-Logo.png'
+import githubLogo from '../../../resources/GitHub_Logo.png';
+import liLogo from '../../../resources/LI-Logo.png';
 
-import './Sidebar.css';
-import './Header.css';
 import { useNavigate } from 'react-router';
 import { AuthContext } from '../../../contexts/AuthContext';
+import './Header.css';
+import './Sidebar.css';
 
 
 function NavMenu(props) {
@@ -82,20 +82,20 @@ const Header = (props) => {
 };
 
 const LinksList = () => {
-    const {signUserOut} = useContext(AuthContext);
+    const { signUserOut } = useContext(AuthContext);
     const navigate = useNavigate();
 
     return (
         <>
             <a className={"nav-button"} onClick={() => navigate("/capture")}>Capture</a>
-            <a className={"nav-button"} onClick={() => navigate("/priorities")}>Priorities</a>
+            <a className={"nav-button"} onClick={() => navigate("/goals")}>Goals</a>
             <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
             <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
             <a className={"nav-button"} onClick={() => navigate("/timeline")}>Timeline</a>
             <a className={"nav-button"} onClick={() => navigate("/health")}>Health</a>
             <a className={"nav-button"} onClick={() => signUserOut()}>Logout</a>
         </>
-    )
-}
+    );
+};
 
 export default NavMenu;
