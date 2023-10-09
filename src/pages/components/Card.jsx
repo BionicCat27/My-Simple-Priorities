@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { DBContext } from "../../contexts/DBContext";
-import { update } from "firebase/database";
 
 export const Card = (props) => {
     const { removeObject } = useContext(DBContext);

@@ -1,25 +1,28 @@
 import { useContext, useEffect, useState } from "react";
 import { DBContext } from "../contexts/DBContext";
+import { Card } from "./components/Card";
+import { EditableInput } from "./components/EditableInput";
 import NavMenu from "./components/NavMenu/NavMenu";
 
 const CapturePage = () => {
-    const {pushObject, ready, addDataListener} = useContext(DBContext);
+    const { pushObject, ready, addDataListener } = useContext(DBContext);
 
     const [note, setNote] = useState("");
-    const [notes, setNotes] = useState([])
+    const [cards, setNotes] = useState([]);
     const [showNotes, setShowNotes] = useState(false);
 
     useEffect(() => {
         if (ready) {
-            addDataListener("capture", setNotes);   
+            addDataListener("capture", setNotes);
         }
-    }, [ready])
+    }, [ready]);
 
     const captureNote = (e) => {
         e.preventDefault();
-        pushObject("capture", {value: note});
+        if (!note) return;
+        pushObject("capture", { value: note });
         setNote("");
-    }
+    };
 
     return (
         <>
@@ -40,21 +43,51 @@ const CapturePage = () => {
                         <button id="capture-see_notes" onClick={() => setShowNotes(!showNotes)}>
                             {showNotes ? "Hide notes" : "See notes"}
                         </button>
-                        {showNotes && 
-                        <div>
-                            {notes ? Object.keys(notes).map((noteKey, index) => {
-                                return (
-                                    <div className="card column-card" key={index}>
-                                        <button>Task</button>
-                                        <p className="capture-note_text">{notes[noteKey]["value"]}</p>
-                                        <button>Note</button>
-                                    </div>
-                                )}) : <p>No notes found.</p>}
-                        </div>
+                        {showNotes &&
+                            <div>
+                                {cards ? cards.map((card) => {
+                                    return (
+                                        <CaptureCard key={`${card.key}${card.value}`} card={card} />
+                                    );
+                                }) : <p>No notes found.</p>}
+                            </div>
                         }
                     </div>
                 </div>
             </div>
         </>);
-}
-export default CapturePage
+};
+
+const CaptureCard = (props) => {
+    const { updateObject } = useContext(DBContext);
+
+    const card = props.card;
+    const cardPath = `capture/${card.key}`;
+    const [value, setValue] = useState(card.value);
+
+    if (!card) return;
+
+    function updateContent() {
+        updateObject(cardPath, "value", value);
+    }
+
+    function resetContent() {
+        setValue(card.value);
+    }
+
+    return (
+        <Card card={card}
+            updateContent={updateContent}
+            resetContent={resetContent}
+            cardPath={cardPath}
+            viewComponent={
+                <h3>{card.value}</h3>
+            }
+            editComponent={
+                <EditableInput label={"Value"} value={value} setValue={setValue} />
+            }
+        />
+    );
+};
+
+export default CapturePage;
