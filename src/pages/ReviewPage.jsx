@@ -11,6 +11,7 @@ import CardSizeViewSelector from './components/CardSizeViewSelector';
 import CardStatusViewSelector from './components/CardStatusViewSelector';
 import { EditableInput } from './components/EditableInput';
 import { EditableTextarea } from './components/EditableTextarea';
+import { Card } from './components/Card';
 
 const ReviewPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);
@@ -106,12 +107,10 @@ const ReviewPage = (props) => {
 };
 
 const ReviewCard = (props) => {
-    const { ready, updateObject, removeObject } = useContext(DBContext);
+    const { updateObject } = useContext(DBContext);
 
     const card = props.card;
     const cardSizeView = props.cardSizeView;
-
-    const [isEditing, setEditing] = useState(false);
 
     const [titleInput, setTitleInput] = useState(card.title || "");
     const [descriptionInput, setDescriptionInput] = useState(card.description || "");
@@ -119,9 +118,7 @@ const ReviewCard = (props) => {
     const [statusInput, setStatusInput] = useState(card.status || "Todo");
 
     const isDefault = (cardSizeView == "Default");
-
-    const [draggedOver, setDraggedOver] = useState(false);
-    const [dragging, setDragging] = useState(false);
+    const cardPath = `review/${card.key}`;
 
     function calculateProgressValue() {
         if (!card.progress || card.progress.length == 0) return 0;
@@ -136,20 +133,11 @@ const ReviewCard = (props) => {
     }
 
     function updateContent() {
-        updateObject(`review/${card.key}`, "title", titleInput);
-        updateObject(`review/${card.key}`, "description", descriptionInput);
-        updateObject(`review/${card.key}`, "progress", progressInput);
-        updateObject(`review/${card.key}`, "status", statusInput);
+        updateObject(cardPath, "title", titleInput);
+        updateObject(cardPath, "description", descriptionInput);
+        updateObject(cardPath, "progress", progressInput);
+        updateObject(cardPath, "status", statusInput);
         setEditing(false);
-    }
-
-    function deleteCard() {
-        if (confirm(`Delete \"${card.title}\"?`)) {
-            removeObject(`review/${card.key}`);
-            setEditing(false);
-        } else {
-            console.log("Not deleting");
-        }
     }
 
     function handleTotalInput(value, index) {
@@ -177,44 +165,24 @@ const ReviewCard = (props) => {
         setProgressInput(workingArray);
     }
 
-    function handleDrop(e) {
-        let targetKey = e.dataTransfer.getData("key");
-
+    function dropHandler(targetKey) {
         updateObject(`review/${targetKey}`, "status", card.status);
-
-        setDraggedOver(false);
-    }
-
-    function handleDragOver(e) {
-        e.preventDefault();
-        setDraggedOver(true);
-    }
-
-    function handleDragLeave(e) {
-        setDraggedOver(false);
-    }
-
-    function handleDragStart(e, key, status) {
-        e.dataTransfer.setData("key", key);
-        e.dataTransfer.setData("status", status);
-        setDragging(true);
-    }
-
-    function handleDragEnd(e) {
-        setDragging(false);
     }
 
     return (
-        <div draggable className={(isDefault ? "condensed_card " : "content_card ") + (dragging ? "brdr-red " : " ") + (draggedOver ? "brdr-blue " : " ")}
-            onClick={() => (!isEditing && setEditing(true))}
-            onDrop={(e) => { handleDrop(e); }}
-            onDragStart={(e) => { handleDragStart(e, card.key, card.status); }}
-            onDragEnd={(e) => { handleDragEnd(e); }}
-            onDragOver={(e) => { handleDragOver(e); }}
-            onDragLeave={(e) => { handleDragLeave(e); }}
-            onTouchMove={(e) => { handleDragStart(e, card.key, card.status); }}
-            onTouchEnd={(e) => { handleDragEnd(e); }}>
-            {isEditing ?
+        <Card dropHandler={dropHandler}
+            isDefault={isDefault}
+            updateContent={updateContent}
+            cardPath={cardPath}
+            card={card}
+            viewComponent={
+                <>
+                    <h3>{card.title}</h3>
+                    {!isDefault && <p>{card.description}</p>}
+                    <p>{calculateProgressValue()}%</p>
+                </>
+            }
+            editComponent={
                 <>
                     <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
                     <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
@@ -235,18 +203,9 @@ const ReviewCard = (props) => {
                     ))}
                     <p onClick={handleAddStage}>Add progress stage</p>
                     <StatusSelector value={statusInput} setValue={(value) => setStatusInput(value)} />
-                    <div id="formButtonContainer">
-                        <button onClick={updateContent}>Save</button>
-                        <a id="deleteButton" onClick={deleteCard}>Delete</a>
-                    </div>
-                </> :
-                <>
-                    <h3>{card.title}</h3>
-                    {!isDefault && <p>{card.description}</p>}
-                    <p>{calculateProgressValue()}%</p>
                 </>
             }
-        </div >
+        />
     );
 };
 

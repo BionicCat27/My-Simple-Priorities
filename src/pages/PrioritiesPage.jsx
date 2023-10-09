@@ -9,6 +9,7 @@ import NavMenu from './components/NavMenu/NavMenu';
 import CardSizeViewSelector from './components/CardSizeViewSelector';
 import { EditableInput } from './components/EditableInput';
 import { EditableTextarea } from './components/EditableTextarea';
+import { Card } from './components/Card';
 
 const PrioritiesPage = (props) => {
     const { ready, addDataListener, pushObject } = useContext(DBContext);
@@ -70,91 +71,28 @@ const PrioritiesPage = (props) => {
 };
 
 const PrioritiesCard = (props) => {
-    const { ready, updateObject, removeObject } = useContext(DBContext);
+    const { updateObject } = useContext(DBContext);
 
     const card = props.card;
     const cardSizeView = props.cardSizeView;
-
-    const [isEditing, setEditing] = useState(false);
 
     const [titleInput, setTitleInput] = useState(card.title || "");
     const [descriptionInput, setDescriptionInput] = useState(card.description || "");
     const [hoursInput, setHoursInput] = useState(card.hours || 0);
 
-    const [draggedOver, setDraggedOver] = useState(false);
-    const [dragging, setDragging] = useState(false);
+    const cardPath = `priorities/${card.key}`;
 
     function updateContent() {
-        if (!ready) return;
-        updateObject(`priorities/${card.key}`, "title", titleInput);
-        updateObject(`priorities/${card.key}`, "description", descriptionInput);
-        updateObject(`priorities/${card.key}`, "hours", hoursInput);
-
-        setEditing(false);
-    }
-
-    function deleteCard() {
-        if (confirm(`Delete \"${card.title}\"?`)) {
-            removeObject(`priorities/${card.key}`);
-            setEditing(false);
-        } else {
-            console.log("Not deleting");
-        }
-    }
-
-    function handleDrop(e, index) {
-        let targetIndex = e.dataTransfer.getData("index");
-        let targetStatus = e.dataTransfer.getData("status");
-
-        if (targetStatus === status) {
-            props.moveCard(targetIndex, index);
-        } else {
-            update(ref(props.database, 'users/' + props.user.uid + '/priorities/' + targetIndex), {
-                status: status
-            });
-        }
-        setDraggedOver(false);
-    }
-
-    function handleDragOver(e) {
-        e.preventDefault();
-        setDraggedOver(true);
-    }
-
-    function handleDragLeave(e) {
-        setDraggedOver(false);
-    }
-
-    function handleDragStart(e, index, status) {
-        e.dataTransfer.setData("index", index);
-        e.dataTransfer.setData("status", status);
-        setDragging(true);
-    }
-
-    function handleDragEnd(e) {
-        setDragging(false);
+        updateObject(cardPath, "title", titleInput);
+        updateObject(cardPath, "description", descriptionInput);
+        updateObject(cardPath, "hours", hoursInput);
     }
 
     return (
-        <div draggable className={(cardSizeView == "Default" ? "condensed_card " : "content_card ") + (dragging ? "brdr-red " : " ") + (draggedOver ? "brdr-blue " : " ")}
-            onClick={() => (!isEditing && setEditing(true))}
-            onDrop={(e) => { handleDrop(e, props.index); }}
-            onDragStart={(e) => { handleDragStart(e, props.index, props.status); }}
-            onDragEnd={(e) => { handleDragEnd(e); }}
-            onDragOver={(e) => { handleDragOver(e); }}
-            onDragLeave={(e) => { handleDragLeave(e); }}
-            onTouchMove={(e) => { handleDragStart(e, props.index, props.status); }}
-            onTouchEnd={(e) => { handleDragEnd(e); }}>
-            {isEditing ?
-                <>
-                    <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
-                    <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
-                    <EditableInput label={"Hours"} value={hoursInput} setValue={setHoursInput} type="number" />
-                    <div id="formButtonContainer">
-                        <button onClick={updateContent}>Save</button>
-                        <a id="deleteButton" onClick={deleteCard}>Delete</a>
-                    </div>
-                </> :
+        <Card updateContent={updateContent}
+            cardPath={cardPath}
+            card={card}
+            viewComponent={
                 <div className="cardContentContainer">
                     <div id="col1">
                         <h3>{card.title}</h3>
@@ -165,7 +103,13 @@ const PrioritiesCard = (props) => {
                     </div>
                 </div>
             }
-        </div >
+            editComponent={
+                <>
+                    <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
+                    <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
+                    <EditableInput label={"Hours"} value={hoursInput} setValue={setHoursInput} type="number" />
+                </>
+            } />
     );
 };
 
