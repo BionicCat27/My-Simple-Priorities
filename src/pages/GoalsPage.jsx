@@ -6,7 +6,6 @@ import { DBContext } from '../contexts/DBContext';
 //Styles
 import './common.css';
 import { Card } from './components/Card';
-import CardSizeViewSelector from './components/CardSizeViewSelector';
 import { EditableInput } from './components/EditableInput';
 import { EditableTextarea } from './components/EditableTextarea';
 import NavMenu from './components/NavMenu/NavMenu';
@@ -14,11 +13,8 @@ import NavMenu from './components/NavMenu/NavMenu';
 const GoalsPage = (props) => {
     const { ready, addDataListener, pushObject } = useContext(DBContext);
 
-    const DEFAULT_SIZE_VIEW = "Default";
-
     const [contentList, setContentList] = useState([]);
     const [contentInput, setContentInput] = useState("");
-    const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
 
     useEffect(() => {
         if (ready) {
@@ -54,7 +50,6 @@ const GoalsPage = (props) => {
                 <form onSubmit={addContent} id="contentForm">
                     <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add priority!</button>
-                    <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
                     <h3>Expected weekly hours: {getTotalHours()}/168</h3>
                 </form>
                 <div className="cards_container">
@@ -62,7 +57,6 @@ const GoalsPage = (props) => {
                         <GoalsCard
                             card={card}
                             key={`${card.key}/${card.title}`}
-                            cardSizeView={cardSizeView}
                         />)}
                 </div>
             </div>
@@ -74,7 +68,6 @@ const GoalsCard = (props) => {
     const { updateObject } = useContext(DBContext);
 
     const card = props.card;
-    const cardSizeView = props.cardSizeView;
 
     const [titleInput, setTitleInput] = useState(card.title || "");
     const [descriptionInput, setDescriptionInput] = useState(card.description || "");
@@ -102,10 +95,10 @@ const GoalsCard = (props) => {
                 <div className="cardContentContainer">
                     <div id="col1">
                         <h3>{card.title}</h3>
-                        {cardSizeView != "Default" && <p>{card.description}</p>}
+                        <p>{card.description}</p>
                     </div>
                     <div id="col2">
-                        <p id="hoursDisplay">{card.description && `${card.description} -`} {card?.hours} hours</p>
+                        <p id="hoursDisplay">{card?.hours} hours</p>
                     </div>
                 </div>
             }
