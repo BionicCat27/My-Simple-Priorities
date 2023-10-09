@@ -192,7 +192,7 @@ const ReviewCard = (props) => {
                 <>
                     <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
                     <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
-                    {progressInput.map((progressObject, index) => (
+                    {progressInput && progressInput.map((progressObject, index) => (
                         <div key={`${index}Container`}>
                             <div className="inlineContainer" key={`${index}ProgressContainer`}>
                                 <label htmlFor="contentProgressInput" key={`${index}ProgressLabel`}>Progress</label>
