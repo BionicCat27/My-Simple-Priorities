@@ -59,7 +59,7 @@ const CapturePage = () => {
 };
 
 const CaptureCard = (props) => {
-    const { updateObject } = useContext(DBContext);
+    const { updateObject, pushObject, removeObject } = useContext(DBContext);
 
     const card = props.card;
     const cardPath = `capture/${card.key}`;
@@ -75,6 +75,16 @@ const CaptureCard = (props) => {
         setValue(card.value);
     }
 
+    function createTodo() {
+        //Create todo
+        pushObject(`todo`, {
+            title: card.value,
+            status: "Todo"
+        });
+        //Delete note
+        removeObject(cardPath);
+    }
+
     return (
         <Card card={card}
             updateContent={updateContent}
@@ -84,7 +94,10 @@ const CaptureCard = (props) => {
                 <h3>{card.value}</h3>
             }
             editComponent={
-                <EditableInput label={"Value"} value={value} setValue={setValue} />
+                <>
+                    <EditableInput label={"Value"} value={value} setValue={setValue} />
+                    <button onClick={createTodo}>Turn into Todo</button>
+                </>
             }
         />
     );

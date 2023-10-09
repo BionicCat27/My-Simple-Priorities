@@ -86,11 +86,11 @@ const TodoCard = (props) => {
     const cardPath = `${path}/${card.key}`;
 
     function updateContent() {
-        updateObject(cardPath, "title", titleInput);
-        updateObject(cardPath, "description", descriptionInput);
-        updateObject(cardPath, "status", statusInput);
-        updateObject(cardPath, "checklist", checklistInput);
-        updateObject(cardPath, "dueDate", dueDateInput);
+        updateObject(cardPath, "title", titleInput || "");
+        updateObject(cardPath, "description", descriptionInput || "");
+        updateObject(cardPath, "status", statusInput || "Todo");
+        updateObject(cardPath, "checklist", checklistInput || []);
+        updateObject(cardPath, "dueDate", dueDateInput || "");
     }
 
     function resetContent() {
@@ -187,6 +187,9 @@ const StatusBlock = (props) => {
 
             <h3>{status}</h3>
             {cards && cards.map(card => {
+                if (!card.status) {
+                    updateObject(`${path}/${card.key}`, "Todo", "");
+                }
                 if (statusMatch(card.status, status)) {
                     return (
                         <TodoCard
