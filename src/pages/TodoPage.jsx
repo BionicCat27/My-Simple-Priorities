@@ -107,12 +107,10 @@ const TodoPage = (props) => {
 };
 
 const TodoCard = (props) => {
-    const { ready, updateObject, removeObject } = useContext(DBContext);
+    const { updateObject } = useContext(DBContext);
 
     const card = props.card;
     const cardSizeView = props.cardSizeView;
-
-    const [isEditing, setEditing] = useState(false);
 
     const [titleInput, setTitleInput] = useState(card.title || "");
     const [descriptionInput, setDescriptionInput] = useState(card.description || "");
@@ -123,26 +121,12 @@ const TodoCard = (props) => {
     const isDefault = (cardSizeView == "Default");
     const cardPath = `todo/${card.key}`;
 
-    const [draggedOver, setDraggedOver] = useState(false);
-    const [dragging, setDragging] = useState(false);
-
     function updateContent() {
         updateObject(cardPath, "title", titleInput);
         updateObject(cardPath, "description", descriptionInput);
         updateObject(cardPath, "status", statusInput);
         updateObject(cardPath, "checklist", checklistInput);
         updateObject(cardPath, "dueDate", dueDateInput);
-
-        setEditing(false);
-    }
-
-    function deleteCard() {
-        if (confirm(`Delete \"${card.title}\"?`)) {
-            removeObject(cardPath);
-            setEditing(false);
-        } else {
-            console.log("Not deleting");
-        }
     }
 
     function handleCheckBox(value, index) {
@@ -181,11 +165,86 @@ const TodoCard = (props) => {
         }
     }
 
+    function dropHandler(targetKey) {
+        updateObject(`todo/${targetKey}`, "status", card.status);
+    }
+
+    return (
+        <Card dropHandler={dropHandler}
+            isDefault={isDefault}
+            updateContent={updateContent}
+            cardPath={cardPath}
+            card={card}
+            viewComponent={
+                <div className="cardContentContainer">
+                    <div id="col1">
+                        <h3>{card.title}</h3>
+                        {!isDefault && <p>{card.description}</p>}
+                    </div>
+                    <div id="col2">
+                        {card.dueDate && <p id="dueDateDisplay" className={generateDatePassed(card.dueDate)} >{card.dueDate}</p>}
+                    </div>
+                </div>
+            }
+            editComponent={
+                <>
+                    <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
+                    <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
+                    <label>Checklist</label>
+                    {
+                        checklistInput && checklistInput.map((checklistObject, index) => (
+                            <div key={`${index}Container`}>
+                                <input className="inline-input" type="checkbox" checked={checklistObject.checked} onChange={field => handleCheckBox(field.target.checked, index)} />
+                                <input className="inline-input" type="text" value={checklistObject.value} onChange={field => handleCheckBoxValue(field.target.value, index)} />
+                            </div>
+                        ))
+                    }
+                    <div id="formButtonContainer">
+                        <button onClick={() => { addChecklistItem(); }}>Add Checklist item</button>
+                    </div>
+                    <StatusSelector value={statusInput} setValue={(value) => setStatusInput(value)} />
+                    <EditableInput label={"Due Date"} value={dueDateInput} setValue={setDueDateInput} type="date" />
+                </>
+            }
+        />
+    );
+};
+
+const Card = (props) => {
+    const { removeObject } = useContext(DBContext);
+
+    const [draggedOver, setDraggedOver] = useState(false);
+    const [dragging, setDragging] = useState(false);
+    const [editing, setEditing] = useState(false);
+
+    const dropHandler = props.dropHandler;
+    const updateContent = props.updateContent;
+
+    const viewComponent = props.viewComponent;
+    const editComponent = props.editComponent;
+
+    const card = props.card;
+    const cardPath = props.cardPath;
+    if (!card) return;
+    const isDefault = props.isDefault || true;
+
+    function deleteCard() {
+        if (confirm(`Delete \"${card.title}\"?`)) {
+            removeObject(cardPath);
+            setEditing(false);
+        } else {
+            console.log("Not deleting");
+        }
+    }
+
+    function handleSave() {
+        updateContent();
+        setEditing(false);
+    }
+
     function handleDrop(e) {
         let targetKey = e.dataTransfer.getData("key");
-
-        updateObject(`todo/${targetKey}`, "status", card.status);
-
+        dropHandler(targetKey);
         setDraggedOver(false);
     }
 
@@ -208,10 +267,15 @@ const TodoCard = (props) => {
         setDragging(false);
     }
 
-
+    function generateClasses() {
+        let classes = (isDefault ? "condensed_card " : "content_card ");
+        classes += (dragging ? "brdr-red " : " ");
+        classes += (draggedOver ? "brdr-blue " : " ");
+        return classes;
+    }
     return (
-        <div draggable className={(isDefault ? "condensed_card " : "content_card ") + (dragging ? "brdr-red " : " ") + (draggedOver ? "brdr-blue " : " ")}
-            onClick={() => (!isEditing && setEditing(true))}
+        <div draggable className={generateClasses()}
+            onClick={() => (!editing && setEditing(true))}
             onDrop={(e) => { handleDrop(e); }}
             onDragStart={(e) => { handleDragStart(e, card.key, card.status); }}
             onDragEnd={(e) => { handleDragEnd(e); }}
@@ -219,40 +283,18 @@ const TodoCard = (props) => {
             onDragLeave={(e) => { handleDragLeave(e); }}
             onTouchMove={(e) => { handleDragStart(e, card.key, card.status); }}
             onTouchEnd={(e) => { handleDragEnd(e); }}>
-            {isEditing ?
-                <>
-                    <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
-                    <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
-                    <label>Checklist</label>
-                    {
-                        checklistInput && checklistInput.map((checklistObject, index) => (
-                            <div key={`${index}Container`}>
-                                <input className="inline-input" type="checkbox" checked={checklistObject.checked} onChange={field => handleCheckBox(field.target.checked, index)} />
-                                <input className="inline-input" type="text" value={checklistObject.value} onChange={field => handleCheckBoxValue(field.target.value, index)} />
-                            </div>
-                        ))
-                    }
-                    <div id="formButtonContainer">
-                        <button onClick={() => { addChecklistItem(); }}>Add Checklist item</button>
-                    </div>
-                    <StatusSelector value={statusInput} setValue={(value) => setStatusInput(value)} />
-                    <EditableInput label={"Due Date"} value={dueDateInput} setValue={setDueDateInput} type="date" />
-                    <div id="formButtonContainer">
-                        <button onClick={updateContent}>Save</button>
-                        <a id="deleteButton" onClick={deleteCard}>Delete</a>
-                    </div>
-                </> :
-                <div className="cardContentContainer">
-                    <div id="col1">
-                        <h3>{card.title}</h3>
-                        {!isDefault && <p>{card.description}</p>}
-                    </div>
-                    <div id="col2">
-                        {card.dueDate && <p id="dueDateDisplay" className={generateDatePassed(card.dueDate)} >{card.dueDate}</p>}
-                    </div>
+            {editing
+                ? editComponent
+                : viewComponent
+            }
+            {editing &&
+                <div id="formButtonContainer">
+                    <button onClick={handleSave}>Save</button>
+                    <a id="deleteButton" onClick={deleteCard}>Delete</a>
                 </div>
             }
-        </div >
+
+        </div>
     );
 };
 
