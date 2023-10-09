@@ -5,7 +5,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { DBContext } from '../contexts/DBContext';
 //Components
 //Styles
-import './common.css'
+import './common.css';
 import NavMenu from './components/NavMenu/NavMenu';
 import StatusSelector from './components/StatusSelector';
 import CardSizeViewSelector from './components/CardSizeViewSelector';
@@ -23,10 +23,10 @@ const TodoPage = (props) => {
     const [cardStatusView, setCardStatusView] = useState(DEFAULT_STATUS_VIEW);
 
     useEffect(() => {
-        if(ready) {
-            addDataListener(`todo`, setContentList)
+        if (ready) {
+            addDataListener(`todo`, setContentList);
         }
-    }, [ready])
+    }, [ready]);
 
     function addContent(event) {
         event.preventDefault();
@@ -38,14 +38,14 @@ const TodoPage = (props) => {
             description: "",
             status: "Todo",
             checklist: []
-        })
-        
+        });
+
         setContentInput("");
     }
 
     function handleDrop(e, status) {
         let targetKey = e.dataTransfer.getData("key");
-        updateObject(`todo/${targetKey}`, "status", status)
+        updateObject(`todo/${targetKey}`, "status", status);
     }
 
     function handleDragOver(e) {
@@ -62,23 +62,23 @@ const TodoPage = (props) => {
 
     function getStatusBlock(status) {
         return (
-            <div className='statusBlock' 
+            <div className='statusBlock'
                 onDrop={(e) => { handleDrop(e, status); }}
                 onDragOver={handleDragOver}>
 
                 <h3>{status}</h3>
-                    {contentList && contentList.map(card => {
-                        if (statusMatch(card.status, status)) {
-                            return (
-                                <TodoCard
-                                    card={card}
-                                    key={`${card.key}${card.title}`}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                />
-                            );
-                        }
-                    })
+                {contentList && contentList.map(card => {
+                    if (statusMatch(card.status, status)) {
+                        return (
+                            <TodoCard
+                                card={card}
+                                key={`${card.key}${card.title}`}
+                                cardSizeView={cardSizeView}
+                                cardStatusView={cardStatusView}
+                            />
+                        );
+                    }
+                })
                 }
             </div>
         );
@@ -95,9 +95,9 @@ const TodoPage = (props) => {
                     <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />
                 </form>
                 <div className="cards_container">
-                    { statusMatch("Todo", cardStatusView) && getStatusBlock("Todo") }
-                    { statusMatch("In Progress", cardStatusView) && getStatusBlock("In Progress") }
-                    { statusMatch("Done", cardStatusView) && getStatusBlock("Done") }
+                    {statusMatch("Todo", cardStatusView) && getStatusBlock("Todo")}
+                    {statusMatch("In Progress", cardStatusView) && getStatusBlock("In Progress")}
+                    {statusMatch("Done", cardStatusView) && getStatusBlock("Done")}
                 </div>
             </div>
         </>
@@ -106,10 +106,10 @@ const TodoPage = (props) => {
 
 const TodoCard = (props) => {
     const { ready, updateObject, removeObject } = useContext(DBContext);
-    
+
     const card = props.card;
     const cardSizeView = props.cardSizeView;
-    
+
     const [isEditing, setEditing] = useState(false);
 
     const [titleInput, setTitleInput] = useState(card.title || "");
@@ -119,23 +119,24 @@ const TodoCard = (props) => {
     const [dueDateInput, setDueDateInput] = useState(card.dueDate || "");
 
     const isDefault = (cardSizeView == "Default");
+    const cardPath = `todo/${card.key}`;
 
     const [draggedOver, setDraggedOver] = useState(false);
     const [dragging, setDragging] = useState(false);
 
     function updateContent() {
-        updateObject(`todo/${card.key}`, "title", titleInput)
-        updateObject(`todo/${card.key}`, "description", descriptionInput)
-        updateObject(`todo/${card.key}`, "status", statusInput)
-        updateObject(`todo/${card.key}`, "checklist", checklistInput)
-        updateObject(`todo/${card.key}`, "dueDate", dueDateInput)
-        
+        updateObject(cardPath, "title", titleInput);
+        updateObject(cardPath, "description", descriptionInput);
+        updateObject(cardPath, "status", statusInput);
+        updateObject(cardPath, "checklist", checklistInput);
+        updateObject(cardPath, "dueDate", dueDateInput);
+
         setEditing(false);
     }
 
     function deleteCard() {
         if (confirm(`Delete \"${card.title}\"?`)) {
-            removeObject(`todo/${card.key}`)
+            removeObject(cardPath);
             setEditing(false);
         } else {
             console.log("Not deleting");
@@ -196,7 +197,7 @@ const TodoCard = (props) => {
     function handleDrop(e) {
         let targetKey = e.dataTransfer.getData("key");
 
-        updateObject(`todo/${targetKey}`, "status", card.status)
+        updateObject(`todo/${targetKey}`, "status", card.status);
 
         setDraggedOver(false);
     }
@@ -231,19 +232,16 @@ const TodoCard = (props) => {
             onDragLeave={(e) => { handleDragLeave(e); }}
             onTouchMove={(e) => { handleDragStart(e, card.key, card.status); }}
             onTouchEnd={(e) => { handleDragEnd(e); }}>
-            { isEditing ?
+            {isEditing ?
                 <>
-                    <label htmlFor="contentTitleInput">Title</label>
-                    <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
-                    <label htmlFor="contentDescriptionInput">Description</label>
-                    <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
+                    <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
+                    <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
                     {generateChecklistContent()}
                     <div id="formButtonContainer">
                         <button onClick={() => { addChecklistItem(); }}>Add Checklist item</button>
                     </div>
                     <StatusSelector value={statusInput} setValue={(value) => setStatusInput(value)} />
-                    <label htmlFor="contentDueDateInput">Due Date</label>
-                    <input id="contentDueDateInput" type="date" onChange={field => setDueDateInput(field.target.value)} value={dueDateInput}></input>
+                    <EditableInput label={"Due Date"} value={dueDateInput} setValue={setDueDateInput} type="date" />
                     <div id="formButtonContainer">
                         <button onClick={updateContent}>Save</button>
                         <a id="deleteButton" onClick={deleteCard}>Delete</a>
@@ -252,14 +250,42 @@ const TodoCard = (props) => {
                 <div className="cardContentContainer">
                     <div id="col1">
                         <h3>{card.title}</h3>
-                        {!isDefault && <p>{description}</p>}
+                        {!isDefault && <p>{card.description}</p>}
                     </div>
                     <div id="col2">
-                        {card.dueDate && <p id="dueDateDisplay" className={generateDatePassed(card.dueDate)} >{ card.dueDate}</p>}
+                        {card.dueDate && <p id="dueDateDisplay" className={generateDatePassed(card.dueDate)} >{card.dueDate}</p>}
                     </div>
                 </div>
             }
         </div >
+    );
+};
+
+const EditableInput = (props) => {
+    const label = props.label;
+    const value = props.value;
+    const setValue = props.setValue;
+    const type = props.type;
+
+    return (
+        <>
+            {label && <label>{label}</label>}
+            <input value={value} onChange={(field) => { setValue(field.target.value); }} type={type} />
+        </>
+    );
+};
+
+const EditableTextarea = (props) => {
+    const label = props.label;
+    const value = props.value;
+    const setValue = props.setValue;
+    const type = props.type;
+
+    return (
+        <>
+            {label && <label>{label}</label>}
+            <textarea value={value} onChange={(field) => { setValue(field.target.value); }} type={type} />
+        </>
     );
 };
 
