@@ -13,6 +13,7 @@ import CardStatusViewSelector from './components/CardStatusViewSelector';
 import { EditableInput } from './components/EditableInput';
 import { EditableTextarea } from './components/EditableTextarea';
 import { Card } from './components/Card';
+import { EditableChecklist } from './components/EditableChecklist';
 
 const TodoPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);
@@ -130,27 +131,6 @@ const TodoCard = (props) => {
         updateObject(cardPath, "dueDate", dueDateInput);
     }
 
-    function handleCheckBox(value, index) {
-        let workingArray = [...checklistInput];
-        workingArray[index].checked = value;
-        setChecklistInput(workingArray);
-    }
-
-    function handleCheckBoxValue(value, index) {
-        let workingArray = [...checklistInput];
-        workingArray[index].value = value;
-        setChecklistInput(workingArray);
-    }
-
-    function addChecklistItem() {
-        let workingArray = [...checklistInput];
-        workingArray.push({
-            checked: false,
-            value: ""
-        });
-        setChecklistInput(workingArray);
-    }
-
     function generateDatePassed(dateToCheck) {
         let date = new Date(new Date(dateToCheck).toDateString()).getTime();
         let today = new Date(new Date().toDateString()).getTime();
@@ -191,18 +171,7 @@ const TodoCard = (props) => {
                 <>
                     <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
                     <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
-                    <label>Checklist</label>
-                    {
-                        checklistInput && checklistInput.map((checklistObject, index) => (
-                            <div key={`${index}Container`}>
-                                <input className="inline-input" type="checkbox" checked={checklistObject.checked} onChange={field => handleCheckBox(field.target.checked, index)} />
-                                <input className="inline-input" type="text" value={checklistObject.value} onChange={field => handleCheckBoxValue(field.target.value, index)} />
-                            </div>
-                        ))
-                    }
-                    <div id="formButtonContainer">
-                        <button onClick={() => { addChecklistItem(); }}>Add Checklist item</button>
-                    </div>
+                    <EditableChecklist label={"Subtasks"} value={checklistInput} setValue={setChecklistInput} />
                     <StatusSelector value={statusInput} setValue={(value) => setStatusInput(value)} />
                     <EditableInput label={"Due Date"} value={dueDateInput} setValue={setDueDateInput} type="date" />
                 </>
