@@ -149,7 +149,7 @@ const PrioritiesCard = (props) => {
                 <>
                     <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
                     <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
-                    <EditableInput label={"Hours"} value={hoursInput} setValue={setHoursInput} />
+                    <EditableInput label={"Hours"} value={hoursInput} setValue={setHoursInput} type="number" />
                     <div id="formButtonContainer">
                         <button onClick={updateContent}>Save</button>
                         <a id="deleteButton" onClick={deleteCard}>Delete</a>
