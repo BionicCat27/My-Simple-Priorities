@@ -15,8 +15,8 @@ import { EditableTextarea } from './components/EditableTextarea';
 import { Card } from './components/Card';
 import { EditableChecklist } from './components/EditableChecklist';
 
-const TodoPage = (props) => {
-    const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);
+const TodoPage = () => {
+    const { ready, addDataListener, pushObject } = useContext(DBContext);
 
     const DEFAULT_STATUS_VIEW = "Planning";
     const DEFAULT_SIZE_VIEW = "Default";
@@ -26,9 +26,11 @@ const TodoPage = (props) => {
     const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
     const [cardStatusView, setCardStatusView] = useState(DEFAULT_STATUS_VIEW);
 
+    const path = `todo`;
+
     useEffect(() => {
         if (ready) {
-            addDataListener(`todo`, setContentList);
+            addDataListener(path, setContentList);
         }
     }, [ready]);
 
@@ -37,7 +39,7 @@ const TodoPage = (props) => {
         if (contentInput.length == 0) {
             return;
         }
-        pushObject(`todo`, {
+        pushObject(path, {
             title: contentInput,
             description: "",
             status: "Todo",
@@ -45,47 +47,6 @@ const TodoPage = (props) => {
         });
 
         setContentInput("");
-    }
-
-    function handleDrop(e, status) {
-        let targetKey = e.dataTransfer.getData("key");
-        updateObject(`todo/${targetKey}`, "status", status);
-    }
-
-    function handleDragOver(e) {
-        e.preventDefault();
-    }
-
-    function statusMatch(status, targetstatus) {
-        if (targetstatus === "All") return true;
-        if (targetstatus === "Planning" && (status === "Todo" || status === "In Progress")) return true;
-        if (targetstatus === "Focus" && (status === "In Progress" || status === "Done")) return true;
-        if (targetstatus === status) return true;
-        return false;
-    }
-
-    function getStatusBlock(status) {
-        return (
-            <div className='statusBlock'
-                onDrop={(e) => { handleDrop(e, status); }}
-                onDragOver={handleDragOver}>
-
-                <h3>{status}</h3>
-                {contentList && contentList.map(card => {
-                    if (statusMatch(card.status, status)) {
-                        return (
-                            <TodoCard
-                                card={card}
-                                key={`${card.key}${card.title}`}
-                                cardSizeView={cardSizeView}
-                                cardStatusView={cardStatusView}
-                            />
-                        );
-                    }
-                })
-                }
-            </div>
-        );
     }
 
     return (
@@ -99,9 +60,9 @@ const TodoPage = (props) => {
                     <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />
                 </form>
                 <div className="cards_container">
-                    {statusMatch("Todo", cardStatusView) && getStatusBlock("Todo")}
-                    {statusMatch("In Progress", cardStatusView) && getStatusBlock("In Progress")}
-                    {statusMatch("Done", cardStatusView) && getStatusBlock("Done")}
+                    <StatusBlock status="Todo" path={path} sizeView={cardSizeView} statusView={cardStatusView} cards={contentList} />
+                    <StatusBlock status="In Progress" path={path} sizeView={cardSizeView} statusView={cardStatusView} cards={contentList} />
+                    <StatusBlock status="Done" path={path} sizeView={cardSizeView} statusView={cardStatusView} cards={contentList} />
                 </div>
             </div>
         </>
@@ -112,7 +73,7 @@ const TodoCard = (props) => {
     const { updateObject } = useContext(DBContext);
 
     const card = props.card;
-    const cardSizeView = props.cardSizeView;
+    const sizeView = props.sizeView;
 
     const [titleInput, setTitleInput] = useState(card.title || "");
     const [descriptionInput, setDescriptionInput] = useState(card.description || "");
@@ -120,8 +81,9 @@ const TodoCard = (props) => {
     const [checklistInput, setChecklistInput] = useState(card.checklist || []);
     const [dueDateInput, setDueDateInput] = useState(card.dueDate || "");
 
-    const isDefault = (cardSizeView == "Default");
-    const cardPath = `todo/${card.key}`;
+    const isDefault = (sizeView == "Default");
+    const path = props.path;
+    const cardPath = `${path}/${card.key}`;
 
     function updateContent() {
         updateObject(cardPath, "title", titleInput);
@@ -146,12 +108,12 @@ const TodoCard = (props) => {
         }
     }
 
-    function dropHandler(targetKey) {
-        updateObject(`todo/${targetKey}`, "status", card.status);
+    function dropHandler(path) {
+        updateObject(path, "status", card.status);
     }
 
     return (
-        <Card dropHandler={dropHandler}
+        <Card dropHandler={(targetKey) => dropHandler(`${path}/${targetKey}`)}
             isDefault={isDefault}
             updateContent={updateContent}
             cardPath={cardPath}
@@ -172,11 +134,64 @@ const TodoCard = (props) => {
                     <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
                     <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
                     <EditableChecklist label={"Subtasks"} value={checklistInput} setValue={setChecklistInput} />
-                    <StatusSelector value={statusInput} setValue={(value) => setStatusInput(value)} />
+                    <StatusSelector value={statusInput} setValue={setStatusInput} />
                     <EditableInput label={"Due Date"} value={dueDateInput} setValue={setDueDateInput} type="date" />
                 </>
             }
         />
+    );
+};
+
+const StatusBlock = (props) => {
+    const { updateObject } = useContext(DBContext);
+    const status = props.status;
+    const cards = props.cards;
+    const statusView = props.statusView;
+    const sizeView = props.sizeView;
+    const path = props.path;
+
+    function handleDrop(e, status) {
+        let targetKey = e.dataTransfer.getData("key");
+        updateObject(`${path}/${targetKey}`, "status", status);
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+    }
+
+    function statusMatch(status, targetstatus) {
+        if (targetstatus === "All") return true;
+        if (targetstatus === "Planning" && (status === "Todo" || status === "In Progress")) return true;
+        if (targetstatus === "Focus" && (status === "In Progress" || status === "Done")) return true;
+        if (targetstatus === status) return true;
+        return false;
+    }
+
+    if (!statusMatch(status, statusView)) {
+        return;
+    }
+
+    return (
+        <div className='statusBlock'
+            onDrop={(e) => { handleDrop(e, status); }}
+            onDragOver={handleDragOver}>
+
+            <h3>{status}</h3>
+            {cards && cards.map(card => {
+                if (statusMatch(card.status, status)) {
+                    return (
+                        <TodoCard
+                            card={card}
+                            path={path}
+                            key={`${card.key}${card.title}`}
+                            sizeView={sizeView}
+                            statusView={statusView}
+                        />
+                    );
+                }
+            })
+            }
+        </div>
     );
 };
 
