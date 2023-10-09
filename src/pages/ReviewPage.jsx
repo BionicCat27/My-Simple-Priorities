@@ -4,11 +4,13 @@ import React, { useEffect, useState, useContext } from 'react';
 import { DBContext } from '../contexts/DBContext';
 //Components
 //Styles
-import './common.css'
+import './common.css';
 import StatusSelector from './components/StatusSelector';
 import NavMenu from './components/NavMenu/NavMenu';
 import CardSizeViewSelector from './components/CardSizeViewSelector';
 import CardStatusViewSelector from './components/CardStatusViewSelector';
+import { EditableInput } from './components/EditableInput';
+import { EditableTextarea } from './components/EditableTextarea';
 
 const ReviewPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);
@@ -22,10 +24,10 @@ const ReviewPage = (props) => {
     const [cardStatusView, setCardStatusView] = useState(DEFAULT_STATUS_VIEW);
 
     useEffect(() => {
-        if(ready) {
-            addDataListener(`review`, setContentList)
+        if (ready) {
+            addDataListener(`review`, setContentList);
         }
-    }, [ready])
+    }, [ready]);
 
     function addContent(event) {
         event.preventDefault();
@@ -40,10 +42,10 @@ const ReviewPage = (props) => {
         });
         setContentInput("");
     }
-    
+
     function handleDrop(e, status) {
         let targetKey = e.dataTransfer.getData("key");
-        updateObject(`review/${targetKey}`, "status", status)
+        updateObject(`review/${targetKey}`, "status", status);
     }
 
     function handleDragOver(e) {
@@ -61,23 +63,23 @@ const ReviewPage = (props) => {
 
     function getStatusBlock(status) {
         return (
-            <div className='statusBlock' 
+            <div className='statusBlock'
                 onDrop={(e) => { handleDrop(e, status); }}
                 onDragOver={handleDragOver}>
 
                 <h3>{status}</h3>
-                    {contentList && contentList.map(card => {
-                        if (statusMatch(card.status, status)) {
-                            return (
-                                <ReviewCard
-                                    card={card}
-                                    key={`${card.key}${card.title}`}
-                                    cardSizeView={cardSizeView}
-                                    cardStatusView={cardStatusView}
-                                />
-                            );
-                        }
-                    })
+                {contentList && contentList.map(card => {
+                    if (statusMatch(card.status, status)) {
+                        return (
+                            <ReviewCard
+                                card={card}
+                                key={`${card.key}${card.title}`}
+                                cardSizeView={cardSizeView}
+                                cardStatusView={cardStatusView}
+                            />
+                        );
+                    }
+                })
                 }
             </div>
         );
@@ -94,9 +96,9 @@ const ReviewPage = (props) => {
                     <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />
                 </form>
                 <div className="cards_container">
-                    { statusMatch("Todo", cardStatusView) && getStatusBlock("Todo") }
-                    { statusMatch("In Progress", cardStatusView) && getStatusBlock("In Progress") }
-                    { statusMatch("Done", cardStatusView) && getStatusBlock("Done") }
+                    {statusMatch("Todo", cardStatusView) && getStatusBlock("Todo")}
+                    {statusMatch("In Progress", cardStatusView) && getStatusBlock("In Progress")}
+                    {statusMatch("Done", cardStatusView) && getStatusBlock("Done")}
                 </div>
             </div>
         </>
@@ -108,7 +110,7 @@ const ReviewCard = (props) => {
 
     const card = props.card;
     const cardSizeView = props.cardSizeView;
-    
+
     const [isEditing, setEditing] = useState(false);
 
     const [titleInput, setTitleInput] = useState(card.title || "");
@@ -134,10 +136,10 @@ const ReviewCard = (props) => {
     }
 
     function updateContent() {
-        updateObject(`review/${card.key}`, "title", titleInput)
-        updateObject(`review/${card.key}`, "description", descriptionInput)
-        updateObject(`review/${card.key}`, "progress", progressInput)
-        updateObject(`review/${card.key}`, "status", statusInput)
+        updateObject(`review/${card.key}`, "title", titleInput);
+        updateObject(`review/${card.key}`, "description", descriptionInput);
+        updateObject(`review/${card.key}`, "progress", progressInput);
+        updateObject(`review/${card.key}`, "status", statusInput);
         setEditing(false);
     }
 
@@ -178,7 +180,7 @@ const ReviewCard = (props) => {
     function handleDrop(e) {
         let targetKey = e.dataTransfer.getData("key");
 
-        updateObject(`review/${targetKey}`, "status", card.status)
+        updateObject(`review/${targetKey}`, "status", card.status);
 
         setDraggedOver(false);
     }
@@ -212,12 +214,10 @@ const ReviewCard = (props) => {
             onDragLeave={(e) => { handleDragLeave(e); }}
             onTouchMove={(e) => { handleDragStart(e, card.key, card.status); }}
             onTouchEnd={(e) => { handleDragEnd(e); }}>
-            { isEditing ?
+            {isEditing ?
                 <>
-                    <label htmlFor="contentTitleInput">Title</label>
-                    <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
-                    <label htmlFor="contentDescriptionInput">Description</label>
-                    <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
+                    <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
+                    <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
                     {progressInput.map((progressObject, index) => (
                         <div key={`${index}Container`}>
                             <div className="inlineContainer" key={`${index}ProgressContainer`}>

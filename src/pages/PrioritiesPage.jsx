@@ -7,6 +7,8 @@ import { DBContext } from '../contexts/DBContext';
 import './common.css';
 import NavMenu from './components/NavMenu/NavMenu';
 import CardSizeViewSelector from './components/CardSizeViewSelector';
+import { EditableInput } from './components/EditableInput';
+import { EditableTextarea } from './components/EditableTextarea';
 
 const PrioritiesPage = (props) => {
     const { ready, addDataListener, pushObject } = useContext(DBContext);
@@ -18,10 +20,10 @@ const PrioritiesPage = (props) => {
     const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
 
     useEffect(() => {
-        if(ready) {
-            addDataListener("priorities", setContentList)
+        if (ready) {
+            addDataListener("priorities", setContentList);
         }
-    }, [ready])
+    }, [ready]);
 
     function addContent(event) {
         event.preventDefault();
@@ -32,7 +34,7 @@ const PrioritiesPage = (props) => {
             title: contentInput,
             description: "",
             hours: 0
-        })
+        });
         setContentInput("");
     }
 
@@ -41,7 +43,7 @@ const PrioritiesPage = (props) => {
         return contentList.reduce((totalHours, card) => {
             if (!card.hours) return totalHours;
             return totalHours + parseInt(card.hours);
-        }, 0)
+        }, 0);
     }
 
     return (
@@ -55,12 +57,12 @@ const PrioritiesPage = (props) => {
                     <h3>Expected weekly hours: {getTotalHours()}/168</h3>
                 </form>
                 <div className="cards_container">
-                    {contentList && contentList.map(card => 
-                    <PrioritiesCard
-                        card={card}
-                        key={`${card.key}/${card.title}`}
-                        cardSizeView={cardSizeView}
-                    />)}
+                    {contentList && contentList.map(card =>
+                        <PrioritiesCard
+                            card={card}
+                            key={`${card.key}/${card.title}`}
+                            cardSizeView={cardSizeView}
+                        />)}
                 </div>
             </div>
         </>
@@ -74,7 +76,7 @@ const PrioritiesCard = (props) => {
     const cardSizeView = props.cardSizeView;
 
     const [isEditing, setEditing] = useState(false);
-    
+
     const [titleInput, setTitleInput] = useState(card.title || "");
     const [descriptionInput, setDescriptionInput] = useState(card.description || "");
     const [hoursInput, setHoursInput] = useState(card.hours || 0);
@@ -84,16 +86,16 @@ const PrioritiesCard = (props) => {
 
     function updateContent() {
         if (!ready) return;
-        updateObject(`priorities/${card.key}`, "title", titleInput)
-        updateObject(`priorities/${card.key}`, "description", descriptionInput)
-        updateObject(`priorities/${card.key}`, "hours", hoursInput)
+        updateObject(`priorities/${card.key}`, "title", titleInput);
+        updateObject(`priorities/${card.key}`, "description", descriptionInput);
+        updateObject(`priorities/${card.key}`, "hours", hoursInput);
 
         setEditing(false);
     }
 
     function deleteCard() {
         if (confirm(`Delete \"${card.title}\"?`)) {
-            removeObject(`priorities/${card.key}`)
+            removeObject(`priorities/${card.key}`);
             setEditing(false);
         } else {
             console.log("Not deleting");
@@ -143,28 +145,25 @@ const PrioritiesCard = (props) => {
             onDragLeave={(e) => { handleDragLeave(e); }}
             onTouchMove={(e) => { handleDragStart(e, props.index, props.status); }}
             onTouchEnd={(e) => { handleDragEnd(e); }}>
-            { isEditing ?
-            <>
-                <label htmlFor="contentTitleInput">Title</label>
-                <input id="contentTitleInput" className="margin-y-1" onChange={field => setTitleInput(field.target.value)} value={titleInput}></input>
-                <label htmlFor="contentDescriptionInput">Description</label>
-                <textarea id="contentDescriptionInput" className="margin-y-1" onChange={field => setDescriptionInput(field.target.value)} value={descriptionInput}></textarea>
-                <label htmlFor="contentHoursInput">Hours</label>
-                <input id="contentHoursInput" className="margin-y-1" onChange={field => setHoursInput(field.target.value)} value={hoursInput}></input>
-                <div id="formButtonContainer">
-                    <button onClick={updateContent}>Save</button>
-                    <a id="deleteButton" onClick={deleteCard}>Delete</a>
+            {isEditing ?
+                <>
+                    <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
+                    <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
+                    <EditableInput label={"Hours"} value={hoursInput} setValue={setHoursInput} />
+                    <div id="formButtonContainer">
+                        <button onClick={updateContent}>Save</button>
+                        <a id="deleteButton" onClick={deleteCard}>Delete</a>
+                    </div>
+                </> :
+                <div className="cardContentContainer">
+                    <div id="col1">
+                        <h3>{card.title}</h3>
+                        {cardSizeView != "Default" && <p>{card.description}</p>}
+                    </div>
+                    <div id="col2">
+                        <p id="hoursDisplay">{card?.hours}</p>
+                    </div>
                 </div>
-            </> :
-            <div className="cardContentContainer">
-                <div id="col1">
-                    <h3>{card.title}</h3>
-                    {cardSizeView != "Default" && <p>{card.description}</p>}
-                </div>
-                <div id="col2">
-                    <p id="hoursDisplay">{card?.hours}</p>
-                </div>
-            </div>
             }
         </div >
     );

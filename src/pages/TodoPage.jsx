@@ -10,6 +10,8 @@ import NavMenu from './components/NavMenu/NavMenu';
 import StatusSelector from './components/StatusSelector';
 import CardSizeViewSelector from './components/CardSizeViewSelector';
 import CardStatusViewSelector from './components/CardStatusViewSelector';
+import { EditableInput } from './components/EditableInput';
+import { EditableTextarea } from './components/EditableTextarea';
 
 const TodoPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);
@@ -164,21 +166,6 @@ const TodoCard = (props) => {
         setChecklistInput(workingArray);
     }
 
-    function generateChecklistContent() {
-        if (checklistInput.length == 0) {
-            return;
-        }
-        return <>{
-            checklistInput.map((checklistObject, index) => (
-                <div key={`${index}Container`}>
-                    <input className="inline-input" type="checkbox" checked={checklistObject.checked} onChange={field => handleCheckBox(field.target.checked, index)} />
-                    <input className="inline-input" type="text" value={checklistObject.value} onChange={field => handleCheckBoxValue(field.target.value, index)} />
-                </div>
-            ))}
-        </>;
-
-    }
-
     function generateDatePassed(dateToCheck) {
         let date = new Date(new Date(dateToCheck).toDateString()).getTime();
         let today = new Date(new Date().toDateString()).getTime();
@@ -236,7 +223,15 @@ const TodoCard = (props) => {
                 <>
                     <EditableInput label={"Title"} value={titleInput} setValue={setTitleInput} type="text" />
                     <EditableTextarea label={"Description"} value={descriptionInput} setValue={setDescriptionInput} />
-                    {generateChecklistContent()}
+                    <label>Checklist</label>
+                    {
+                        checklistInput && checklistInput.map((checklistObject, index) => (
+                            <div key={`${index}Container`}>
+                                <input className="inline-input" type="checkbox" checked={checklistObject.checked} onChange={field => handleCheckBox(field.target.checked, index)} />
+                                <input className="inline-input" type="text" value={checklistObject.value} onChange={field => handleCheckBoxValue(field.target.value, index)} />
+                            </div>
+                        ))
+                    }
                     <div id="formButtonContainer">
                         <button onClick={() => { addChecklistItem(); }}>Add Checklist item</button>
                     </div>
@@ -260,34 +255,5 @@ const TodoCard = (props) => {
         </div >
     );
 };
-
-const EditableInput = (props) => {
-    const label = props.label;
-    const value = props.value;
-    const setValue = props.setValue;
-    const type = props.type;
-
-    return (
-        <>
-            {label && <label>{label}</label>}
-            <input value={value} onChange={(field) => { setValue(field.target.value); }} type={type} />
-        </>
-    );
-};
-
-const EditableTextarea = (props) => {
-    const label = props.label;
-    const value = props.value;
-    const setValue = props.setValue;
-    const type = props.type;
-
-    return (
-        <>
-            {label && <label>{label}</label>}
-            <textarea value={value} onChange={(field) => { setValue(field.target.value); }} type={type} />
-        </>
-    );
-};
-
 
 export default TodoPage;
