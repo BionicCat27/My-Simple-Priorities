@@ -7,10 +7,10 @@ import HealthPage from './pages/HealthPage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ProtectedPage from './pages/ProtectedPage';
+import ReviewPage from './pages/ReviewPage';
 import SignupPage from './pages/SignupPage';
 import TimelinePage from './pages/TimelinePage';
 import TodoPage from './pages/TodoPage';
-import ReviewPage from './pages/reviewPage';
 
 function App() {
   return (
