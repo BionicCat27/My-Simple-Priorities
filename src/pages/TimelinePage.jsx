@@ -11,13 +11,39 @@ const TimelinePage = (props) => {
     const { ready, addDataListener } = useContext(DBContext);
 
     const [cards, setCards] = useState([]);
-    const ganttLength = 30;
+    const [sortAscending, setSortAscending] = useState(true)
+    const [sortedCards, setSortedCards] = useState([]);
+    const [ganttLength, setGanttLength] = useState(7);
     
     useEffect(() => {
         if (ready) {
-            addDataListener("todo", setCards);   
+            addDataListener("todo", setCards);  
         }
     }, [ready])
+
+    useEffect(()=> {
+        if (!cards) {
+            return;
+        }
+        let mostDifference = 0;
+        cards.forEach((card)=> {
+            let differenceInDays = getDaysDiff(card.dueDate, new Date())
+            if(differenceInDays > mostDifference) {
+                mostDifference = differenceInDays - 1;
+            }
+        })
+        setGanttLength(mostDifference > 7 ? mostDifference : 7);
+        let sortedCards = [...cards];
+        sortedCards.sort((a, b)=>{
+            if (sortAscending) {
+                return getDaysDiff(a.dueDate, b.dueDate)
+            } else {
+                return getDaysDiff(b.dueDate, a.dueDate)
+            }
+        })
+        setSortedCards(sortedCards); 
+
+    }, [cards, sortAscending])
 
     function getDaysDiff(x, y) {
         let xDate = new Date(x);
@@ -33,6 +59,7 @@ const TimelinePage = (props) => {
             <NavMenu title="Timeline" />
             <div id="pageContent">
                 <h2>Days Until Due</h2>
+                <button onClick={()=>{setSortAscending(!sortAscending)}}>Sort by {sortAscending ?  "latest first" : "soonest first"}</button>
                 <div className="ganttTableContainer">
                     <table className="ganttTable">
                         <thead>
@@ -41,14 +68,14 @@ const TimelinePage = (props) => {
                                 {
                                     Array.from( { length: ganttLength },
                                         (el, index) => {
-                                            return (<th key={`header${index}`}>{index}</th>);
+                                            return (<th key={`header${index}`}>{index + 1}</th>);
                                         }
                                     )
                                 }
                             </tr>
                         </thead>
                         <tbody>
-                            {cards && cards.map((card)=> {
+                            {sortedCards && sortedCards.map((card)=> {
                                 if (!card.dueDate || card.status == "Done") return;
                                 let daysUntilDue = getDaysDiff(card.dueDate, new Date());
                                 if (daysUntilDue < 0) return;
