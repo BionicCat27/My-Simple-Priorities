@@ -35,12 +35,11 @@ const TimelinePage = (props) => {
         setGanttLength(mostDifference > 7 ? mostDifference : 7);
         let sortedCards = [...cards];
         sortedCards.sort((a, b)=>{
-            if (sortAscending) {
                 return getDaysDiff(a.dueDate, b.dueDate)
-            } else {
-                return getDaysDiff(b.dueDate, a.dueDate)
-            }
         })
+        if(!sortAscending) {
+            sortedCards = sortedCards.reverse()
+        }
         setSortedCards(sortedCards); 
 
     }, [cards, sortAscending])
