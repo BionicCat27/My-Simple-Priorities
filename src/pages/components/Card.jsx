@@ -16,6 +16,7 @@ export const Card = (props) => {
     const editComponent = props.editComponent;
 
     const card = props.card;
+    const cardClasses = props.cardClasses;
     const cardPath = props.cardPath;
     if (!card) return;
     const isDefault = props.isDefault || true;
@@ -74,6 +75,7 @@ export const Card = (props) => {
         let classes = (isDefault ? "condensed_card " : "content_card ");
         classes += (dragging ? "brdr-red " : " ");
         classes += (draggedOver ? "brdr-blue " : " ");
+        classes += cardClasses;
         return classes;
     }
     return (

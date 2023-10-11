@@ -30,7 +30,7 @@ const TodoPage = () => {
     const [cardStatusView, setCardStatusView] = useState(DEFAULT_STATUS_VIEW);
 
     const [ganttLength, setGanttLength] = useState(7);
-    const [sortAscending, setSortAscending] = useState(true)
+    const [sortAscending, setSortAscending] = useState(true);
 
     const path = `todo`;
 
@@ -40,32 +40,32 @@ const TodoPage = () => {
         }
     }, [ready]);
 
-    useEffect(()=>{
-        contentList.reverse()
-    }, [sortAscending])
+    useEffect(() => {
+        contentList.reverse();
+    }, [sortAscending]);
 
     function handleData(cards) {
-        console.log(`Cards: ${cards}`)
+        console.log(`Cards: ${cards}`);
         if (!cards) {
-            setContentList([])
+            setContentList([]);
             return;
         }
-        console.log(`Setting Gantt length`)
+        console.log(`Setting Gantt length`);
         let mostDifference = 0;
-        cards.forEach((card)=> {
-            let differenceInDays = getDaysDiff(card.dueDate, new Date())
-            if(differenceInDays > mostDifference) {
+        cards.forEach((card) => {
+            let differenceInDays = getDaysDiff(card.dueDate, new Date());
+            if (differenceInDays > mostDifference) {
                 mostDifference = differenceInDays;
             }
-        })
+        });
         setGanttLength(mostDifference > 7 ? mostDifference : 7);
-        console.log(`Sorting`)
-        let sortedCards = [...cards]
-        sortedCards.sort((a, b)=>{
-            return getDaysDiff(a.dueDate, b.dueDate)
-        })
-        if(!sortAscending) {
-            contentList.reverse()
+        console.log(`Sorting`);
+        let sortedCards = [...cards];
+        sortedCards.sort((a, b) => {
+            return getDaysDiff(a.dueDate, b.dueDate);
+        });
+        if (!sortAscending) {
+            contentList.reverse();
         }
         setContentList(sortedCards);
     }
@@ -99,11 +99,11 @@ const TodoPage = () => {
             <>
                 <NavMenu title="Todo" />
                 <div id="pageContent">
-                    <button onClick={()=>{setCardView(!cardView)}}>{cardView ?  "Use Gantt view" : "Use Cards view"}</button>
+                    <button onClick={() => { setCardView(!cardView); }}>{cardView ? "Use Gantt view" : "Use Cards view"}</button>
                     <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
                     <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />
                     <form onSubmit={addContent} id="contentForm">
-                        <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
+                        <input autoFocus value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
                         <button id="addContentButton" onClick={addContent}>Add Todo!</button>
                     </form>
                     <div className="cards_container">
@@ -119,8 +119,8 @@ const TodoPage = () => {
         <>
             <NavMenu title="Todo" />
             <div id="pageContent">
-                <button onClick={()=>{setCardView(!cardView)}}>{cardView ?  "Use Gantt view" : "Use Cards view"}</button>
-                <button onClick={()=>{setSortAscending(!sortAscending)}}>Sort by {sortAscending ?  "latest first" : "soonest first"}</button>
+                <button onClick={() => { setCardView(!cardView); }}>{cardView ? "Use Gantt view" : "Use Cards view"}</button>
+                <button onClick={() => { setSortAscending(!sortAscending); }}>Sort by {sortAscending ? "latest first" : "soonest first"}</button>
                 <h3>Days Until Due</h3>
                 <div className="ganttTableContainer">
                     <table className="ganttTable">
@@ -128,7 +128,7 @@ const TodoPage = () => {
                             <tr>
                                 <th key={`ganttHeader`}>Today</th>
                                 {
-                                    Array.from( { length: ganttLength },
+                                    Array.from({ length: ganttLength },
                                         (el, index) => {
                                             return (<th key={`header${index}`}>{index + 1}</th>);
                                         }
@@ -137,7 +137,7 @@ const TodoPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {contentList && contentList.map((card)=> {
+                            {contentList && contentList.map((card) => {
                                 if (!card.dueDate || card.status == "Done") return;
                                 let daysUntilDue = getDaysDiff(card.dueDate, new Date());
                                 if (daysUntilDue < 0) return;
@@ -150,7 +150,7 @@ const TodoPage = () => {
                                             </div>
                                         </td>
                                         {
-                                            Array.from( { length: ganttLength - daysUntilDue },
+                                            Array.from({ length: ganttLength - daysUntilDue },
                                                 (el, index) => {
                                                     return (<td key={`${card.key}/${index}`}></td>);
                                                 }

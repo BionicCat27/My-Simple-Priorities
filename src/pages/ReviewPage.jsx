@@ -91,7 +91,7 @@ const ReviewPage = (props) => {
             <NavMenu title="Review" />
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
-                    <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
+                    <input autoFocus value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add review!</button>
                     <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
                     <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />

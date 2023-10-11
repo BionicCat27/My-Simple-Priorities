@@ -48,7 +48,7 @@ const GoalsPage = (props) => {
             <NavMenu title="Goals" />
             <div id="pageContent">
                 <form onSubmit={addContent} id="contentForm">
-                    <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
+                    <input autoFocus value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
                     <button id="addContentButton" onClick={addContent}>Add priority!</button>
                     <h3>Expected weekly hours: {getTotalHours()}/168</h3>
                 </form>

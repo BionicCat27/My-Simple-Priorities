@@ -32,15 +32,14 @@ const CapturePage = () => {
                     <div id="capture-page-content">
                         <form onSubmit={captureNote}>
                             <input
+                                autoFocus
                                 id="capture-input"
                                 name=""
                                 value={note}
                                 onChange={(e) => setNote(e.target.value)}
-                                placeholder="Capture note"
                             ></input>
-                            <button type="submit">+</button>
                         </form>
-                        <button id="capture-see_notes" onClick={() => setShowNotes(!showNotes)}>
+                        <button className="quiet-button" id="capture-see_notes" onClick={() => setShowNotes(!showNotes)}>
                             {showNotes ? "Hide notes" : "See notes"}
                         </button>
                         {showNotes &&
@@ -86,7 +85,9 @@ const CaptureCard = (props) => {
     }
 
     return (
-        <Card card={card}
+        <Card
+            card={card}
+            cardClasses="capture_card"
             updateContent={updateContent}
             resetContent={resetContent}
             cardPath={cardPath}

@@ -6,6 +6,7 @@ body {
   color: black;
   font-size: 1rem;
   margin: 0;
+  background-color: white;
 }
 
 body,
@@ -39,6 +40,48 @@ a {
   color: black;
 }
 
+.quiet-button {
+  border: none;
+  color: rgba(0, 0, 0, 0.5);
+  text-decoration: underline;
+}
+
+.quiet-button:hover {
+  color: rgba(0, 0, 0, 0.90);
+  background-color: rgba(0, 0, 0, 0.20);
+}
+
+.quiet-button:focus {
+  background-color: rgba(0, 0, 0, 0.20);
+}
+
+input {
+  background-color: rgba(0, 0, 0, 0.10);
+  box-shadow: 0px 1px 2px -1px black;
+  padding: 0.5rem;
+  border: none;
+  border-bottom: 1px solid black;
+  transition: background-color 50ms;
+}
+
+*:focus {
+  background-color: rgba(0, 0, 0, 0.05);
+  outline: none;
+}
+
+.capture_card {
+  min-width: 200px;
+}
+
+#capture-input {
+  width: 100px;
+  transition: width 50ms;
+}
+
+#capture-input:focus {
+  width: 200px;
+}
+
 button:hover {
   color: white;
   background-color: #374780;
@@ -62,7 +105,7 @@ button:hover {
 
 @media (max-width: 720px) {
   .div-card {
-      width: auto;
+    width: auto;
   }
 }
 
