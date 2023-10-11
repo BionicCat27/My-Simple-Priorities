@@ -2,6 +2,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 //Firebase
 //Contexts
+import './TimelineGantt.css';
+
 import { DBContext } from '../contexts/DBContext';
 //Components
 //Styles
@@ -18,21 +20,55 @@ import StatusSelector from './components/StatusSelector';
 const TodoPage = () => {
     const { ready, addDataListener, pushObject } = useContext(DBContext);
 
-    const DEFAULT_STATUS_VIEW = "Planning";
     const DEFAULT_SIZE_VIEW = "Default";
+    const DEFAULT_STATUS_VIEW = "Planning";
 
     const [contentList, setContentList] = useState([]);
     const [contentInput, setContentInput] = useState("");
+    const [cardView, setCardView] = useState(true);
     const [cardSizeView, setCardSizeView] = useState(DEFAULT_SIZE_VIEW);
     const [cardStatusView, setCardStatusView] = useState(DEFAULT_STATUS_VIEW);
+
+    const [ganttLength, setGanttLength] = useState(7);
+    const [sortAscending, setSortAscending] = useState(true)
 
     const path = `todo`;
 
     useEffect(() => {
         if (ready) {
-            addDataListener(path, setContentList);
+            addDataListener(path, handleData);
         }
     }, [ready]);
+
+    useEffect(()=>{
+        contentList.reverse()
+    }, [sortAscending])
+
+    function handleData(cards) {
+        console.log(`Cards: ${cards}`)
+        if (!cards) {
+            setContentList([])
+            return;
+        }
+        console.log(`Setting Gantt length`)
+        let mostDifference = 0;
+        cards.forEach((card)=> {
+            let differenceInDays = getDaysDiff(card.dueDate, new Date())
+            if(differenceInDays > mostDifference) {
+                mostDifference = differenceInDays;
+            }
+        })
+        setGanttLength(mostDifference > 7 ? mostDifference : 7);
+        console.log(`Sorting`)
+        let sortedCards = [...cards]
+        sortedCards.sort((a, b)=>{
+            return getDaysDiff(a.dueDate, b.dueDate)
+        })
+        if(!sortAscending) {
+            contentList.reverse()
+        }
+        setContentList(sortedCards);
+    }
 
     function addContent(event) {
         event.preventDefault();
@@ -49,20 +85,82 @@ const TodoPage = () => {
         setContentInput("");
     }
 
+    function getDaysDiff(x, y) {
+        let xDate = new Date(x);
+        let yDate = new Date(y);
+        let milliDiff = xDate.getTime() - yDate.getTime();
+        const milliInDay = 1000 * 60 * 60 * 24;
+        let daysDiff = Math.ceil(milliDiff / milliInDay);
+        return daysDiff;
+    }
+
+    if (cardView) {
+        return (
+            <>
+                <NavMenu title="Todo" />
+                <div id="pageContent">
+                    <button onClick={()=>{setCardView(!cardView)}}>{cardView ?  "Use Gantt view" : "Use Cards view"}</button>
+                    <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
+                    <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />
+                    <form onSubmit={addContent} id="contentForm">
+                        <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
+                        <button id="addContentButton" onClick={addContent}>Add Todo!</button>
+                    </form>
+                    <div className="cards_container">
+                        <StatusBlock status="Todo" path={path} sizeView={cardSizeView} statusView={cardStatusView} cards={contentList} />
+                        <StatusBlock status="In Progress" path={path} sizeView={cardSizeView} statusView={cardStatusView} cards={contentList} />
+                        <StatusBlock status="Done" path={path} sizeView={cardSizeView} statusView={cardStatusView} cards={contentList} />
+                    </div>
+                </div>
+            </>
+        );
+    }
     return (
         <>
             <NavMenu title="Todo" />
             <div id="pageContent">
-                <form onSubmit={addContent} id="contentForm">
-                    <input value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
-                    <button id="addContentButton" onClick={addContent}>Add Todo!</button>
-                    <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
-                    <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />
-                </form>
-                <div className="cards_container">
-                    <StatusBlock status="Todo" path={path} sizeView={cardSizeView} statusView={cardStatusView} cards={contentList} />
-                    <StatusBlock status="In Progress" path={path} sizeView={cardSizeView} statusView={cardStatusView} cards={contentList} />
-                    <StatusBlock status="Done" path={path} sizeView={cardSizeView} statusView={cardStatusView} cards={contentList} />
+                <button onClick={()=>{setCardView(!cardView)}}>{cardView ?  "Use Gantt view" : "Use Cards view"}</button>
+                <button onClick={()=>{setSortAscending(!sortAscending)}}>Sort by {sortAscending ?  "latest first" : "soonest first"}</button>
+                <h3>Days Until Due</h3>
+                <div className="ganttTableContainer">
+                    <table className="ganttTable">
+                        <thead>
+                            <tr>
+                                <th key={`ganttHeader`}>Today</th>
+                                {
+                                    Array.from( { length: ganttLength },
+                                        (el, index) => {
+                                            return (<th key={`header${index}`}>{index + 1}</th>);
+                                        }
+                                    )
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {contentList && contentList.map((card)=> {
+                                if (!card.dueDate || card.status == "Done") return;
+                                let daysUntilDue = getDaysDiff(card.dueDate, new Date());
+                                if (daysUntilDue < 0) return;
+                                return (
+                                    <tr key={`${card.key}`}>
+                                        <td className="ganttCardName ganttBlock" colSpan={daysUntilDue + 1}>
+                                            <div className='ganttBar'>
+                                                <p>{card.title}</p>
+                                                <p>{card.dueDate}</p>
+                                            </div>
+                                        </td>
+                                        {
+                                            Array.from( { length: ganttLength - daysUntilDue },
+                                                (el, index) => {
+                                                    return (<td key={`${card.key}/${index}`}></td>);
+                                                }
+                                            )
+                                        }
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </>

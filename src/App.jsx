@@ -9,7 +9,6 @@ import NotFoundPage from './pages/NotFoundPage';
 import ProtectedPage from './pages/ProtectedPage';
 import ReviewPage from './pages/ReviewPage';
 import SignupPage from './pages/SignupPage';
-import TimelinePage from './pages/TimelinePage';
 import TodoPage from './pages/TodoPage';
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
             <Route path="/goals" element={<ProtectedPage><GoalsPage /></ProtectedPage>} title="Priorities" />
             <Route path="/todo" element={<ProtectedPage><TodoPage /></ProtectedPage>} title="Todo" />
             <Route path="/review" element={<ProtectedPage><ReviewPage /></ProtectedPage>} />
-            <Route path="/timeline" element={<ProtectedPage><TimelinePage /></ProtectedPage>} />
             <Route path="/health" element={<ProtectedPage><HealthPage /></ProtectedPage>} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
