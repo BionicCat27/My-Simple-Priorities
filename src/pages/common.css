@@ -226,3 +226,9 @@ button {
     margin-bottom: 1rem;
     display: block;
 }
+
+#pageTitle {
+    margin-bottom: 1rem;
+    text-align: center;
+    color: black;
+}

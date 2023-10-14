@@ -11,15 +11,15 @@ export const AuthProvider = ({ children }) => {
     const [cookies, setCookie] = useCookies(["user"]);
     const [user, setUser] = useState();
 
-    useEffect(()=>{
+    useEffect(() => {
         setUser(cookies?.user);
-    }, [cookies])
+    }, [cookies]);
 
     function signIn(email, password, errorCallback) {
-        if(!auth) return;
+        if (!auth) return;
         signInWithEmailAndPassword(auth, email, password)
             .then((userResult) => {
-                setCookie("user", userResult)
+                setCookie("user", userResult);
             })
             .catch((error) => {
                 errorCallback("Incorrect username or password.");
@@ -27,22 +27,25 @@ export const AuthProvider = ({ children }) => {
     }
 
     function signUp(email, password, errorCallback) {
-        if(!auth) return;
+        if (!auth) return;
         createUserWithEmailAndPassword(auth, email, password)
             .then((userResult) => {
-                setCookie("user", userResult)
+                setCookie("user", userResult);
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                errorCallback("Authentication Error: " + errorCode + " - " + errorMessage);
+                if (errorCallback == "auth/email-already-in-use") {
+                    errorCallback("Email already in use.");
+                }
+                // errorCallback("Authentication Error: " + errorCode + " - " + errorMessage);
             });
     }
 
     function signUserOut() {
         if (!auth) return;
         signOut(auth).then(() => {
-            setCookie("user", undefined)
+            setCookie("user", undefined);
         }).catch((error) => {
             console.log("An error occurred during signout: " + error);
         });
@@ -52,7 +55,7 @@ export const AuthProvider = ({ children }) => {
         //Get auth
         if (!auth) return;
         onAuthStateChanged(auth, (userResult) => {
-            setCookie("user", userResult)
+            setCookie("user", userResult);
         });
     }, []);
 

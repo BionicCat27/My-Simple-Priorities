@@ -61,10 +61,6 @@
 
 /* Sidebar padding */
 
-body {
-    padding-left: 12rem;
-}
-
 @media (max-width: 720px) {
     body {
         padding-left: 0;

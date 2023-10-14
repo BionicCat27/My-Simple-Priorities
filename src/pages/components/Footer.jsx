@@ -1,7 +1,7 @@
 import React from 'react';
 
-import githubLogo from '../../resources/GitHub_Logo.png'
-import liLogo from '../../resources/LI-Logo.png'
+import githubLogo from '../../resources/GitHub_Logo.png';
+import liLogo from '../../resources/LI-Logo.png';
 
 import './Footer.css';
 

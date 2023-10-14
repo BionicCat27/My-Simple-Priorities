@@ -5,8 +5,8 @@ import liLogo from '../../../resources/LI-Logo.png';
 
 import { useNavigate } from 'react-router';
 import { AuthContext } from '../../../contexts/AuthContext';
-import './Header.css';
-import './Sidebar.css';
+// import './Header.css';
+// import './Sidebar.css';
 
 
 function NavMenu(props) {
