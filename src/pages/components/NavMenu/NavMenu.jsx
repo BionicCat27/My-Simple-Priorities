@@ -64,17 +64,19 @@ const Header = (props) => {
         setShowMenu(!showMenu);
     };
     return (
-        <header className="nav-header">
+        <header className="nav-header flex flex-col bg-red-400">
             <div className="title-container">
                 <h1 id="title">My Simple {props.title}</h1>
-                <button className="hamburger-btn" onClick={toggleMenu}>
-                    <span className="hamburger-icon"></span>
-                    <span className="hamburger-icon"></span>
-                    <span className="hamburger-icon"></span>
+                <button className="hamburger-btn bg-blue-400 outline-black" onClick={toggleMenu}>Show content
+                    <span className="hamburger-icon w-25 h-3 bg-black m-5"></span>
+                    <span className="hamburger-icon w-25 h-3 bg-black m-5"></span>
+                    <span className="hamburger-icon w-25 h-3 bg-black m-5"></span>
                 </button>
             </div>
-            <nav className={`nav-list ${showMenu ? 'show' : ''}`}>
-                <LinksList />
+            <nav className={'nav-list flex flex-col'}>
+                {
+                    showMenu && <LinksList />
+                }
             </nav>
         </header>
     );

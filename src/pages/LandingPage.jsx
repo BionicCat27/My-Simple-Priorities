@@ -32,20 +32,21 @@ const LandingPage = () => {
     }, [user]);
 
     return (
-        <div className="flex flex-row place-content-center h-screen bg-red-500">
-            <div className='basis-1/2 bg-green-400 h-full'>
-                <h2 className='text-center'>Priorities and Productivity.</h2>
+        <div className="flex justify-content items-center h-screen">
+            <div className='basis-1/2 rounded-md shadow-md p-8 ml-4 mr-2'>
+                <h2 className='text-center text-xl'>Priorities and Productivity.</h2>
+                <h2 className='text-center'>Manage your notes, tasks and time.</h2>
             </div>
-            <div className="basis-1/2 bg-blue-400">
-                <form className='flex flex-col' onSubmit={prepareSignIn}>
-                    <input id="loginFormEmail" placeholder={"Username"} className="centeredFormElement" type="email" value={email} onChange={field => setEmail(field.target.value)}></input>
-                    <input id="loginFormPassword" placeholder={"Password"} className="centeredFormElement" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
-                    <div className='flex flex-row '>
-                        <button onClick={prepareSignIn}>Login</button>
+            <div className="basis-1/2 rounded-md shadow-md p-8 ml-2 mr-4 w-auto">
+                <form className='flex flex-col justify-center items-center' onSubmit={prepareSignIn}>
+                    <input id="loginFormEmail" placeholder={"Username"} className="centeredFormElement bg-opacity-50 bg-gray-300 hover:bg-gray-100 focus:bg-gray-100 rounded p-1" type="email" value={email} onChange={field => setEmail(field.target.value)}></input>
+                    <input id="loginFormPassword" placeholder={"Password"} className="centeredFormElement bg-opacity-50 bg-gray-300 hover:bg-gray-100 focus:bg-gray-100 rounded p-1" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
+                    <div className='flex flex-row items-center'>
+                        <button className='mr-2 underline hover:no-underline underline-offset-2 border border-transparent rounded py-1 px-2 hover:border-black hover:bg-white hover:bg-opacity-50' onClick={prepareSignIn}>Login</button>
                         <p>or</p>
-                        <button className="quiet-button" onClick={prepareCreateAccount}>Signup</button>
-                        {errorMessage ? <p id="login-error-message" >{errorMessage}</p> : null}
+                        <button className="ml-2 underline hover:no-underline underline-offset-2 border border-transparent rounded py-1 px-2 hover:border-black hover:bg-white hover:bg-opacity-50" onClick={prepareCreateAccount}>Signup</button>
                     </div>
+                    {errorMessage ? <p className='font-semibold text-red-900 border rounded p-2 mt-2' id="login-error-message" >{errorMessage}</p> : null}
                 </form>
             </div>
             <Footer />
