@@ -98,7 +98,6 @@ const LinksList = () => {
             <a className={"nav-button"} onClick={() => navigate("/goals")}>Goals</a>
             <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
             <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
-            <a className={"nav-button"} onClick={() => navigate("/health")}>Health</a>
             <a className={"nav-button"} onClick={() => navigate("/screens")}>Screens</a>
             {
                 screens && screens.map(screen => 
