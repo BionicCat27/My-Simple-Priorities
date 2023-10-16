@@ -127,15 +127,14 @@ const ListDisplay = (props) => {
 
     useEffect(()=>{
         if (!ready) return;
-        addDataListener(`types/${type.typeKey}/data`, setData)
+        addDataListener(`types/${type.typeKey}/data`, setData, true)
     }, [ready])
 
     if (!data) return;
-    let collectedData = [].concat(...Object.values(data))
     return (
-        <div>
-            {collectedData && collectedData.map((datum)=> {
-                return <div className="card">{datum.name}</div>
+        <div key={`listDisplay/${type.typeKey}`}>
+            {data && data.map((datum)=> {
+                return (<div className="card" key={`datumCard/${type.typeKey}/${datum.key}`}>{datum.name}</div>);
             })}
         </div>
     )
@@ -200,7 +199,7 @@ const ScreenCard = (props) => {
                             let type = types[screenType.typeKey];
                             if(!type) return;
                             return (
-                                <div className="card">
+                                <div className="card" key={`typeCard/${screenType.key}`}>
                                     <p>{type.name}</p>
                                     <button onClick={()=>{removeObject(`${cardPath}/types/${screenType.key}`)}}>Remove</button>
                                 </div>
@@ -209,14 +208,14 @@ const ScreenCard = (props) => {
                     }
                     <select value={typeSelectorInput} onChange={field => setTypeSelectorInput(field.target.value)}>
                         <option>{defaultSelectorInput}</option>
-                        {typesList && typesList.map(type => <option value={type.key}>{type.name}</option>)}
+                        {typesList && typesList.map(type => <option value={type.key} key={`typeOption/${type.key}`}>{type.name}</option>)}
                     </select>
                     <button onClick={()=>{addSelected(`${cardPath}/types`, typeSelectorInput, "typeKey")}}>Associate Type</button>
                     <label>Displays</label>
                     {
                         screenDisplays && screenDisplays.map(display => {
                             return (
-                                <div className="card">
+                                <div className="card" key={`screenCard/display/${display.key}`}>
                                     <p>{displaysMap[display.displayKey].name}</p>
                                     <button onClick={()=>{removeObject(`${cardPath}/displays/${display.key}`)}}>Remove</button>
                                 </div>
@@ -225,7 +224,7 @@ const ScreenCard = (props) => {
                     }
                     <select value={displaySelectorInput} onChange={field => setDisplaySelectorInput(field.target.value)}>
                         <option>{defaultSelectorInput}</option>
-                        {displaysList && displaysList.map(display => <option value={display.key}>{display.name}</option>)}
+                        {displaysList && displaysList.map(display => <option value={display.key} key={`displayOption/${display.key}`}>{display.name}</option>)}
                     </select>
                     <button onClick={()=>{addSelected(`${cardPath}/displays`, displaySelectorInput, "displayKey")}}>Add Display</button>
 

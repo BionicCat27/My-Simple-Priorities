@@ -45,12 +45,10 @@ const TodoPage = () => {
     }, [sortAscending]);
 
     function handleData(cards) {
-        console.log(`Cards: ${cards}`);
         if (!cards) {
             setContentList([]);
             return;
         }
-        console.log(`Setting Gantt length`);
         let mostDifference = 0;
         cards.forEach((card) => {
             let differenceInDays = getDaysDiff(card.dueDate, new Date());
@@ -59,7 +57,6 @@ const TodoPage = () => {
             }
         });
         setGanttLength(mostDifference > 7 ? mostDifference : 7);
-        console.log(`Sorting`);
         let sortedCards = [...cards];
         sortedCards.sort((a, b) => {
             return getDaysDiff(a.dueDate, b.dueDate);

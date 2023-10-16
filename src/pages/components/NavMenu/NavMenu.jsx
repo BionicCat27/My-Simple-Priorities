@@ -84,14 +84,16 @@ const Header = (props) => {
 
 const LinksList = () => {
     const { signUserOut } = useContext(AuthContext);
-    const { addDataListener } = useContext(DBContext);
+    const { addDataListener, ready } = useContext(DBContext);
     const navigate = useNavigate();
 
     const [screens, setScreens] = useState();
 
     useEffect(()=>{
-        addDataListener(`screens`, setScreens, true)
-    }, [])
+        if(ready) {
+            addDataListener(`screens`, setScreens, true)
+        }
+    }, [ready])
     return (
         <>
             <a className={"nav-button"} onClick={() => navigate("/capture")}>Capture</a>
@@ -101,7 +103,7 @@ const LinksList = () => {
             <a className={"nav-button"} onClick={() => navigate("/screens")}>Screens</a>
             {
                 screens && screens.map(screen => 
-                    <a className={"nav-button"} onClick={() => navigate(`/screens/${screen.key}`)}>{screen.name}</a>
+                    <a className={"nav-button"} key={`navLink/${screen.key}`} onClick={() => navigate(`/screens/${screen.key}`)}>{screen.name}</a>
                 )
             }
             <a className={"nav-button"} onClick={() => navigate("/types")}>Types</a>
