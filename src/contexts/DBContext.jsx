@@ -39,7 +39,7 @@ export const DBProvider = ({ children }) => {
     }
 
     const asKeyedList = (data) => {
-        if (!data) return;
+        if (!data) return data;
         let keyedList = Object.keys(data).map(key => {
             let object = data[key];
             object.key = key;
@@ -48,14 +48,11 @@ export const DBProvider = ({ children }) => {
         return keyedList;
     }
 
-    const addDataListener = async (path, resultFunction) => {
+    const addDataListener = async (path, resultFunction, keyed) => {
         if(!ready) return;
-        onValue(getRef(path), (snapshot) => {
-            let data = snapshot.val();
-            data = asKeyedList(data);
-            resultFunction(data);
-        })
+        onValue(getRef(path), (snapshot) => keyed ? resultFunction(asKeyedList(snapshot.val())) : resultFunction(snapshot.val()))
     }
+
 
     return (
         <DBContext.Provider value={{

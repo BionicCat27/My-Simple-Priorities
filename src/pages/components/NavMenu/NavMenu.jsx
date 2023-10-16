@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router';
 import { AuthContext } from '../../../contexts/AuthContext';
 import './Header.css';
 import './Sidebar.css';
+import { DBContext } from '../../../contexts/DBContext';
 
 
 function NavMenu(props) {
@@ -83,8 +84,14 @@ const Header = (props) => {
 
 const LinksList = () => {
     const { signUserOut } = useContext(AuthContext);
+    const { addDataListener } = useContext(DBContext);
     const navigate = useNavigate();
 
+    const [screens, setScreens] = useState();
+
+    useEffect(()=>{
+        addDataListener(`screens`, setScreens, true)
+    }, [])
     return (
         <>
             <a className={"nav-button"} onClick={() => navigate("/capture")}>Capture</a>
@@ -92,6 +99,13 @@ const LinksList = () => {
             <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
             <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
             <a className={"nav-button"} onClick={() => navigate("/health")}>Health</a>
+            <a className={"nav-button"} onClick={() => navigate("/screens")}>Screens</a>
+            {
+                screens && screens.map(screen => 
+                    <a className={"nav-button"} onClick={() => navigate(`/screens/${screen.key}`)}>{screen.name}</a>
+                )
+            }
+            <a className={"nav-button"} onClick={() => navigate("/types")}>Types</a>
             <a className={"nav-button"} onClick={() => signUserOut()}>Logout</a>
         </>
     );

@@ -10,6 +10,8 @@ import ProtectedPage from './pages/ProtectedPage';
 import ReviewPage from './pages/ReviewPage';
 import SignupPage from './pages/SignupPage';
 import TodoPage from './pages/TodoPage';
+import ScreensPage from './pages/ScreensPage';
+import TypesPage from './pages/TypesPage';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/todo" element={<ProtectedPage><TodoPage /></ProtectedPage>} title="Todo" />
             <Route path="/review" element={<ProtectedPage><ReviewPage /></ProtectedPage>} />
             <Route path="/health" element={<ProtectedPage><HealthPage /></ProtectedPage>} />
+            <Route path="/screens/*" element={<ProtectedPage><ScreensPage /></ProtectedPage>} />
+            <Route path="/types" element={<ProtectedPage><TypesPage /></ProtectedPage>} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="*" element={<NotFoundPage />} />
