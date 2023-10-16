@@ -13,7 +13,7 @@ const CapturePage = () => {
 
     useEffect(() => {
         if (ready) {
-            addDataListener("capture", setNotes);
+            addDataListener("capture", setNotes, true);
         }
     }, [ready]);
 

@@ -18,7 +18,7 @@ const GoalsPage = (props) => {
 
     useEffect(() => {
         if (ready) {
-            addDataListener("priorities", setContentList);
+            addDataListener("priorities", setContentList, true);
         }
     }, [ready]);
 

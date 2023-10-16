@@ -26,7 +26,7 @@ const ReviewPage = (props) => {
 
     useEffect(() => {
         if (ready) {
-            addDataListener(`review`, setContentList);
+            addDataListener(`review`, setContentList, true);
         }
     }, [ready]);
 

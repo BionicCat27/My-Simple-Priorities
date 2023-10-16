@@ -36,7 +36,7 @@ const TodoPage = () => {
 
     useEffect(() => {
         if (ready) {
-            addDataListener(path, handleData);
+            addDataListener(path, handleData, true);
         }
     }, [ready]);
 
