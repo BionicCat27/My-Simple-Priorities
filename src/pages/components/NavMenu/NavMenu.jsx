@@ -100,13 +100,13 @@ const LinksList = () => {
             <a className={"nav-button"} onClick={() => navigate("/goals")}>Goals</a>
             <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
             <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
+            <a className={"nav-button"} onClick={() => navigate("/types")}>Types</a>
             <a className={"nav-button"} onClick={() => navigate("/screens")}>Screens</a>
             {
                 screens && screens.map(screen => 
                     <a className={"nav-button"} key={`navLink/${screen.key}`} onClick={() => navigate(`/screens/${screen.key}`)}>{screen.name}</a>
                 )
             }
-            <a className={"nav-button"} onClick={() => navigate("/types")}>Types</a>
             <a className={"nav-button"} onClick={() => signUserOut()}>Logout</a>
         </>
     );
