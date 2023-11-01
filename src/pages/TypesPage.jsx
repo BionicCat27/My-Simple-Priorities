@@ -46,14 +46,34 @@ const TypesPage = () => {
 
 const TypesCard = (props) => {
 
-    const {updateObject} = useContext(DBContext)
+    const {updateObject, pushObject, asKeyedList} = useContext(DBContext)
 
     const card = props.card;
     if (!card) return;
     const cardPath = `${props.path}/${card.key}`;
+    const typeFields = asKeyedList(card.fields);
+
+    const fieldsMap = {
+        'fields/text': {
+            'name': 'Text'
+        }
+    }
+    const fieldsList = asKeyedList(fieldsMap);
+    
+    const defaultSelectorInput = "None";
 
     const [titleInput, setTitleInput] = useState(card.name);
+    const [fieldSelectorInput, setFieldSelectorInput] = useState(defaultSelectorInput);
 
+    function addSelected(path, value, keyName) {
+        if (value === defaultSelectorInput) {
+            return;
+        }
+        let obj = {};
+        obj[keyName] = value;
+        pushObject(path, obj);
+    }
+    
     function updateContent() {
         updateObject(cardPath, "name", titleInput || "");
     }
@@ -73,11 +93,62 @@ const TypesCard = (props) => {
             editComponent={
                 <>
                     <EditableInput label={"Name"} value={titleInput} setValue={setTitleInput} />
+                    <label>Fields</label>
+                    {
+                        typeFields && typeFields.map(field => {
+                            return (
+                                <>
+                                    <FieldCard card={field}
+                                    path={cardPath}
+                                    />
+                                </>
+                            );
+                        })
+                    }
+                    <select value={fieldSelectorInput} onChange={field => setFieldSelectorInput(field.target.value)}>
+                        <option>{defaultSelectorInput}</option>
+                        {fieldsList && fieldsList.map(field => <option value={field.key} key={`fieldOption/${field.key}`}>{field.name}</option>)}
+                    </select>
+                    <button onClick={()=>{addSelected(`${cardPath}/fields`, fieldSelectorInput, "fieldKey")}}>Add Field</button>
                 </>
             }
-            />
+        />
     )
+}
 
+const FieldCard = (props) => {
+    const {updateObject, pushObject, removeObject, asKeyedList} = useContext(DBContext)
+
+    const card = props.card;
+    const cardPath = `${props.path}/fields/${card.key}`;
+
+    const [input, setInput] = useState(card.name || "");
+
+
+    function updateContent() {
+        updateObject(cardPath, "name", input || "");
+    }
+
+    function resetContent() {
+        setInput(card.name);
+    }
+
+    return (
+        <Card card={card}
+        cardPath={cardPath}
+        updateContent={updateContent}
+        resetContent={resetContent}
+        viewComponent={
+            <>
+                <h3>{card.name}</h3>
+                <h4>{card.fieldKey}</h4>
+            </>
+        }
+        editComponent={
+            <EditableInput label="Name" value={input} setValue={setInput} />
+        }
+        />
+    )
 }
 
 export default TypesPage;

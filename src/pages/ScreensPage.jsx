@@ -125,35 +125,39 @@ const ScreenPage = (props) => {
 }
 
 const ListDisplay = (props) => {
-    const {ready, addDataListener} = useContext(DBContext);
+    const {ready, addDataListener, asKeyedList} = useContext(DBContext);
     const type = props.type;
     const display = props.display;
-    const [data, setData] = useState([]);
+    const [typeObject, setTypeObject] = useState([]);
+    const typeData = asKeyedList(typeObject?.data);
+    const typeFields = asKeyedList(typeObject?.fields);
 
-    const displayPath = `types/${type.typeKey}/data`;
+    const typePath = `types/${type.typeKey}`;
 
     useEffect(()=>{
         if (!ready) return;
-        addDataListener(displayPath, setData, true)
+        addDataListener(typePath, setTypeObject, false)
     }, [ready])
 
-    if (!data) return;
+    if (!typeData) return;
     return (
         <div key={`listDisplay/${type.typeKey}`} style={{width: "100%"}}>
             <h3>{display.name}</h3>
-            {data && data.map((datum)=> {
-                return <ListCard card={datum} 
-                path={displayPath}/>;
+            {typeData && typeData.map((datum)=> {
+                return <ListCard card={datum} typeFields={typeFields}
+                path={typePath}/>;
             })}
         </div>
     )
 }
 
 const ListCard = (props) => {
-    const {updateObject} = useContext(DBContext);
+    const {updateObject, asKeyedList} = useContext(DBContext);
     const card = props.card;
     if (!card) return <div className="card">No card prop found</div>;
-    const cardPath = `${props.path}/${card.key}`
+    const cardPath = `${props.path}/data/${card.key}`
+
+    const fields = props.typeFields;
 
     const [input, setInput] = useState(card.name);
 
@@ -176,6 +180,12 @@ const ListCard = (props) => {
             editComponent={
                 <>
                     <EditableInput label={"Name"} value={input} setValue={setInput} />
+                    <label>Fields</label>
+                    {
+                        fields && fields.map(field => {
+                            return <EditableInput label={field.name} path={`${cardPath}/fields`} dataname={field.key} />
+                        })
+                    }
                 </>
             }
             />
