@@ -86,6 +86,7 @@ const ScreenPage = (props) => {
         setInput("");
     }
     if(!screen) return;
+    const configuration = screen.configuration;
     const screenDisplays = asKeyedList(screen.displays);
     let screenTypes = asKeyedList(screen.types);
     let screenType;
@@ -106,17 +107,19 @@ const ScreenPage = (props) => {
                 <input autoFocus placeholder="Name" value={input} onChange={field => setInput(field.target.value)} type="text" className="content_field" />
                 <button id="addContentButton" onClick={event => addContent(event, typePath)}>Create</button>
             </form>
-            {
-                screenDisplays && screenDisplays.map((display)=>{
-                    if (!display) return;
-                    const displayType = display.displayKey;
-                    if (displayType === 'displays/list') {
-                        return (
-                            <ListDisplay type={screenType} />
-                        )
-                    }
-                })
-            }
+            <div className={`flex-aligned-${configuration?.displays?.alignment}`}>
+                {
+                    screenDisplays && screenDisplays.map((display)=>{
+                        if (!display) return;
+                        const displayType = display.displayKey;
+                        if (displayType === 'displays/list') {
+                            return (
+                                <ListDisplay type={screenType} />
+                            )
+                        }
+                    })
+                }
+            </div>
         </>
     )
 }
@@ -135,7 +138,7 @@ const ListDisplay = (props) => {
 
     if (!data) return;
     return (
-        <div key={`listDisplay/${type.typeKey}`}>
+        <div key={`listDisplay/${type.typeKey}`} style={{width: "100%"}}>
             {data && data.map((datum)=> {
                 return <ListCard card={datum} 
                 path={displayPath}/>;
@@ -193,6 +196,7 @@ const ScreenCard = (props) => {
     const types = props.types;
     const typesList = asKeyedList(types);
     const screenTypes = asKeyedList(card.types);
+    const configuration = card.configuration;
     const screenDisplays = asKeyedList(card.displays);
 
     const defaultSelectorInput = "None";
@@ -208,6 +212,16 @@ const ScreenCard = (props) => {
         let obj = {};
         obj[keyName] = value;
         pushObject(path, obj);
+    }
+
+    function toggleDisplayAlignment() {
+        let value = true;
+        if (configuration?.displays?.alignment == undefined) {
+            value = true;
+        } else {
+            value = !configuration.displays.alignment
+        }
+        updateObject(`${cardPath}/configuration`, "displays/alignment", value)
     }
 
     function updateContent() {
@@ -264,7 +278,7 @@ const ScreenCard = (props) => {
                         {displaysList && displaysList.map(display => <option value={display.key} key={`displayOption/${display.key}`}>{display.name}</option>)}
                     </select>
                     <button onClick={()=>{addSelected(`${cardPath}/displays`, displaySelectorInput, "displayKey")}}>Add Display</button>
-
+                    <button onClick={()=>{toggleDisplayAlignment()}}>Aligned {configuration?.displays?.alignment ? `Horizontally` : `Vertically`}</button>
                 </>
             }
             />

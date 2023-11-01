@@ -159,3 +159,13 @@ button:hover {
 .emptyTitle {
   text-align: center;
 }
+
+.flex-aligned-true {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-aligned-false {
+  display: flex;
+  flex-direction: column;
+}
