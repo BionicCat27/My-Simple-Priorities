@@ -22,7 +22,7 @@ export const Card = (props) => {
     const isDefault = props.isDefault || true;
 
     function deleteCard() {
-        if (confirm(`Delete \"${card.title}\"?`)) {
+        if (confirm(`Delete \"${card.title || card.name}\"?`)) {
             removeObject(cardPath);
             setEditing(false);
         } else {

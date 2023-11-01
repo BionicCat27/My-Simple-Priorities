@@ -94,7 +94,8 @@ const ScreenPage = (props) => {
     } else {
         return <>
         <NavMenu title={screen.name} />
-        <p>No type associated with screen "{screen.name}"</p>
+        <p>No type associated with screen "{screen.name}."</p>
+        <p><a href="/types">Create a Type</a> or <a href="/screens">Manage screens</a></p>
         </>;
     }
     let typePath = `types/${screenType.typeKey}/data`;
@@ -125,18 +126,54 @@ const ListDisplay = (props) => {
     const type = props.type;
     const [data, setData] = useState([]);
 
+    const displayPath = `types/${type.typeKey}/data`;
+
     useEffect(()=>{
         if (!ready) return;
-        addDataListener(`types/${type.typeKey}/data`, setData, true)
+        addDataListener(displayPath, setData, true)
     }, [ready])
 
     if (!data) return;
     return (
         <div key={`listDisplay/${type.typeKey}`}>
             {data && data.map((datum)=> {
-                return (<div className="card" key={`datumCard/${type.typeKey}/${datum.key}`}>{datum.name}</div>);
+                return <ListCard card={datum} 
+                path={displayPath}/>;
             })}
         </div>
+    )
+}
+
+const ListCard = (props) => {
+    const {updateObject} = useContext(DBContext);
+    const card = props.card;
+    if (!card) return <div className="card">No card prop found</div>;
+    const cardPath = `${props.path}/${card.key}`
+
+    const [input, setInput] = useState(card.name);
+
+    function updateContent() {
+        updateObject(cardPath, "name", input || "");
+    }
+
+    function resetContent() {
+        setInput(card.name);
+    }
+
+    return (
+        <Card card={card}
+            cardPath={cardPath} 
+            updateContent={updateContent}
+            resetContent={resetContent}
+            viewComponent={
+                <h3>{card.name}</h3>   
+            }
+            editComponent={
+                <>
+                    <EditableInput label={"Name"} value={input} setValue={setInput} />
+                </>
+            }
+            />
     )
 }
 
