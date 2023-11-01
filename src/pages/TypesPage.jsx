@@ -3,6 +3,7 @@ import { DBContext } from "../contexts/DBContext";
 import NavMenu from "./components/NavMenu/NavMenu";
 import { Card } from "./components/Card";
 import { EditableInput } from "./components/EditableInput";
+import { EditableSelect } from "./components/EditableSelect";
 
 const TypesPage = () => {
     const {addDataListener, pushObject, ready} = useContext(DBContext)
@@ -105,10 +106,8 @@ const TypesCard = (props) => {
                             );
                         })
                     }
-                    <select value={fieldSelectorInput} onChange={field => setFieldSelectorInput(field.target.value)}>
-                        <option>{defaultSelectorInput}</option>
-                        {fieldsList && fieldsList.map(field => <option value={field.key} key={`fieldOption/${field.key}`}>{field.name}</option>)}
-                    </select>
+                    <EditableSelect label={""} value={fieldSelectorInput} setValue={setFieldSelectorInput}
+                    options={fieldsList} defaultOption={defaultSelectorInput} />
                     <button onClick={()=>{addSelected(`${cardPath}/fields`, fieldSelectorInput, "fieldKey")}}>Add Field</button>
                 </>
             }

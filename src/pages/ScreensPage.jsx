@@ -4,6 +4,7 @@ import NavMenu from "./components/NavMenu/NavMenu";
 import { Card } from "./components/Card";
 import { EditableInput } from "./components/EditableInput";
 import { useLocation } from "react-router";
+import { EditableSelect } from "./components/EditableSelect";
 
 const ScreensPage = () => {
     const {addDataListener, pushObject, ready} = useContext(DBContext)
@@ -269,10 +270,8 @@ const ScreenCard = (props) => {
                             );
                         })
                     }
-                    <select value={typeSelectorInput} onChange={field => setTypeSelectorInput(field.target.value)}>
-                        <option>{defaultSelectorInput}</option>
-                        {typesList && typesList.map(type => <option value={type.key} key={`typeOption/${type.key}`}>{type.name}</option>)}
-                    </select>
+                    <EditableSelect label={""} value={typeSelectorInput} setValue={setTypeSelectorInput}
+                    options={typesList} defaultOption={defaultSelectorInput} />
                     <button onClick={()=>{addSelected(`${cardPath}/types`, typeSelectorInput, "typeKey")}}>Associate Type</button>
                     <label>Displays</label>
                     {
@@ -286,10 +285,8 @@ const ScreenCard = (props) => {
                             );
                         })
                     }
-                    <select value={displaySelectorInput} onChange={field => setDisplaySelectorInput(field.target.value)}>
-                        <option>{defaultSelectorInput}</option>
-                        {displaysList && displaysList.map(display => <option value={display.key} key={`displayOption/${display.key}`}>{display.name}</option>)}
-                    </select>
+                    <EditableSelect label={""} value={displaySelectorInput} setValue={setDisplaySelectorInput}
+                    options={displaysList} defaultOption={defaultSelectorInput} />
                     <button onClick={()=>{addSelected(`${cardPath}/displays`, displaySelectorInput, "displayKey")}}>Add Display</button>
                     <button onClick={()=>{toggleDisplayAlignment()}}>Aligned {configuration?.displays?.alignment ? `Horizontally` : `Vertically`}</button>
                 </>
