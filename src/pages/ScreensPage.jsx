@@ -184,12 +184,32 @@ const ListCard = (props) => {
                     <label>Fields</label>
                     {
                         fields && fields.map(field => {
-                            return <EditableInput label={field.name} path={`${cardPath}/fields`} dataname={field.key} />
+                            return <FieldInput field={field} fields={fields} path={cardPath}/>
                         })
                     }
                 </>
             }
-            />
+        />
+    )
+}
+
+const FieldInput = (props) => {
+    const {updateObject, asKeyedList} = useContext(DBContext)
+
+    const path = props.path;
+    const field = props.field;
+    const options = asKeyedList(field.options);
+
+    if (field.fieldKey == "fields/select") {
+        function setSelect(value) {
+
+        }
+        return (
+            <EditableSelect label={field.name} path={`${path}/fields`} dataname={field.key} options={options}/>
+        )
+    }
+    return (
+        <EditableInput label={field.name} path={`${path}/fields`} dataname={field.key} />
     )
 }
 

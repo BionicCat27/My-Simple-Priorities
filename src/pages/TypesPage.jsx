@@ -57,6 +57,9 @@ const TypesCard = (props) => {
     const fieldsMap = {
         'fields/text': {
             'name': 'Text'
+        },
+        'fields/select': {
+            'name': 'Select'
         }
     }
     const fieldsList = asKeyedList(fieldsMap);
@@ -121,15 +124,25 @@ const FieldCard = (props) => {
     const card = props.card;
     const cardPath = `${props.path}/fields/${card.key}`;
 
-    const [input, setInput] = useState(card.name || "");
+    const [nameInput, setNameInput] = useState(card.name || "");
+    const [optionInput, setOptionInput] = useState("");
 
+    const options = asKeyedList(card.options);
+
+    function addSelectOption() {
+        pushObject(`${cardPath}/options`, {
+            'name': optionInput
+        });
+        setOptionInput("");
+    }
 
     function updateContent() {
-        updateObject(cardPath, "name", input || "");
+        updateObject(cardPath, "name", nameInput || "");
     }
 
     function resetContent() {
-        setInput(card.name);
+        setNameInput(card.name);
+        setOptionInput("");
     }
 
     return (
@@ -144,10 +157,60 @@ const FieldCard = (props) => {
             </>
         }
         editComponent={
-            <EditableInput label="Name" value={input} setValue={setInput} />
+            <>
+                <EditableInput label="Name" value={nameInput} setValue={setNameInput} />
+                {
+                    card.fieldKey == "fields/select" && 
+                    <>
+                        <div>Select-field Options</div>
+                        {
+                            options && options.map(option => {
+                                return <> 
+                                    <OptionCard option={option} path={cardPath} /> 
+                                </>
+                            })
+                        }
+                        <EditableInput label={""} value={optionInput} setValue={setOptionInput}/>
+                        <button onClick={() => addSelectOption()}>Add</button>
+                    </>
+                }
+            </>
         }
         />
     )
+}
+
+const OptionCard = (props) => {
+    const {updateObject, pushObject, removeObject, asKeyedList} = useContext(DBContext)
+
+    const option = props.option;
+    const path = `${props.path}/options/${option.key}`;
+
+    const [input, setInput] = useState(option.name);
+
+    function updateContent() {
+        updateObject(path, "name", input || "");
+    }
+
+    function resetContent() {
+        setInput(option.name);
+    }
+
+    return (
+        <Card card={option} 
+        cardPath={path}
+        updateContent={updateContent}
+        resetContent={resetContent}
+        viewComponent={
+            <>
+                {option.name && <h3>{option.name}</h3>}
+            </>
+        }
+        editComponent={
+            <EditableInput label="Name" value={input} setValue={setInput} />
+        }
+        />
+    );
 }
 
 export default TypesPage;
