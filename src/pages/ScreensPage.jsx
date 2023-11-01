@@ -114,7 +114,7 @@ const ScreenPage = (props) => {
                         const displayType = display.displayKey;
                         if (displayType === 'displays/list') {
                             return (
-                                <ListDisplay type={screenType} />
+                                <ListDisplay type={screenType} display={display} />
                             )
                         }
                     })
@@ -127,6 +127,7 @@ const ScreenPage = (props) => {
 const ListDisplay = (props) => {
     const {ready, addDataListener} = useContext(DBContext);
     const type = props.type;
+    const display = props.display;
     const [data, setData] = useState([]);
 
     const displayPath = `types/${type.typeKey}/data`;
@@ -139,6 +140,7 @@ const ListDisplay = (props) => {
     if (!data) return;
     return (
         <div key={`listDisplay/${type.typeKey}`} style={{width: "100%"}}>
+            <h3>{display.name}</h3>
             {data && data.map((datum)=> {
                 return <ListCard card={datum} 
                 path={displayPath}/>;
@@ -266,10 +268,11 @@ const ScreenCard = (props) => {
                     {
                         screenDisplays && screenDisplays.map(display => {
                             return (
-                                <div className="card" key={`screenCard/display/${display.key}`}>
-                                    <p>{displaysMap[display.displayKey].name}</p>
-                                    <button onClick={()=>{removeObject(`${cardPath}/displays/${display.key}`)}}>Remove</button>
-                                </div>
+                                <>
+                                    <DisplayCard card={display}
+                                    path={cardPath}
+                                    />
+                                </>
                             );
                         })
                     }
@@ -281,9 +284,43 @@ const ScreenCard = (props) => {
                     <button onClick={()=>{toggleDisplayAlignment()}}>Aligned {configuration?.displays?.alignment ? `Horizontally` : `Vertically`}</button>
                 </>
             }
-            />
+        />
     )
+}
 
+const DisplayCard = (props) => {
+    const {updateObject, pushObject, removeObject, asKeyedList} = useContext(DBContext)
+
+    const card = props.card;
+    if (!card) return;
+    const cardPath = `${props.path}/displays/${card.key}`;
+
+    const [input, setInput] = useState(card.name);
+    
+    function updateContent() {
+        updateObject(cardPath, "name", input || "");
+    }
+
+    function resetContent() {
+        setInput(card.name);
+    }
+
+    return (
+        <Card card={card}
+        cardPath={cardPath}
+        updateContent={updateContent}
+        resetContent={resetContent}
+        viewComponent={
+            <>
+                {card.name && <h3>{card.name}</h3>}
+                <h4>{card.displayKey}</h4>
+            </>
+        }
+        editComponent={
+            <EditableInput label="Name" value={input} setValue={setInput} />
+        }
+        />
+    )
 }
 
 export default ScreensPage;
