@@ -133,6 +133,15 @@ const ListDisplay = (props) => {
     const typeData = asKeyedList(typeObject?.data);
     const typeFields = asKeyedList(typeObject?.fields);
 
+    let filteredData = typeData;
+    if (typeData && display.filterField && display.filterFieldValue) {
+        filteredData = filteredData.filter(datum => {
+            let fields = datum?.fields;
+            if (!fields) return false;
+            return fields[display.filterField] === display.filterFieldValue;
+        });
+    }
+
     const typePath = `types/${type.typeKey}`;
 
     useEffect(()=>{
@@ -144,7 +153,7 @@ const ListDisplay = (props) => {
     return (
         <div key={`listDisplay/${type.typeKey}`} style={{width: "100%"}}>
             <h3>{display.name}</h3>
-            {typeData && typeData.map((datum)=> {
+            {filteredData && filteredData.map((datum)=> {
                 return <ListCard card={datum} typeFields={typeFields}
                 path={typePath}/>;
             })}
@@ -201,11 +210,8 @@ const FieldInput = (props) => {
     const options = asKeyedList(field.options);
 
     if (field.fieldKey == "fields/select") {
-        function setSelect(value) {
-
-        }
         return (
-            <EditableSelect label={field.name} path={`${path}/fields`} dataname={field.key} options={options}/>
+            <EditableSelect label={field.name} path={`${path}/fields`} dataname={field.key} options={options} defaultOption="None"/>
         )
     }
     return (
@@ -300,6 +306,8 @@ const ScreenCard = (props) => {
                                 <>
                                     <DisplayCard card={display}
                                     path={cardPath}
+                                    screenTypes={screenTypes}
+                                    typesList={typesList}
                                     />
                                 </>
                             );
@@ -316,12 +324,24 @@ const ScreenCard = (props) => {
 }
 
 const DisplayCard = (props) => {
-    const {updateObject, pushObject, removeObject, asKeyedList} = useContext(DBContext)
+    const {updateObject, pushObject, ready, addDataListener, asKeyedList} = useContext(DBContext)
 
     const card = props.card;
     if (!card) return;
     const cardPath = `${props.path}/displays/${card.key}`;
-
+    const screenTypes = asKeyedList(props.screenTypes);
+    const typesList = asKeyedList(props.typesList);
+    let screenType;
+    if (screenTypes?.length >= 1) {
+        screenType = screenTypes[0];
+    } else {
+        return <>
+            <p>No type associated with screen "{screen.name}."</p>
+            <p><a href="/types">Create a Type</a> or <a href="/screens">Manage screens</a></p>
+        </>;
+    }
+    let typeFields = asKeyedList(typesList[screenType.key].fields);
+    
     const [input, setInput] = useState(card.name);
     
     function updateContent() {
@@ -331,6 +351,10 @@ const DisplayCard = (props) => {
     function resetContent() {
         setInput(card.name);
     }
+
+    let filterFieldKey = card.filterField;
+    let filterField = typeFields.find(field => field.key === filterFieldKey);
+    let filterFieldOptions = asKeyedList(filterField?.options);
 
     return (
         <Card card={card}
@@ -344,7 +368,13 @@ const DisplayCard = (props) => {
             </>
         }
         editComponent={
-            <EditableInput label="Name" value={input} setValue={setInput} />
+            <>
+                <EditableInput label="Name" value={input} setValue={setInput} />
+                <EditableSelect label={"Filter by Field"} path={`${cardPath}`} dataname={`filterField`} options={typeFields} defaultOption="None"/>
+                {filterField &&
+                <EditableSelect label={`Filter by ${filterField.name}`} path={`${cardPath}`} dataname={`filterFieldValue`} options={filterFieldOptions} defaultOption="None"/>
+                }
+            </>
         }
         />
     )
