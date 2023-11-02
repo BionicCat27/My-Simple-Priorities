@@ -353,7 +353,8 @@ const DisplayCard = (props) => {
     }
 
     let filterFieldKey = card.filterField;
-    let filterField = typeFields.find(field => field.key === filterFieldKey);
+    if (!typeFields) return;
+    let filterField = typeFields?.find(field => field.key === filterFieldKey);
     let filterFieldOptions = asKeyedList(filterField?.options);
 
     return (
