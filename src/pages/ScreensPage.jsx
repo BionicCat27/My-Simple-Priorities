@@ -7,86 +7,86 @@ import { useLocation } from "react-router";
 import { EditableSelect } from "./components/EditableSelect";
 
 const ScreensPage = () => {
-    const {addDataListener, pushObject, ready} = useContext(DBContext)
+    const { addDataListener, pushObject, ready } = useContext(DBContext);
 
     const [screens, setScreens] = useState([]);
     const [types, setTypes] = useState([]);
     const [input, setInput] = useState("");
 
-    const location = useLocation()
+    const location = useLocation();
 
-    const pagePath = `screens`
+    const pagePath = `screens`;
 
-    useEffect(()=> {
+    useEffect(() => {
         if (ready) {
-            addDataListener(pagePath, setScreens, true)
-            addDataListener(`types`, setTypes)
+            addDataListener(pagePath, setScreens, true);
+            addDataListener(`types`, setTypes);
         }
-    }, [ready])
+    }, [ready]);
 
     function addContent(event) {
         event.preventDefault();
         pushObject(pagePath, {
             'name': input
-        })
+        });
         setInput("");
     }
-    if(location.pathname === '/screens') {
+    if (location.pathname === '/screens') {
         return (
             <>
-                <NavMenu title="Screens"/>
-               <div>
+                <NavMenu title="Screens" />
+                <div>
                     <form onSubmit={addContent} id="contentForm">
                         <input autoFocus placeholder="Screen Name" value={input} onChange={field => setInput(field.target.value)} type="text" className="content_field" />
                         <button id="addContentButton" onClick={addContent}>Create</button>
                     </form>
                     <h1>Screens</h1>
                     {
-                        screens && screens.map(screen => 
+                        screens && screens.map(screen =>
                             <ScreenCard card={screen}
-                            types={types}
-                            path={pagePath}/>
-                            )
-                        }
+                                types={types}
+                                path={pagePath} />
+                        )
+                    }
                 </div>
             </>
-        )
+        );
     }
     let screenKey = location.pathname.split("/")[2];
-    return (<ScreenPage path={`${pagePath}`} screenKey={screenKey}/>);
-}
+    return (<ScreenPage path={`${pagePath}`} screenKey={screenKey} />);
+};
 
 const ScreenPage = (props) => {
-    const {addDataListener, ready, pushObject, asKeyedList} = useContext(DBContext);
-    
+    const { addDataListener, ready, pushObject, asKeyedList } = useContext(DBContext);
+
     const displaysMap = {
         'displays/list': {
             'name': 'List'
         }
-    }
+    };
     const displaysList = asKeyedList(displaysMap);
 
     const screenKey = props.screenKey;
     const screenPath = `${props.path}/${screenKey}`;
 
-    
+
     const [screen, setScreen] = useState();
     const [input, setInput] = useState("");
-    
-    useEffect(()=>{
-        if(ready) {
+
+    useEffect(() => {
+        if (ready) {
             addDataListener(screenPath, setScreen);
         }
-    },[ready])
-    
+    }, [ready]);
+
     function addContent(event, path) {
         event.preventDefault();
         pushObject(path, {
             'name': input
-        })
+        });
         setInput("");
     }
-    if(!screen) return;
+    if (!screen) return <p>No screen found.</p>;
     const configuration = screen.configuration;
     const screenDisplays = asKeyedList(screen.displays);
     let screenTypes = asKeyedList(screen.types);
@@ -95,38 +95,38 @@ const ScreenPage = (props) => {
         screenType = screenTypes[0];
     } else {
         return <>
-        <NavMenu title={screen.name} />
-        <p>No type associated with screen "{screen.name}."</p>
-        <p><a href="/types">Create a Type</a> or <a href="/screens">Manage screens</a></p>
+            <NavMenu title={screen.name} />
+            <p>No type associated with screen "{screen.name}."</p>
+            <p><a href="/types">Create a Type</a> or <a href="/screens">Manage screens</a></p>
         </>;
     }
     let typePath = `types/${screenType.typeKey}/data`;
     return (
         <>
-            <NavMenu title={screen.name}/>
+            <NavMenu title={screen.name} />
             <form onSubmit={event => addContent(event, typePath)} id="contentForm">
                 <input autoFocus placeholder="Name" value={input} onChange={field => setInput(field.target.value)} type="text" className="content_field" />
                 <button id="addContentButton" onClick={event => addContent(event, typePath)}>Create</button>
             </form>
             <div className={`flex-aligned-${configuration?.displays?.alignment}`}>
                 {
-                    screenDisplays && screenDisplays.map((display)=>{
+                    screenDisplays && screenDisplays.map((display) => {
                         if (!display) return;
                         const displayType = display.displayKey;
                         if (displayType === 'displays/list') {
                             return (
                                 <ListDisplay type={screenType} display={display} />
-                            )
+                            );
                         }
                     })
                 }
             </div>
         </>
-    )
-}
+    );
+};
 
 const ListDisplay = (props) => {
-    const {ready, addDataListener, asKeyedList} = useContext(DBContext);
+    const { ready, addDataListener, asKeyedList } = useContext(DBContext);
     const type = props.type;
     const display = props.display;
     const [typeObject, setTypeObject] = useState([]);
@@ -144,28 +144,28 @@ const ListDisplay = (props) => {
 
     const typePath = `types/${type.typeKey}`;
 
-    useEffect(()=>{
+    useEffect(() => {
         if (!ready) return;
-        addDataListener(typePath, setTypeObject, false)
-    }, [ready])
+        addDataListener(typePath, setTypeObject, false);
+    }, [ready]);
 
     if (!typeData) return;
     return (
-        <div key={`listDisplay/${type.typeKey}`} style={{width: "100%"}}>
+        <div key={`listDisplay/${type.typeKey}`} style={{ width: "100%" }}>
             <h3>{display.name}</h3>
-            {filteredData && filteredData.map((datum)=> {
+            {filteredData && filteredData.map((datum) => {
                 return <ListCard card={datum} typeFields={typeFields}
-                path={typePath}/>;
+                    path={typePath} />;
             })}
         </div>
-    )
-}
+    );
+};
 
 const ListCard = (props) => {
-    const {updateObject, asKeyedList} = useContext(DBContext);
+    const { updateObject, asKeyedList } = useContext(DBContext);
     const card = props.card;
     if (!card) return <div className="card">No card prop found</div>;
-    const cardPath = `${props.path}/data/${card.key}`
+    const cardPath = `${props.path}/data/${card.key}`;
 
     const fields = props.typeFields;
 
@@ -181,11 +181,11 @@ const ListCard = (props) => {
 
     return (
         <Card card={card}
-            cardPath={cardPath} 
+            cardPath={cardPath}
             updateContent={updateContent}
             resetContent={resetContent}
             viewComponent={
-                <h3>{card.name}</h3>   
+                <h3>{card.name}</h3>
             }
             editComponent={
                 <>
@@ -193,17 +193,17 @@ const ListCard = (props) => {
                     <label>Fields</label>
                     {
                         fields && fields.map(field => {
-                            return <FieldInput field={field} fields={fields} path={cardPath}/>
+                            return <FieldInput field={field} fields={fields} path={cardPath} />;
                         })
                     }
                 </>
             }
         />
-    )
-}
+    );
+};
 
 const FieldInput = (props) => {
-    const {updateObject, asKeyedList} = useContext(DBContext)
+    const { updateObject, asKeyedList } = useContext(DBContext);
 
     const path = props.path;
     const field = props.field;
@@ -211,17 +211,17 @@ const FieldInput = (props) => {
 
     if (field.fieldKey == "fields/select") {
         return (
-            <EditableSelect label={field.name} path={`${path}/fields`} dataname={field.key} options={options} defaultOption="None"/>
-        )
+            <EditableSelect label={field.name} path={`${path}/fields`} dataname={field.key} options={options} defaultOption="None" />
+        );
     }
     return (
         <EditableInput label={field.name} path={`${path}/fields`} dataname={field.key} />
-    )
-}
+    );
+};
 
 const ScreenCard = (props) => {
 
-    const {updateObject, pushObject, removeObject, asKeyedList} = useContext(DBContext)
+    const { updateObject, pushObject, removeObject, asKeyedList } = useContext(DBContext);
 
     const card = props.card;
     if (!card) return;
@@ -230,7 +230,7 @@ const ScreenCard = (props) => {
         'displays/list': {
             'name': 'List'
         }
-    }
+    };
     const displaysList = asKeyedList(displaysMap);
     const types = props.types;
     const typesList = asKeyedList(types);
@@ -243,7 +243,7 @@ const ScreenCard = (props) => {
     const [input, setInput] = useState(card.name);
     const [typeSelectorInput, setTypeSelectorInput] = useState(defaultSelectorInput);
     const [displaySelectorInput, setDisplaySelectorInput] = useState(defaultSelectorInput);
-    
+
     function addSelected(path, value, keyName) {
         if (value === defaultSelectorInput) {
             return;
@@ -258,9 +258,9 @@ const ScreenCard = (props) => {
         if (configuration?.displays?.alignment == undefined) {
             value = true;
         } else {
-            value = !configuration.displays.alignment
+            value = !configuration.displays.alignment;
         }
-        updateObject(`${cardPath}/configuration`, "displays/alignment", value)
+        updateObject(`${cardPath}/configuration`, "displays/alignment", value);
     }
 
     function updateContent() {
@@ -274,11 +274,11 @@ const ScreenCard = (props) => {
 
     return (
         <Card card={card}
-            cardPath={cardPath} 
+            cardPath={cardPath}
             updateContent={updateContent}
             resetContent={resetContent}
             viewComponent={
-                <h3>{card.name}</h3>   
+                <h3>{card.name}</h3>
             }
             editComponent={
                 <>
@@ -287,44 +287,44 @@ const ScreenCard = (props) => {
                     {
                         screenTypes && screenTypes.map(screenType => {
                             let type = types[screenType.typeKey];
-                            if(!type) return;
+                            if (!type) return;
                             return (
                                 <div className="card" key={`typeCard/${screenType.key}`}>
                                     <p>{type.name}</p>
-                                    <button onClick={()=>{removeObject(`${cardPath}/types/${screenType.key}`)}}>Remove</button>
+                                    <button onClick={() => { removeObject(`${cardPath}/types/${screenType.key}`); }}>Remove</button>
                                 </div>
                             );
                         })
                     }
                     <EditableSelect label={""} value={typeSelectorInput} setValue={setTypeSelectorInput}
-                    options={typesList} defaultOption={defaultSelectorInput} />
-                    <button onClick={()=>{addSelected(`${cardPath}/types`, typeSelectorInput, "typeKey")}}>Associate Type</button>
+                        options={typesList} defaultOption={defaultSelectorInput} />
+                    <button onClick={() => { addSelected(`${cardPath}/types`, typeSelectorInput, "typeKey"); }}>Associate Type</button>
                     <label>Displays</label>
                     {
                         screenDisplays && screenDisplays.map(display => {
                             return (
                                 <>
                                     <DisplayCard card={display}
-                                    path={cardPath}
-                                    screenTypes={screenTypes}
-                                    typesList={typesList}
+                                        path={cardPath}
+                                        screenTypes={screenTypes}
+                                        typesList={typesList}
                                     />
                                 </>
                             );
                         })
                     }
                     <EditableSelect label={""} value={displaySelectorInput} setValue={setDisplaySelectorInput}
-                    options={displaysList} defaultOption={defaultSelectorInput} />
-                    <button onClick={()=>{addSelected(`${cardPath}/displays`, displaySelectorInput, "displayKey")}}>Add Display</button>
-                    <button onClick={()=>{toggleDisplayAlignment()}}>Aligned {configuration?.displays?.alignment ? `Horizontally` : `Vertically`}</button>
+                        options={displaysList} defaultOption={defaultSelectorInput} />
+                    <button onClick={() => { addSelected(`${cardPath}/displays`, displaySelectorInput, "displayKey"); }}>Add Display</button>
+                    <button onClick={() => { toggleDisplayAlignment(); }}>Aligned {configuration?.displays?.alignment ? `Horizontally` : `Vertically`}</button>
                 </>
             }
         />
-    )
-}
+    );
+};
 
 const DisplayCard = (props) => {
-    const {updateObject, pushObject, ready, addDataListener, asKeyedList} = useContext(DBContext)
+    const { updateObject, pushObject, ready, addDataListener, asKeyedList } = useContext(DBContext);
 
     const card = props.card;
     if (!card) return;
@@ -341,9 +341,9 @@ const DisplayCard = (props) => {
         </>;
     }
     let typeFields = asKeyedList(typesList[screenType.key].fields);
-    
+
     const [input, setInput] = useState(card.name);
-    
+
     function updateContent() {
         updateObject(cardPath, "name", input || "");
     }
@@ -359,26 +359,26 @@ const DisplayCard = (props) => {
 
     return (
         <Card card={card}
-        cardPath={cardPath}
-        updateContent={updateContent}
-        resetContent={resetContent}
-        viewComponent={
-            <>
-                {card.name && <h3>{card.name}</h3>}
-                <h4>{card.displayKey}</h4>
-            </>
-        }
-        editComponent={
-            <>
-                <EditableInput label="Name" value={input} setValue={setInput} />
-                <EditableSelect label={"Filter by Field"} path={`${cardPath}`} dataname={`filterField`} options={typeFields} defaultOption="None"/>
-                {filterField &&
-                <EditableSelect label={`Filter by ${filterField.name}`} path={`${cardPath}`} dataname={`filterFieldValue`} options={filterFieldOptions} defaultOption="None"/>
-                }
-            </>
-        }
+            cardPath={cardPath}
+            updateContent={updateContent}
+            resetContent={resetContent}
+            viewComponent={
+                <>
+                    {card.name && <h3>{card.name}</h3>}
+                    <h4>{card.displayKey}</h4>
+                </>
+            }
+            editComponent={
+                <>
+                    <EditableInput label="Name" value={input} setValue={setInput} />
+                    <EditableSelect label={"Filter by Field"} path={`${cardPath}`} dataname={`filterField`} options={typeFields} defaultOption="None" />
+                    {filterField &&
+                        <EditableSelect label={`Filter by ${filterField.name}`} path={`${cardPath}`} dataname={`filterFieldValue`} options={filterFieldOptions} defaultOption="None" />
+                    }
+                </>
+            }
         />
-    )
-}
+    );
+};
 
 export default ScreensPage;
