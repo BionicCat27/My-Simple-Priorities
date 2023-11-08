@@ -357,11 +357,6 @@ const DisplayCard = (props) => {
     let filterField = typeFields?.find(field => field.key === filterFieldKey);
     let filterFieldOptions = asKeyedList(filterField?.options);
 
-    console.log(`Type object: ${JSON.stringify(typeObject)}`);
-    console.log(`Type fields: ${JSON.stringify(typeFields)}`);
-    console.log(`Filter Field: ${JSON.stringify(filterFieldKey)}`);
-    console.log(`Filter Field options: ${JSON.stringify(filterFieldOptions)}`);
-
     return (
         <Card card={card}
             cardPath={cardPath}
