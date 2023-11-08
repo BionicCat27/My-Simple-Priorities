@@ -20,9 +20,11 @@ export const EditableInput = (props) => {
         );
     }
 
+    const [initialValue, setInitialValue] = useState("");
     const [value, setValue] = useState("");
 
     function handleSetValue(input) {
+        setInitialValue(input || "");
         setValue(input || "")
     }
     
@@ -35,8 +37,8 @@ export const EditableInput = (props) => {
     return (
         <>
             {label && <label>{label}</label>}
-            <input value={value} onChange={(field) => { setValue(field.target.value); }} type={type} />
-            <button onClick={()=>{updateObject(`${path}`, dataname, value)}}>Save {label}</button>
+            <input className="display-inline-block" value={value} onChange={(field) => { setValue(field.target.value); }} type={type} />
+            <button className="display-inline-block margin-x-002" onClick={()=>{updateObject(`${path}`, dataname, value)}} disabled={value === initialValue}>Save {label}</button>
         </>
     )
 

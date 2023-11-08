@@ -36,6 +36,11 @@ select {
   display: inline-block;
 }
 
+button:disabled, button:disabled:hover, select:disabled, select:disabled:hover {
+  background-color: lightgray;
+  color: black
+}
+
 a {
   color: black;
 }
@@ -118,7 +123,7 @@ button:hover {
 }
 
 .display-inline-block {
-  display: inline-block;
+  display: inline-block !important;
 }
 
 .display-none {
@@ -137,6 +142,10 @@ button:hover {
 .margin-x-1 {
   margin-left: 1rem;
   margin-right: 1rem;
+}
+
+.margin-x-002 {
+  margin-left: 0.2rem;
 }
 
 .vertical-center {

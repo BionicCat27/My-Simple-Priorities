@@ -28,9 +28,11 @@ export const EditableSelect = (props) => {
         );
     }
 
+    const [initialValue, setInitialValue] = useState("");
     const [value, setValue] = useState("");
 
     function handleSetValue(input) {
+        setInitialValue(input || "");
         setValue(input || "")
     }
     
@@ -51,7 +53,7 @@ export const EditableSelect = (props) => {
                     )
                 }
             </select>
-            <button onClick={()=>{updateObject(`${path}`, dataname, value)}}>Save {label}</button>
+            <button onClick={()=>{updateObject(`${path}`, dataname, value)}} disabled={value === initialValue}>Save {label}</button>
         </>
     )
 };
