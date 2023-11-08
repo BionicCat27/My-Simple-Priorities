@@ -111,7 +111,7 @@ const ScreenPage = (props) => {
             <div className={`flex-aligned-${configuration?.displays?.alignment}`}>
                 {
                     screenDisplays && screenDisplays.map((display) => {
-                        if (!display) return;
+                        if (!display) return <p>Invalid display</p>;
                         const displayType = display.displayKey;
                         if (displayType === 'displays/list') {
                             return (
@@ -334,13 +334,10 @@ const DisplayCard = (props) => {
     let screenType;
     if (screenTypes?.length >= 1) {
         screenType = screenTypes[0];
-    } else {
-        return <>
-            <p>No type associated with screen "{screen.name}."</p>
-            <p><a href="/types">Create a Type</a> or <a href="/screens">Manage screens</a></p>
-        </>;
     }
-    let typeFields = asKeyedList(typesList[screenType.key].fields);
+    let typeObject = typesList[screenType.key];
+    let typeFields = asKeyedList(typeObject.fields || []);
+    if (!typeFields && typeFields != []) return <p>No valid type fields ({JSON.stringify(typeObject)})</p>;
 
     const [input, setInput] = useState(card.name);
 
@@ -353,7 +350,6 @@ const DisplayCard = (props) => {
     }
 
     let filterFieldKey = card.filterField;
-    if (!typeFields) return;
     let filterField = typeFields?.find(field => field.key === filterFieldKey);
     let filterFieldOptions = asKeyedList(filterField?.options);
 
@@ -371,7 +367,8 @@ const DisplayCard = (props) => {
             editComponent={
                 <>
                     <EditableInput label="Name" value={input} setValue={setInput} />
-                    <EditableSelect label={"Filter by Field"} path={`${cardPath}`} dataname={`filterField`} options={typeFields} defaultOption="None" />
+                    {typeFields && typeFields.length > 0 && 
+                        <EditableSelect label={`Filter by Field`} path={`${cardPath}`} dataname={`filterField`} options={typeFields} defaultOption="None" /> }
                     {filterField &&
                         <EditableSelect label={`Filter by ${filterField.name}`} path={`${cardPath}`} dataname={`filterFieldValue`} options={filterFieldOptions} defaultOption="None" />
                     }
