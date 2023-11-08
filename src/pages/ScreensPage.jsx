@@ -330,12 +330,16 @@ const DisplayCard = (props) => {
     if (!card) return;
     const cardPath = `${props.path}/displays/${card.key}`;
     const screenTypes = asKeyedList(props.screenTypes);
-    const typesList = asKeyedList(props.typesList);
+    const typesList = props.typesList;
     let screenType;
     if (screenTypes?.length >= 1) {
         screenType = screenTypes[0];
     }
-    let typeObject = typesList[screenType.key];
+    if (!screenType) {
+        return <p>No type selected for screen.</p>
+    }
+    let typeObject = typesList.find(type => type.key === screenType.typeKey);
+    if (!typeObject) return <p>Invalid type object for screen type: {JSON.stringify(screenType)} vs {JSON.stringify(typesList)}</p>
     let typeFields = asKeyedList(typeObject.fields || []);
     if (!typeFields && typeFields != []) return <p>No valid type fields ({JSON.stringify(typeObject)})</p>;
 
