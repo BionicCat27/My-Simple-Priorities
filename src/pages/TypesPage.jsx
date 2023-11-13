@@ -170,7 +170,7 @@ const FieldCard = (props) => {
                                 </>
                             })
                         }
-                        <EditableInput label={""} value={optionInput} setValue={setOptionInput}/>
+                        <EditableInput label={""} value={optionInput} setValue={setOptionInput} onSubmit={addSelectOption}/>
                         <button onClick={() => addSelectOption()}>Add</button>
                         <EditableSelect label={"Default Option"} path={cardPath} dataname={`defaultValue`} options={options} defaultOption="None"/>
                     </>
