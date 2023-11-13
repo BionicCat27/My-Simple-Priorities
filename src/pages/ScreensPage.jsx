@@ -179,8 +179,7 @@ const ListDisplay = (props) => {
     if (typeData && display.filterField && display.filterFieldValue) {
         filteredData = filteredData.filter(datum => {
             let fields = datum?.fields;
-            if (!fields) return false;
-            return fields[display.filterField] === display.filterFieldValue;
+            return fields && fields[display.filterField] === display.filterFieldValue;
         });
     }
     const typePath = `types/${type.key}`;
