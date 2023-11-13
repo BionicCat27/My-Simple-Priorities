@@ -3,7 +3,7 @@ import { DBContext } from "../contexts/DBContext";
 import NavMenu from "./components/NavMenu/NavMenu";
 import { Card } from "./components/Card";
 import { EditableInput } from "./components/EditableInput";
-import { useLocation } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { EditableSelect } from "./components/EditableSelect";
 
 const ScreensPage = () => {
@@ -12,8 +12,6 @@ const ScreensPage = () => {
     const [screens, setScreens] = useState([]);
     const [types, setTypes] = useState([]);
     const [input, setInput] = useState("");
-
-    const location = useLocation();
 
     const pagePath = `screens`;
 
@@ -31,51 +29,56 @@ const ScreensPage = () => {
         });
         setInput("");
     }
-    if (location.pathname === '/screens') {
-        return (
-            <>
-                <NavMenu title="Screens" />
-                <div>
-                    <form onSubmit={addContent} id="contentForm">
-                        <input autoFocus placeholder="Screen Name" value={input} onChange={field => setInput(field.target.value)} type="text" className="content_field" />
-                        <button id="addContentButton" onClick={addContent}>Create</button>
-                    </form>
-                    <h1>Screens</h1>
-                    {
-                        screens && screens.map(screen =>
-                            <ScreenCard card={screen}
-                                types={types}
-                                path={pagePath} />
-                        )
-                    }
-                </div>
-            </>
-        );
-    }
-    let screenKey = location.pathname.split("/")[2];
-    return (<ScreenPage path={`${pagePath}`} screenKey={screenKey} />);
+    return (
+        <>
+            <NavMenu title="Screens" />
+            <div>
+                <form onSubmit={addContent} id="contentForm">
+                    <input autoFocus placeholder="Screen Name" value={input} onChange={field => setInput(field.target.value)} type="text" className="content_field" />
+                    <button id="addContentButton" onClick={addContent}>Create</button>
+                </form>
+                <h1>Screens</h1>
+                {
+                    screens && screens.map(screen =>
+                        <ScreenCard card={screen}
+                            types={types}
+                            path={pagePath} />
+                    )
+                }
+            </div>
+        </>
+    );
 };
 
-const ScreenPage = (props) => {
+export const ScreenPage = (props) => {
     const { addDataListener, ready, pushObject, asKeyedList } = useContext(DBContext);
+    const params = useParams();
 
     const [screen, setScreen] = useState();
     const [input, setInput] = useState("");
     const [typeObject, setTypeObject] = useState([]);
     const [screenType, setScreenType] = useState([]);
+    
+    const pagePath = `screens`;
 
     useEffect(() => {
         if (ready) {
-            const screenPath = `${props.path}/${props.screenKey}`;
+            const screenKey = params.screenId;
+            const screenPath = `${pagePath}/${screenKey}`;
+            setScreen();
+            setScreenType();
             addDataListener(screenPath, setScreen);
         }
-    }, [ready]);
+    }, [ready, params]);
 
     useEffect(()=> {
         if(!screen) {
             return;
         }
         let screenTypes = asKeyedList(screen.types);
+        if(!screenTypes || screenTypes.length < 1) {
+            return;
+        }
         let screenType = screenTypes[0];
         setScreenType(screenType);
     }, [screen])
@@ -95,7 +98,7 @@ const ScreenPage = (props) => {
 
     if (!screen) {
         return <p>No screen found.</p>;
-    } else if(screenType?.length < 1) {
+    } else if(!screenType || screenType.length < 1) {
         return (<>
             <NavMenu title={screen.name} />
             <p>No type associated with screen "{screen.name}."</p>

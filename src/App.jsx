@@ -9,7 +9,7 @@ import ProtectedPage from './pages/ProtectedPage';
 import ReviewPage from './pages/ReviewPage';
 import SignupPage from './pages/SignupPage';
 import TodoPage from './pages/TodoPage';
-import ScreensPage from './pages/ScreensPage';
+import ScreensPage, { ScreenPage } from './pages/ScreensPage';
 import TypesPage from './pages/TypesPage';
 
 function App() {
@@ -23,7 +23,8 @@ function App() {
             <Route path="/goals" element={<ProtectedPage><GoalsPage /></ProtectedPage>} title="Priorities" />
             <Route path="/todo" element={<ProtectedPage><TodoPage /></ProtectedPage>} title="Todo" />
             <Route path="/review" element={<ProtectedPage><ReviewPage /></ProtectedPage>} />
-            <Route path="/screens/*" element={<ProtectedPage><ScreensPage /></ProtectedPage>} />
+            <Route path="/screens" element={<ProtectedPage><ScreensPage /></ProtectedPage>}/>
+            <Route path="/screens/:screenId" element={<ProtectedPage><ScreenPage /></ProtectedPage>}/>
             <Route path="/types" element={<ProtectedPage><TypesPage /></ProtectedPage>} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
