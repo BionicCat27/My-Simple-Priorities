@@ -153,7 +153,7 @@ const ScreenPage = (props) => {
                         const displayType = display.displayKey;
                         if (displayType === 'displays/list') {
                             return (
-                                <ListDisplay type={typeObject} display={display} />
+                                <ListDisplay type={typeObject} display={display} key={`${typeDatumPath}/display/${display.key}`}/>
                             );
                         }
                     })
@@ -186,11 +186,11 @@ const ListDisplay = (props) => {
 
     if (!typeData) return;
     return (
-        <div key={`listDisplay/${type.typeKey}`} style={{ width: "100%" }}>
+        <div style={{ width: "100%" }}>
             <h3>{display.name}</h3>
             {filteredData && filteredData.map((datum) => {
                 return <ListCard card={datum} typeFields={typeFields}
-                    path={typePath} />;
+                    path={typePath} key={`${typePath}/card/${datum.key}`}/>;
             })}
         </div>
     );
@@ -228,7 +228,7 @@ const ListCard = (props) => {
                     <label>Fields</label>
                     {
                         fields && fields.map(field => {
-                            return <FieldInput field={field} fields={fields} path={cardPath} />;
+                            return <FieldInput field={field} fields={fields} path={cardPath} key={`${cardPath}/fieldInput/${field.key}`}/>;
                         })
                     }
                 </>
@@ -246,11 +246,11 @@ const FieldInput = (props) => {
 
     if (field.fieldKey == "fields/select") {
         return (
-            <EditableSelect label={field.name} path={`${path}/fields`} dataname={field.key} options={options} defaultOption="None" />
+            <EditableSelect label={field.name} path={`${path}/fields`} dataname={field.key} options={options} defaultOption="None" key={`${path}/fieldInput`}/>
         );
     }
     return (
-        <EditableInput label={field.name} path={`${path}/fields`} dataname={field.key} />
+        <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key}/>
     );
 };
 
