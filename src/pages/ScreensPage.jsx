@@ -59,54 +59,92 @@ const ScreensPage = () => {
 const ScreenPage = (props) => {
     const { addDataListener, ready, pushObject, asKeyedList } = useContext(DBContext);
 
-    const displaysMap = {
-        'displays/list': {
-            'name': 'List'
-        }
-    };
-    const displaysList = asKeyedList(displaysMap);
-
-    const screenKey = props.screenKey;
-    const screenPath = `${props.path}/${screenKey}`;
-
-
     const [screen, setScreen] = useState();
     const [input, setInput] = useState("");
+    const [typeObject, setTypeObject] = useState([]);
+    const [screenType, setScreenType] = useState([]);
 
     useEffect(() => {
         if (ready) {
+            const screenPath = `${props.path}/${props.screenKey}`;
             addDataListener(screenPath, setScreen);
         }
     }, [ready]);
 
-    function addContent(event, path) {
+    useEffect(()=> {
+        if(!screen) {
+            return;
+        }
+        let screenTypes = asKeyedList(screen.types);
+        let screenType = screenTypes[0];
+        setScreenType(screenType);
+    }, [screen])
+
+    useEffect(()=>{
+        if(ready && screenType) {
+            const typeKey = screenType.typeKey;
+            const typePath = `types/${typeKey}`;
+            const handleTypeObject = (object) => {
+                if(!object) return;
+                object.key = typeKey;
+                setTypeObject(object);
+            }
+            addDataListener(typePath, handleTypeObject, false);
+        }
+    }, [screenType])
+
+    if (!screen) {
+        return <p>No screen found.</p>;
+    } else if(screenType?.length < 1) {
+        return (<>
+            <NavMenu title={screen.name} />
+            <p>No type associated with screen "{screen.name}."</p>
+            <p><a href="/types">Create a Type</a> or <a href="/screens">Manage screens</a></p>
+        </>);
+    }
+    const typeDatumPath = `types/${screenType.typeKey}/data`;
+
+
+    function createDatumObject(datatype, path, object) {
+        let fieldsSchema = asKeyedList(datatype?.fields);
+        if(fieldsSchema) {
+            fieldsSchema.forEach(field => {
+                if(field.key in object) {
+                    return;
+                }
+                // Populate any default fields
+                if(field.fieldKey === "fields/select"){
+                    let defaultValue = field.defaultValue;
+                    if(defaultValue) {
+                        if (!object.fields) {
+                            let defaultFieldObject = {};
+                            defaultFieldObject[field.key] = defaultValue;
+                            object["fields"] = defaultFieldObject;
+                        }
+                    }
+                }
+            })
+        }
+        pushObject(path, object);
+    }
+
+    function addContent(datatype, event, path) {
         event.preventDefault();
-        pushObject(path, {
+        createDatumObject(datatype, path, {
             'name': input
         });
         setInput("");
     }
-    if (!screen) return <p>No screen found.</p>;
+
     const configuration = screen.configuration;
     const screenDisplays = asKeyedList(screen.displays);
-    let screenTypes = asKeyedList(screen.types);
-    let screenType;
-    if (screenTypes?.length >= 1) {
-        screenType = screenTypes[0];
-    } else {
-        return <>
-            <NavMenu title={screen.name} />
-            <p>No type associated with screen "{screen.name}."</p>
-            <p><a href="/types">Create a Type</a> or <a href="/screens">Manage screens</a></p>
-        </>;
-    }
-    let typePath = `types/${screenType.typeKey}/data`;
+
     return (
         <>
             <NavMenu title={screen.name} />
-            <form onSubmit={event => addContent(event, typePath)} id="contentForm">
+            <form onSubmit={event => addContent(typeObject, event, typeDatumPath)} id="contentForm">
                 <input autoFocus placeholder="Name" value={input} onChange={field => setInput(field.target.value)} type="text" className="content_field" />
-                <button id="addContentButton" onClick={event => addContent(event, typePath)}>Create</button>
+                <button id="addContentButton" onClick={event => addContent(typeObject, event, typeDatumPath)}>Create</button>
             </form>
             <div className={`flex-aligned-${configuration?.displays?.alignment}`}>
                 {
@@ -115,7 +153,7 @@ const ScreenPage = (props) => {
                         const displayType = display.displayKey;
                         if (displayType === 'displays/list') {
                             return (
-                                <ListDisplay type={screenType} display={display} />
+                                <ListDisplay type={typeObject} display={display} />
                             );
                         }
                     })
@@ -129,9 +167,13 @@ const ListDisplay = (props) => {
     const { ready, addDataListener, asKeyedList } = useContext(DBContext);
     const type = props.type;
     const display = props.display;
-    const [typeObject, setTypeObject] = useState([]);
-    const typeData = asKeyedList(typeObject?.data);
-    const typeFields = asKeyedList(typeObject?.fields);
+    if(!type) {
+        return (
+            <p>Error in Display: invalid type.</p>
+        )
+    }
+    const typeData = asKeyedList(type?.data);
+    const typeFields = asKeyedList(type?.fields);
 
     let filteredData = typeData;
     if (typeData && display.filterField && display.filterFieldValue) {
@@ -141,13 +183,7 @@ const ListDisplay = (props) => {
             return fields[display.filterField] === display.filterFieldValue;
         });
     }
-
-    const typePath = `types/${type.typeKey}`;
-
-    useEffect(() => {
-        if (!ready) return;
-        addDataListener(typePath, setTypeObject, false);
-    }, [ready]);
+    const typePath = `types/${type.key}`;
 
     if (!typeData) return;
     return (
@@ -371,7 +407,7 @@ const DisplayCard = (props) => {
             editComponent={
                 <>
                     <EditableInput label="Name" value={input} setValue={setInput} />
-                    {typeFields && typeFields.length > 0 && 
+                    {typeFields && typeFields.length > 0 &&
                         <EditableSelect label={`Filter by Field`} path={`${cardPath}`} dataname={`filterField`} options={typeFields} defaultOption="None" /> }
                     {filterField &&
                         <EditableSelect label={`Filter by ${filterField.name}`} path={`${cardPath}`} dataname={`filterFieldValue`} options={filterFieldOptions} defaultOption="None" />
