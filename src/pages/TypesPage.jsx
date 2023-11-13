@@ -38,7 +38,7 @@ const TypesPage = () => {
                 </form>
                 <h1>{pageTitle}</h1>
                 {
-                    data && data.map(datum => <TypesCard card={datum} path={pagePath}/>)
+                    data && data.map(datum => <TypesCard card={datum} path={pagePath} key={pagePath}/>)
                 }
             </div>
         </>
@@ -101,11 +101,9 @@ const TypesCard = (props) => {
                     {
                         typeFields && typeFields.map(field => {
                             return (
-                                <>
-                                    <FieldCard card={field}
-                                    path={cardPath}
-                                    />
-                                </>
+                                <FieldCard card={field}
+                                path={cardPath} key={`${cardPath}/${field.key}`}
+                                />
                             );
                         })
                     }
@@ -152,27 +150,25 @@ const FieldCard = (props) => {
         resetContent={resetContent}
         viewComponent={
             <>
-                <h3>{card.name}</h3>
-                <h4>{card.fieldKey}</h4>
+                <h3 key={`${cardPath}/${card.key}/name`}>{card.name}</h3>
+                <h4 key={`${cardPath}/${card.key}/fieldKey`}>{card.fieldKey}</h4>
             </>
         }
         editComponent={
             <>
-                <EditableInput label="Name" value={nameInput} setValue={setNameInput} />
+                <EditableInput label="Name" value={nameInput} setValue={setNameInput} key={`${cardPath}/nameInput`}/>
                 {
                     card.fieldKey == "fields/select" && 
                     <>
-                        <div>Select-field Options</div>
+                        <div key={`${cardPath}/nameInput`}>Select-field Options</div>
                         {
                             options && options.map(option => {
-                                return <> 
-                                    <OptionCard option={option} path={cardPath} /> 
-                                </>
+                                return <OptionCard option={option} path={cardPath} key={`${cardPath}/optionCard/${option.key}`} /> 
                             })
                         }
-                        <EditableInput label={""} value={optionInput} setValue={setOptionInput} onSubmit={addSelectOption}/>
-                        <button onClick={() => addSelectOption()}>Add</button>
-                        <EditableSelect label={"Default Option"} path={cardPath} dataname={`defaultValue`} options={options} defaultOption="None"/>
+                        <EditableInput label={""} value={optionInput} setValue={setOptionInput} onSubmit={addSelectOption} key={`${cardPath}/optionInput`}/>
+                        <button onClick={() => addSelectOption()} key={`${cardPath}/addButton`}>Add</button>
+                        <EditableSelect label={"Default Option"} path={cardPath} dataname={`defaultValue`} options={options} defaultOption="None" key={`${cardPath}/defaultInput`}/>
                     </>
                 }
             </>
