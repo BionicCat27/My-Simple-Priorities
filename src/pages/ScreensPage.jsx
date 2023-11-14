@@ -171,11 +171,28 @@ const ListDisplay = (props) => {
     const [showDisplay, setShowDisplay] = useState(!display.hiddenByDefault)
 
     let filteredData = typeData;
-    if (typeData && display.filterField && display.filterFieldValue) {
-        filteredData = filteredData.filter(datum => {
-            let fields = datum?.fields;
-            return fields && fields[display.filterField] === display.filterFieldValue;
-        });
+    let fieldFilters = display.filters;
+    if (typeData && fieldFilters) {
+        Object.keys(fieldFilters).forEach(fieldFilterKey=>{
+            let fieldFilterValue = display.filters[fieldFilterKey];
+            filteredData = filteredData.filter(datum => {
+                let fields = datum?.fields;
+                if(!fields) return false;
+                let today = new Date();
+                switch(fieldFilterValue){
+                    case '-1w':
+                        var lastWeek = Date.parse(new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7));
+                        return Date.parse(fields[fieldFilterKey]) > lastWeek
+                    case '+1w':
+                        var nextWeek = Date.parse(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7));
+                        return Date.parse(fields[fieldFilterKey]) < nextWeek
+                    case 'None':
+                        return true;
+                    default:
+                        return fields[fieldFilterKey] === fieldFilterValue;
+                }
+            });
+        })
     }
     const typePath = `types/${type.key}`;
 
@@ -398,10 +415,6 @@ const DisplayCard = (props) => {
         updateObject(cardPath, "hiddenByDefault", hiddenByDefault || false);
     }
 
-    let filterFieldKey = card.filterField;
-    let filterField = typeFields?.find(field => field.key === filterFieldKey);
-    let filterFieldOptions = asKeyedList(filterField?.options);
-
     return (
         <Card card={card}
             cardPath={cardPath}
@@ -421,11 +434,23 @@ const DisplayCard = (props) => {
                         <input className="inline-input" type="checkbox" checked={hiddenByDefault} onChange={field => setHiddenByDefault(field.target.checked)} />
                         <label className="inline-input">Hidden By Default</label>
                     </div>
+                    {/* {typeFields && typeFields.length > 0 &&
+                        <EditableSelect label={`Filter by Field`} path={`${cardPath}`} dataname={`filterField`} options={typeFields} defaultOption="None" /> } */}
                     {typeFields && typeFields.length > 0 &&
-                        <EditableSelect label={`Filter by Field`} path={`${cardPath}`} dataname={`filterField`} options={typeFields} defaultOption="None" /> }
-                    {filterField &&
-                        <EditableSelect label={`Filter by ${filterField.name}`} path={`${cardPath}`} dataname={`filterFieldValue`} options={filterFieldOptions} defaultOption="None" />
-                    }
+                    <>
+                        <label>Field filters</label>
+                        {typeFields.map(field => {
+                            let filterFieldOptions = asKeyedList(field.options);
+                            switch(field.fieldKey) {
+                                case 'fields/select':
+                                    return <EditableSelect label={`${field.name} Filter`} path={`${cardPath}/filters`} dataname={field.key} options={filterFieldOptions} defaultOption="None" />
+                                case 'fields/date':
+                                    return <EditableSelect label={`${field.name} Filter`} path={`${cardPath}/filters`} dataname={field.key} options={[{'key': '-1w', 'name': '1 Week Before'}, {'key':'+1w', 'name':'1 Week After'}]} defaultOption="None" />
+                                default:
+                                    return <p>Invalid: {field.fieldKey}</p>
+                            }
+                        })}
+                    </>}
                 </>
             }
         />
