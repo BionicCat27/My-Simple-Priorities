@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { DBContext } from "../contexts/DBContext";
-import NavMenu from "./components/NavMenu/NavMenu";
 import { Card } from "./components/Card";
 import { EditableInput } from "./components/EditableInput";
 import { EditableSelect } from "./components/EditableSelect";

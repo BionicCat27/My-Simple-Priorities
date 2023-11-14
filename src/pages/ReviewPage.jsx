@@ -1,17 +1,16 @@
 //React
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 //Contexts
 import { DBContext } from '../contexts/DBContext';
 //Components
 //Styles
 import './common.css';
-import StatusSelector from './components/StatusSelector';
-import NavMenu from './components/NavMenu/NavMenu';
+import { Card } from './components/Card';
 import CardSizeViewSelector from './components/CardSizeViewSelector';
 import CardStatusViewSelector from './components/CardStatusViewSelector';
 import { EditableInput } from './components/EditableInput';
 import { EditableTextarea } from './components/EditableTextarea';
-import { Card } from './components/Card';
+import StatusSelector from './components/StatusSelector';
 
 const ReviewPage = (props) => {
     const { ready, addDataListener, pushObject, updateObject } = useContext(DBContext);

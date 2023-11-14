@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { DBContext } from "../contexts/DBContext";
 import { Card } from "./components/Card";
 import { EditableInput } from "./components/EditableInput";
-import NavMenu from "./components/NavMenu/NavMenu";
 
 const CapturePage = () => {
     const { pushObject, ready, addDataListener } = useContext(DBContext);

@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import githubLogo from '../../../resources/GitHub_Logo.png';
-import liLogo from '../../../resources/LI-Logo.png';
+import githubLogo from '../../resources/GitHub_Logo.png';
+import liLogo from '../../resources/LI-Logo.png';
 
 import { useNavigate } from 'react-router';
-import { AuthContext } from '../../../contexts/AuthContext';
-import './Header.css';
-import './Sidebar.css';
-import { DBContext } from '../../../contexts/DBContext';
+import { AuthContext } from '../../contexts/AuthContext';
+import { DBContext } from '../../contexts/DBContext';
+import './NavMenu.css';
 
 
 function NavMenu(props) {

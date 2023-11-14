@@ -8,7 +8,6 @@ import './common.css';
 import { Card } from './components/Card';
 import { EditableInput } from './components/EditableInput';
 import { EditableTextarea } from './components/EditableTextarea';
-import NavMenu from './components/NavMenu/NavMenu';
 
 const GoalsPage = (props) => {
     const { ready, addDataListener, pushObject } = useContext(DBContext);

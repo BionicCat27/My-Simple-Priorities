@@ -14,7 +14,6 @@ import CardStatusViewSelector from './components/CardStatusViewSelector';
 import { EditableChecklist } from './components/EditableChecklist';
 import { EditableInput } from './components/EditableInput';
 import { EditableTextarea } from './components/EditableTextarea';
-import NavMenu from './components/NavMenu/NavMenu';
 import StatusSelector from './components/StatusSelector';
 
 const TodoPage = () => {

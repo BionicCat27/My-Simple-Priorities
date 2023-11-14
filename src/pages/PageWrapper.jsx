@@ -1,7 +1,7 @@
-import { useContext, useEffect } from "react";
-import { AuthContext} from "../contexts/AuthContext";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 import LoginPage from "./LoginPage";
-import NavMenu from "./components/NavMenu/NavMenu";
+import NavMenu from "./components/NavMenu";
 
 const PageWrapper = (props)  => {
     const {user} = useContext(AuthContext)
