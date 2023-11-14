@@ -25,36 +25,34 @@ const CapturePage = () => {
     };
 
     return (
-        <>
-            <NavMenu title="Capture" />
-            <div id="pageContent">
-                <div id="capture-page">
-                    <div id="capture-page-content">
-                        <form onSubmit={captureNote}>
-                            <input
-                                autoFocus
-                                id="capture-input"
-                                name=""
-                                value={note}
-                                onChange={(e) => setNote(e.target.value)}
-                            ></input>
-                        </form>
-                        <button className="quiet-button" id="capture-see_notes" onClick={() => setShowNotes(!showNotes)}>
-                            {showNotes ? "Hide notes" : "See notes"}
-                        </button>
-                        {showNotes &&
-                            <div>
-                                {cards ? cards.map((card) => {
-                                    return (
-                                        <CaptureCard key={`${card.key}${card.value}`} card={card} />
-                                    );
-                                }) : <p>No notes found.</p>}
-                            </div>
-                        }
-                    </div>
+        <div id="pageContent">
+            <div id="capture-page">
+                <div id="capture-page-content">
+                    <form onSubmit={captureNote}>
+                        <input
+                            autoFocus
+                            id="capture-input"
+                            name=""
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                        ></input>
+                    </form>
+                    <button className="quiet-button" id="capture-see_notes" onClick={() => setShowNotes(!showNotes)}>
+                        {showNotes ? "Hide notes" : "See notes"}
+                    </button>
+                    {showNotes &&
+                        <div>
+                            {cards ? cards.map((card) => {
+                                return (
+                                    <CaptureCard key={`${card.key}${card.value}`} card={card} />
+                                );
+                            }) : <p>No notes found.</p>}
+                        </div>
+                    }
                 </div>
             </div>
-        </>);
+        </div>
+    );
 };
 
 const CaptureCard = (props) => {

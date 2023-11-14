@@ -5,12 +5,12 @@ import CapturePage from './pages/CapturePage';
 import GoalsPage from './pages/GoalsPage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
-import ProtectedPage from './pages/ProtectedPage';
 import ReviewPage from './pages/ReviewPage';
 import SignupPage from './pages/SignupPage';
 import TodoPage from './pages/TodoPage';
 import ScreensPage, { ScreenPage } from './pages/ScreensPage';
 import TypesPage from './pages/TypesPage';
+import PageWrapper from './pages/PageWrapper';
 
 function App() {
   return (
@@ -19,16 +19,16 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Navigate to="/capture" />} />
-            <Route path="/capture" element={<ProtectedPage><CapturePage /></ProtectedPage>} title="Capture" />
-            <Route path="/goals" element={<ProtectedPage><GoalsPage /></ProtectedPage>} title="Priorities" />
-            <Route path="/todo" element={<ProtectedPage><TodoPage /></ProtectedPage>} title="Todo" />
-            <Route path="/review" element={<ProtectedPage><ReviewPage /></ProtectedPage>} />
-            <Route path="/screens" element={<ProtectedPage><ScreensPage /></ProtectedPage>}/>
-            <Route path="/screens/:screenId" element={<ProtectedPage><ScreenPage /></ProtectedPage>}/>
-            <Route path="/types" element={<ProtectedPage><TypesPage /></ProtectedPage>} />
+            <Route path="/capture" element={<PageWrapper protected navmenu={"Capture"} page={<CapturePage />} />} title="Capture" />
+            <Route path="/goals" element={<PageWrapper protected navmenu={"Goals"} page={<GoalsPage />} />} title="Priorities" />
+            <Route path="/todo" element={<PageWrapper protected navmenu={"Todo"} page={<TodoPage />} />} title="Todo" />
+            <Route path="/review" element={<PageWrapper protected navmenu={"Review"} page={<ReviewPage />} />} />
+            <Route path="/screens" element={<PageWrapper protected navmenu={"Screens"} page={<ScreensPage />} />}/>
+            <Route path="/screens/:screenId" element={<PageWrapper protected navmenu={"Screen"} page={<ScreenPage />} />}/>
+            <Route path="/types" element={<PageWrapper protected navmenu={"Types"} page={<TypesPage />} />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="*" element={<NotFoundPage />} />
+            <Route path="*" element={<PageWrapper navmenu={"Not Found"} page={<NotFoundPage />} />} />
           </Routes>
         </BrowserRouter>
       </DBProvider>

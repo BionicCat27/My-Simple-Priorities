@@ -87,22 +87,19 @@ const ReviewPage = (props) => {
     }
 
     return (
-        <>
-            <NavMenu title="Review" />
-            <div id="pageContent">
-                <form onSubmit={addContent} id="contentForm">
-                    <input autoFocus value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
-                    <button id="addContentButton" onClick={addContent}>Add review!</button>
-                    <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
-                    <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />
-                </form>
-                <div className="cards_container">
-                    {statusMatch("Todo", cardStatusView) && getStatusBlock("Todo")}
-                    {statusMatch("In Progress", cardStatusView) && getStatusBlock("In Progress")}
-                    {statusMatch("Done", cardStatusView) && getStatusBlock("Done")}
-                </div>
+        <div id="pageContent">
+            <form onSubmit={addContent} id="contentForm">
+                <input autoFocus value={contentInput} onChange={field => setContentInput(field.target.value)} type="text" className="content_field" />
+                <button id="addContentButton" onClick={addContent}>Add review!</button>
+                <CardSizeViewSelector setCardSizeView={setCardSizeView} cardSizeView={cardSizeView} />
+                <CardStatusViewSelector setCardSizeView={setCardStatusView} cardSizeView={cardStatusView} />
+            </form>
+            <div className="cards_container">
+                {statusMatch("Todo", cardStatusView) && getStatusBlock("Todo")}
+                {statusMatch("In Progress", cardStatusView) && getStatusBlock("In Progress")}
+                {statusMatch("Done", cardStatusView) && getStatusBlock("Done")}
             </div>
-        </>
+        </div>
     );
 };
 

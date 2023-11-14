@@ -30,23 +30,20 @@ const ScreensPage = () => {
         setInput("");
     }
     return (
-        <>
-            <NavMenu title="Screens" />
-            <div>
-                <form onSubmit={addContent} id="contentForm">
-                    <input autoFocus placeholder="Screen Name" value={input} onChange={field => setInput(field.target.value)} type="text" className="content_field" />
-                    <button id="addContentButton" onClick={addContent}>Create</button>
-                </form>
-                <h1>Screens</h1>
-                {
-                    screens && screens.map(screen =>
-                        <ScreenCard card={screen}
-                            types={types}
-                            path={pagePath} />
-                    )
-                }
-            </div>
-        </>
+        <div>
+            <form onSubmit={addContent} id="contentForm">
+                <input autoFocus placeholder="Screen Name" value={input} onChange={field => setInput(field.target.value)} type="text" className="content_field" />
+                <button id="addContentButton" onClick={addContent}>Create</button>
+            </form>
+            <h1>Screens</h1>
+            {
+                screens && screens.map(screen =>
+                    <ScreenCard card={screen}
+                        types={types}
+                        path={pagePath} />
+                )
+            }
+        </div>
     );
 };
 
@@ -100,7 +97,6 @@ export const ScreenPage = (props) => {
         return <p>No screen found.</p>;
     } else if(!screenType || screenType.length < 1) {
         return (<>
-            <NavMenu title={screen.name} />
             <p>No type associated with screen "{screen.name}."</p>
             <p><a href="/types">Create a Type</a> or <a href="/screens">Manage screens</a></p>
         </>);
@@ -144,7 +140,6 @@ export const ScreenPage = (props) => {
 
     return (
         <>
-            <NavMenu title={screen.name} />
             <form onSubmit={event => addContent(typeObject, event, typeDatumPath)} id="contentForm">
                 <input autoFocus placeholder="Name" value={input} onChange={field => setInput(field.target.value)} type="text" className="content_field" />
                 <button id="addContentButton" onClick={event => addContent(typeObject, event, typeDatumPath)}>Create</button>
