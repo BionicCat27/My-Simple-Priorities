@@ -304,22 +304,18 @@ const ScreenCard = (props) => {
         updateObject(cardPath, "name", input || "");
     }
 
-    function resetContent() {
-        setInput(card.name);
-    }
-
 
     return (
         <Card card={card}
             cardPath={cardPath}
             updateContent={updateContent}
-            resetContent={resetContent}
+            resetContent={()=>{}}
             viewComponent={
                 <h3>{card.name}</h3>
             }
             editComponent={
                 <>
-                    <EditableInput label={"Name"} value={input} setValue={setInput} />
+                    <EditableInput label="Name" path={cardPath} dataname={"name"} />
                     <label>Associated Types</label>
                     {
                         screenTypes && screenTypes.map(screenType => {
@@ -375,7 +371,7 @@ const AssociatedTypeCard = (props) => {
 }
 
 const DisplayCard = (props) => {
-    const { updateObject, pushObject, ready, addDataListener, asKeyedList } = useContext(DBContext);
+    const { updateObject, asKeyedList } = useContext(DBContext);
 
     const card = props.card;
     if (!card) return;
@@ -394,16 +390,10 @@ const DisplayCard = (props) => {
     let typeFields = asKeyedList(typeObject.fields || []);
     if (!typeFields && typeFields != []) return <p>No valid type fields ({JSON.stringify(typeObject)})</p>;
 
-    const [input, setInput] = useState(card.name);
     const [hiddenByDefault, setHiddenByDefault] = useState(card.hiddenByDefault || false);
 
     function updateContent() {
-        updateObject(cardPath, "name", input || "");
         updateObject(cardPath, "hiddenByDefault", hiddenByDefault || false);
-    }
-
-    function resetContent() {
-        setInput(card.name);
     }
 
     let filterFieldKey = card.filterField;
@@ -414,7 +404,7 @@ const DisplayCard = (props) => {
         <Card card={card}
             cardPath={cardPath}
             updateContent={updateContent}
-            resetContent={resetContent}
+            resetContent={()=>{}}
             viewComponent={
                 <>
                     {card.name && <h3>{card.name}</h3>}
@@ -423,9 +413,12 @@ const DisplayCard = (props) => {
             }
             editComponent={
                 <>
-                    <EditableInput label="Name" value={input} setValue={setInput} />
-                    <input className="inline-input" type="checkbox" checked={hiddenByDefault} onChange={field => setHiddenByDefault(field.target.checked)} />
-                    <label className="inline-input">Hidden By Default</label>
+                    <EditableInput label="Name" path={cardPath} dataname={"name"} />
+                    <label>Options</label>
+                    <div>
+                        <input className="inline-input" type="checkbox" checked={hiddenByDefault} onChange={field => setHiddenByDefault(field.target.checked)} />
+                        <label className="inline-input">Hidden By Default</label>
+                    </div>
                     {typeFields && typeFields.length > 0 &&
                         <EditableSelect label={`Filter by Field`} path={`${cardPath}`} dataname={`filterField`} options={typeFields} defaultOption="None" /> }
                     {filterField &&
