@@ -1,6 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { DBContext } from "../../contexts/DBContext";
 
+/**
+ * 
+ * @param {string} label - input label text
+ * @param {string} path (Self-controlled) - data path for self controlled input
+ * @param {string} type (Optional) - input type
+ * @returns 
+ */
 export const EditableInput = (props) => {
     const {addDataListener, ready, updateObject, asKeyedList} = useContext(DBContext);
 

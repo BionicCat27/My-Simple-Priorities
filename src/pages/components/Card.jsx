@@ -1,6 +1,14 @@
 import { useContext, useState } from "react";
 import { DBContext } from "../../contexts/DBContext";
 
+/**
+ * General purpose card element.
+ * @param card - object whose data is being displayed
+ * @param cardPath - path to object data
+ * @param viewComponent - elements to render in view state 
+ * @param editComponent - elements to render in edit state 
+ * @returns 
+ */
 export const Card = (props) => {
     const { removeObject } = useContext(DBContext);
 
