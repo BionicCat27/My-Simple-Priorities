@@ -177,6 +177,7 @@ const ListDisplay = (props) => {
     }
     const typeData = asKeyedList(type?.data);
     const typeFields = asKeyedList(type?.fields);
+    const [showDisplay, setShowDisplay] = useState(!display.hiddenByDefault)
 
     let filteredData = typeData;
     if (typeData && display.filterField && display.filterFieldValue) {
@@ -189,11 +190,15 @@ const ListDisplay = (props) => {
 
     if (!typeData) return;
     return (
-        <div style={{ width: "100%" }}>
-            <h3>{display.name}</h3>
-            {filteredData && filteredData.map((datum) => {
+        <div style={{width: "100%"}}>
+            <h3>{showDisplay && display.name}</h3>
+            {display.hiddenByDefault &&
+            <button className="quiet-button" id="capture-see_notes" onClick={() => setShowDisplay(!showDisplay)}>
+                {showDisplay ? `Hide${` ${display.name}`}` : `Show${` ${display.name}`}`}
+            </button>}
+            {showDisplay && filteredData && filteredData.map((datum) => {
                 return <ListCard card={datum} typeFields={typeFields}
-                    path={typePath} key={`${typePath}/card/${datum.key}`}/>;
+                path={typePath} key={`${typePath}/card/${datum.key}`}/>;
             })}
         </div>
     );
@@ -382,9 +387,11 @@ const DisplayCard = (props) => {
     if (!typeFields && typeFields != []) return <p>No valid type fields ({JSON.stringify(typeObject)})</p>;
 
     const [input, setInput] = useState(card.name);
+    const [hiddenByDefault, setHiddenByDefault] = useState(card.hiddenByDefault || false);
 
     function updateContent() {
         updateObject(cardPath, "name", input || "");
+        updateObject(cardPath, "hiddenByDefault", hiddenByDefault || false);
     }
 
     function resetContent() {
@@ -409,6 +416,8 @@ const DisplayCard = (props) => {
             editComponent={
                 <>
                     <EditableInput label="Name" value={input} setValue={setInput} />
+                    <input className="inline-input" type="checkbox" checked={hiddenByDefault} onChange={field => setHiddenByDefault(field.target.checked)} />
+                    <label className="inline-input">Hidden By Default</label>
                     {typeFields && typeFields.length > 0 &&
                         <EditableSelect label={`Filter by Field`} path={`${cardPath}`} dataname={`filterField`} options={typeFields} defaultOption="None" /> }
                     {filterField &&
