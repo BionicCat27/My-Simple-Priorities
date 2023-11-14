@@ -45,7 +45,7 @@ const Sidebar = (props) => {
                 <LinksList />
             </div>
             <div id="sidebarCreditContainer">
-                <a href="https://aslanbb.vercel.app/">Aslan Bennington-Barr</a>
+                <a href="https://aslanbb.vercel.app/">Made by Aslan</a>
                 <br />
                 <a href="https://github.com/BionicCat27">
                     <img id="githubLogo" src={githubLogo} />

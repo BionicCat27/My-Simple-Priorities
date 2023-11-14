@@ -31,11 +31,11 @@ const ScreensPage = () => {
     }
     return (
         <div>
+            <h1>Screens</h1>
             <form onSubmit={addContent} id="contentForm">
                 <input autoFocus placeholder="Screen Name" value={input} onChange={field => setInput(field.target.value)} type="text" className="content_field" />
                 <button id="addContentButton" onClick={addContent}>Create</button>
             </form>
-            <h1>Screens</h1>
             {
                 screens && screens.map(screen =>
                     <ScreenCard card={screen}

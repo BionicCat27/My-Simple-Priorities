@@ -30,11 +30,11 @@ const TypesPage = () => {
 
     return (
         <div>
+            <h1>{pageTitle}</h1>
             <form onSubmit={addContent} id="contentForm">
                 <input autoFocus placeholder="Type Title" value={input} onChange={field => setInput(field.target.value)} type="text" className="content_field" />
                 <button id="addContentButton" onClick={addContent}>Create</button>
             </form>
-            <h1>{pageTitle}</h1>
             {
                 data && data.map(datum => <TypesCard card={datum} path={pagePath} key={pagePath}/>)
             }
