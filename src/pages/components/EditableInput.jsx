@@ -3,9 +3,12 @@ import { DBContext } from "../../contexts/DBContext";
 
 /**
  * 
- * @param {string} label - input label text
- * @param {string} path (Self-controlled) - data path for self controlled input
- * @param {string} type (Optional) - input type
+ * @param label - input label text
+ * @param value (Controlled) - value of input
+ * @param setValue (Controlled) - function that updates the value of the input
+ * @param path (Self-controlled) - data path for self controlled input
+ * @param dataname (Self-controlled) - data type name for path
+ * @param type (Optional) - input type
  * @returns 
  */
 export const EditableInput = (props) => {
