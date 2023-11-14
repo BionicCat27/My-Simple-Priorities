@@ -326,10 +326,7 @@ const ScreenCard = (props) => {
                             let type = types[screenType.typeKey];
                             if (!type) return;
                             return (
-                                <div className="card" key={`typeCard/${screenType.key}`}>
-                                    <p>{type.name}</p>
-                                    <button onClick={() => { removeObject(`${cardPath}/types/${screenType.key}`); }}>Remove</button>
-                                </div>
+                                <AssociatedTypeCard type={type} screenPath={cardPath} screenTypePath={`${screenType.key}`}/>
                             );
                         })
                     }
@@ -359,6 +356,23 @@ const ScreenCard = (props) => {
         />
     );
 };
+
+const AssociatedTypeCard = (props) => {
+    return (
+        <Card card={props.type}
+        cardPath={`${props.screenPath}/types/${props.screenTypePath}`}
+        resetContent={()=>{}}
+        viewComponent={
+            <p>{props.type.name}</p>
+        }
+        editComponent={
+            <>
+                <p>{props.type.name}</p>
+            </>
+        }
+        />
+    )
+}
 
 const DisplayCard = (props) => {
     const { updateObject, pushObject, ready, addDataListener, asKeyedList } = useContext(DBContext);
