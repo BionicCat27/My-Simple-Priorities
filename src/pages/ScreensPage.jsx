@@ -111,15 +111,12 @@ export const ScreenPage = (props) => {
                     return;
                 }
                 // Populate any default fields
-                if(field.fieldKey === "fields/select"){
-                    let defaultValue = field.defaultValue;
-                    if(defaultValue) {
-                        if (!object.fields) {
-                            let defaultFieldObject = {};
-                            defaultFieldObject[field.key] = defaultValue;
-                            object["fields"] = defaultFieldObject;
-                        }
+                let defaultValue = field.defaultValue;
+                if(defaultValue) {
+                    if(!object.fields) {
+                        object.fields = {};
                     }
+                    object.fields[field.key] = defaultValue;
                 }
             })
         }
@@ -250,10 +247,15 @@ const FieldInput = (props) => {
         return (
             <EditableSelect label={field.name} path={`${path}/fields`} dataname={field.key} options={options} defaultOption="None" key={`${path}/fieldInput`}/>
         );
+    } else if (field.fieldKey === 'fields/date') {
+        return (
+            <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key} type={'date'}/>
+        );
+    } else {
+        return (
+            <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key}/>
+        );
     }
-    return (
-        <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key}/>
-    );
 };
 
 const ScreenCard = (props) => {

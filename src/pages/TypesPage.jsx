@@ -56,6 +56,9 @@ const TypesCard = (props) => {
         },
         'fields/select': {
             'name': 'Select'
+        },
+        'fields/date': {
+            'name': 'Date'
         }
     }
     const fieldsList = asKeyedList(fieldsMap);
@@ -118,7 +121,6 @@ const FieldCard = (props) => {
     const card = props.card;
     const cardPath = `${props.path}/fields/${card.key}`;
 
-    const [nameInput, setNameInput] = useState(card.name || "");
     const [optionInput, setOptionInput] = useState("");
 
     const options = asKeyedList(card.options);
@@ -130,20 +132,10 @@ const FieldCard = (props) => {
         setOptionInput("");
     }
 
-    function updateContent() {
-        updateObject(cardPath, "name", nameInput || "");
-    }
-
-    function resetContent() {
-        setNameInput(card.name);
-        setOptionInput("");
-    }
-
     return (
         <Card card={card}
         cardPath={cardPath}
-        updateContent={updateContent}
-        resetContent={resetContent}
+        resetContent={()=>setOptionInput("")}
         viewComponent={
             <>
                 <h3 key={`${cardPath}/${card.key}/name`}>{card.name}</h3>
@@ -152,9 +144,9 @@ const FieldCard = (props) => {
         }
         editComponent={
             <>
-                <EditableInput label="Name" value={nameInput} setValue={setNameInput} key={`${cardPath}/nameInput`}/>
+                <EditableInput label="Name" path={cardPath}  dataname={'name'} key={`${cardPath}/nameInput`}/>
                 {
-                    card.fieldKey == "fields/select" && 
+                    card.fieldKey === "fields/select" && 
                     <>
                         <div key={`${cardPath}/nameInput`}>Select-field Options</div>
                         {
@@ -164,8 +156,12 @@ const FieldCard = (props) => {
                         }
                         <EditableInput label={""} value={optionInput} setValue={setOptionInput} onSubmit={addSelectOption} key={`${cardPath}/optionInput`}/>
                         <button onClick={() => addSelectOption()} key={`${cardPath}/addButton`}>Add</button>
-                        <EditableSelect label={"Default Option"} path={cardPath} dataname={`defaultValue`} options={options} defaultOption="None" key={`${cardPath}/defaultInput`}/>
+                        <EditableSelect label={"Default Value"} path={cardPath} dataname={`defaultValue`} options={options} defaultOption="None" key={`${cardPath}/defaultInput`}/>
                     </>
+                }
+                {
+                    card.fieldKey === 'fields/text' && 
+                    <EditableInput label={"Default Value"} path={cardPath} dataname={'defaultValue'}/>
                 }
             </>
         }
