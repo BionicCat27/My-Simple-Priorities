@@ -9,8 +9,10 @@ const PageWrapper = (props)  => {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        if(!user) {
+        if(props.protected && !user) {
             navigate("/login")
+        } else if(props.redirector && !loading && user) {
+            navigate("/");
         }
     }, [user])
 

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import githubLogo from '../../resources/GitHub_Logo.png';
 import liLogo from '../../resources/LI-Logo.png';
 
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { AuthContext } from '../../contexts/AuthContext';
 import { DBContext } from '../../contexts/DBContext';
 import './NavMenu.css';
@@ -59,6 +59,12 @@ const Sidebar = (props) => {
 
 const Header = (props) => {
     const [showMenu, setShowMenu] = useState(false);
+    
+    const location = useLocation();
+
+    useEffect(()=> {
+        setShowMenu(false);
+    }, [location.pathname])
 
     const toggleMenu = () => {
         setShowMenu(!showMenu);

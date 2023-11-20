@@ -11,23 +11,16 @@ import { useNavigate } from 'react-router';
 import { AuthContext } from '../contexts/AuthContext';
 
 const SignupPage = () => {
-    const {user, signUp} = useContext(AuthContext);
+    const {user, loading, signUp} = useContext(AuthContext);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-    const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState("");
 
     function prepareCreateAccount(event) {
         event.preventDefault();
-        signUp(email, password, ()=>{});
+        signUp(email, password, setErrorMessage);
     }
-
-    useEffect(()=> {
-        if(!user) return;
-        navigate("/");
-    }, [user]);
-
 
     return (
         <div className="main-content">
@@ -38,6 +31,8 @@ const SignupPage = () => {
                     <input id="signupFormPassword" className="centeredFormElement" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
                     <button onClick={prepareCreateAccount}>Create Account</button>
                 </form>
+                {errorMessage ? <p id="login-error-message">{errorMessage}</p> : null}
+
                 <p>Or <a href="/login">Login</a></p>
             </div>
             <Footer />

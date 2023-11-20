@@ -15,17 +15,10 @@ const LoginPage = () => {
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    const navigate = useNavigate();
-
     function prepareSignIn(event) {
         event.preventDefault();
         signIn(email, password, setErrorMessage);
     }
-
-    useEffect(()=> {
-        if(!user) return;
-        navigate("/");
-    }, [user]);
 
     return (
         <div className="main-content">

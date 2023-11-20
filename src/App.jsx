@@ -26,8 +26,8 @@ function App() {
             <Route path="/screens" element={<PageWrapper protected navmenu={"Screens"} page={<ScreensPage />} />}/>
             <Route path="/screens/:screenId" element={<PageWrapper protected navmenu={"Screen"} page={<ScreenPage />} />}/>
             <Route path="/types" element={<PageWrapper protected navmenu={"Types"} page={<TypesPage />} />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login" element={<PageWrapper redirector page={<LoginPage />} />} />
+            <Route path="/signup" element={<PageWrapper redirector page={<SignupPage />} />} />
             <Route path="*" element={<PageWrapper navmenu={"Not Found"} page={<NotFoundPage />} />} />
           </Routes>
         </BrowserRouter>
