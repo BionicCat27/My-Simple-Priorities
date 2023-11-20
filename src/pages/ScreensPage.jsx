@@ -199,11 +199,7 @@ const ListDisplay = (props) => {
     if (!typeData) return;
     return (
         <div style={{width: "100%"}}>
-            <h3>{showDisplay && display.name}</h3>
-            {display.hiddenByDefault &&
-            <button className="quiet-button" id="capture-see_notes" onClick={() => setShowDisplay(!showDisplay)}>
-                {showDisplay ? `Hide${` ${display.name}`}` : `Show${` ${display.name}`}`}
-            </button>}
+            <h3 className={`clickable ${!showDisplay && 'hide'}`} onClick={() => setShowDisplay(!showDisplay)}>{display.name}</h3>
             {showDisplay && filteredData && filteredData.map((datum) => {
                 return <ListCard card={datum} typeFields={typeFields}
                 path={typePath} key={`${typePath}/card/${datum.key}`}/>;

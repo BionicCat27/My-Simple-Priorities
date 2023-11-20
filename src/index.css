@@ -178,3 +178,11 @@ button:hover {
   display: flex;
   flex-direction: column;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+h3.hide {
+  color: gray;
+}
