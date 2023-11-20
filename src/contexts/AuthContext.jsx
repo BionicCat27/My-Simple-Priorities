@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, connectAuthEmulator, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { connectDatabaseEmulator, getDatabase } from "firebase/database";
@@ -8,55 +8,50 @@ import { auth } from "../firebaseConfig";
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [cookies, setCookie] = useCookies(["user"]);
-    const [user, setUser] = useState();
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(undefined);
+    const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
     useEffect(()=>{
-        setUser(cookies?.user);
+        setUser(cookies.user);
     }, [cookies])
 
     function signIn(email, password, errorCallback) {
         if(!auth) return;
         signInWithEmailAndPassword(auth, email, password)
-            .then((userResult) => {
-                setCookie("user", userResult)
-            })
-            .catch((error) => {
-                errorCallback("Incorrect username or password.");
-            });
+            .catch((error) => errorCallback(`Login Error: ${error.code} - ${error.message}`));
     }
 
     function signUp(email, password, errorCallback) {
         if(!auth) return;
         createUserWithEmailAndPassword(auth, email, password)
-            .then((userResult) => {
-                setCookie("user", userResult)
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                errorCallback("Authentication Error: " + errorCode + " - " + errorMessage);
-            });
+            .catch((error) => errorCallback(`Signup Error: ${error.code} - ${error.message}`));
     }
 
-    function signUserOut() {
+    function signUserOut(errorCallback) {
         if (!auth) return;
-        signOut(auth).then(() => {
-            setCookie("user", undefined)
-        }).catch((error) => {
-            console.log("An error occurred during signout: " + error);
-        });
+        signOut(auth)
+            .catch((error) => errorCallback(`An error occurred during signout: ${error.code} - ${error.message}`));
     }
 
     useEffect(() => {
         //Get auth
         if (!auth) return;
         onAuthStateChanged(auth, (userResult) => {
-            setCookie("user", userResult)
+            setLoading(false);
+            if(userResult) {
+                setCookie('user', userResult)
+            } else {
+                setCookie('user')
+            }
         });
-    }, []);
+    }, [setCookie, removeCookie]);
 
     return (
-        <AuthContext.Provider value={{ user, auth, signUserOut, signIn, signUp }}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ user, loading, auth, signUserOut, signIn, signUp }}>{children}</AuthContext.Provider>
     );
 };
+
+export const useAuth = ()=> {
+    return useContext(AuthContext);
+}

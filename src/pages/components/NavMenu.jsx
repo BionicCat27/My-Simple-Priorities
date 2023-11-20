@@ -82,7 +82,7 @@ const Header = (props) => {
 };
 
 const LinksList = () => {
-    const { signUserOut } = useContext(AuthContext);
+    const { signUserOut, user } = useContext(AuthContext);
     const { addDataListener, ready } = useContext(DBContext);
     const navigate = useNavigate();
 
@@ -106,7 +106,7 @@ const LinksList = () => {
                     <a className={"nav-button"} key={`navLink/${screen.key}`} onClick={() => navigate(`/screens/${screen.key}`)}>{screen.name}</a>
                 )
             }
-            <a className={"nav-button"} onClick={() => signUserOut()}>Logout</a>
+            <a className={"nav-button"} onClick={() => signUserOut()}>Logout {user.email}</a>
         </>
     );
 };
