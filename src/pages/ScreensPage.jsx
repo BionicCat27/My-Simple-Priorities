@@ -227,8 +227,8 @@ const ListCard = (props) => {
         setInput(card.name);
     }
 
-    let highlightedFieldValue = card.fields[highlightedFieldKey];
-    let highlightedTypeField = fields.find((field) => field.key == highlightedFieldKey);
+    let highlightedFieldValue = card?.fields[highlightedFieldKey];
+    let highlightedTypeField = fields?.find((field) => field.key == highlightedFieldKey);
     if (highlightedTypeField?.fieldKey == 'fields/select') {
         let translatedFieldValue = highlightedTypeField?.options[highlightedFieldValue];
         highlightedFieldValue = translatedFieldValue?.name;
