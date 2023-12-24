@@ -58,6 +58,10 @@ button {
     vertical-align: top
 }
 
+.floatRight {
+    float: right;
+}
+
 .brdr-blue {
     border-color: blue;
 }

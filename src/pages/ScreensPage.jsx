@@ -54,7 +54,7 @@ export const ScreenPage = (props) => {
     const [input, setInput] = useState("");
     const [typeObject, setTypeObject] = useState([]);
     const [screenType, setScreenType] = useState([]);
-    
+
     const pagePath = `screens`;
 
     useEffect(() => {
@@ -67,34 +67,34 @@ export const ScreenPage = (props) => {
         }
     }, [ready, params]);
 
-    useEffect(()=> {
-        if(!screen) {
+    useEffect(() => {
+        if (!screen) {
             return;
         }
         let screenTypes = asKeyedList(screen.types);
-        if(!screenTypes || screenTypes.length < 1) {
+        if (!screenTypes || screenTypes.length < 1) {
             return;
         }
         let screenType = screenTypes[0];
         setScreenType(screenType);
-    }, [screen])
+    }, [screen]);
 
-    useEffect(()=>{
-        if(ready && screenType) {
+    useEffect(() => {
+        if (ready && screenType) {
             const typeKey = screenType.typeKey;
             const typePath = `types/${typeKey}`;
             const handleTypeObject = (object) => {
-                if(!object) return;
+                if (!object) return;
                 object.key = typeKey;
                 setTypeObject(object);
-            }
+            };
             addDataListener(typePath, handleTypeObject, false);
         }
-    }, [screenType])
+    }, [screenType]);
 
     if (!screen) {
         return <p>No screen found.</p>;
-    } else if(!screenType || screenType.length < 1) {
+    } else if (!screenType || screenType.length < 1) {
         return (<>
             <p>No type associated with screen "{screen.name}."</p>
             <p><a href="/types">Create a Type</a> or <a href="/screens">Manage screens</a></p>
@@ -105,20 +105,20 @@ export const ScreenPage = (props) => {
 
     function createDatumObject(datatype, path, object) {
         let fieldsSchema = asKeyedList(datatype?.fields);
-        if(fieldsSchema) {
+        if (fieldsSchema) {
             fieldsSchema.forEach(field => {
-                if(field.key in object) {
+                if (field.key in object) {
                     return;
                 }
                 // Populate any default fields
                 let defaultValue = field.defaultValue;
-                if(defaultValue) {
-                    if(!object.fields) {
+                if (defaultValue) {
+                    if (!object.fields) {
                         object.fields = {};
                     }
                     object.fields[field.key] = defaultValue;
                 }
-            })
+            });
         }
         pushObject(path, object);
     }
@@ -147,7 +147,7 @@ export const ScreenPage = (props) => {
                         const displayType = display.displayKey;
                         if (displayType === 'displays/list') {
                             return (
-                                <ListDisplay type={typeObject} display={display} key={`${typeDatumPath}/display/${display.key}`}/>
+                                <ListDisplay type={typeObject} display={display} key={`${typeDatumPath}/display/${display.key}`} />
                             );
                         }
                     })
@@ -161,48 +161,48 @@ const ListDisplay = (props) => {
     const { ready, addDataListener, asKeyedList } = useContext(DBContext);
     const type = props.type;
     const display = props.display;
-    if(!type) {
+    if (!type) {
         return (
             <p>Error in Display: invalid type.</p>
-        )
+        );
     }
     const typeData = asKeyedList(type?.data);
     const typeFields = asKeyedList(type?.fields);
-    const [showDisplay, setShowDisplay] = useState(!display.hiddenByDefault)
+    const [showDisplay, setShowDisplay] = useState(!display.hiddenByDefault);
 
     let filteredData = typeData;
     let fieldFilters = display.filters;
     if (typeData && fieldFilters) {
-        Object.keys(fieldFilters).forEach(fieldFilterKey=>{
+        Object.keys(fieldFilters).forEach(fieldFilterKey => {
             let fieldFilterValue = display.filters[fieldFilterKey];
             filteredData = filteredData.filter(datum => {
                 let fields = datum?.fields;
-                if(!fields) return false;
+                if (!fields) return false;
                 let today = new Date();
-                switch(fieldFilterValue){
+                switch (fieldFilterValue) {
                     case '-1w':
                         var lastWeek = Date.parse(new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7));
-                        return Date.parse(fields[fieldFilterKey]) > lastWeek
+                        return Date.parse(fields[fieldFilterKey]) > lastWeek;
                     case '+1w':
                         var nextWeek = Date.parse(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7));
-                        return Date.parse(fields[fieldFilterKey]) < nextWeek
+                        return Date.parse(fields[fieldFilterKey]) < nextWeek;
                     case 'None':
                         return true;
                     default:
                         return fields[fieldFilterKey] === fieldFilterValue;
                 }
             });
-        })
+        });
     }
     const typePath = `types/${type.key}`;
 
     if (!typeData) return;
     return (
-        <div style={{width: "100%"}}>
+        <div style={{ width: "100%" }}>
             <h3 className={`clickable ${!showDisplay && 'hide'}`} onClick={() => setShowDisplay(!showDisplay)}>{display.name}</h3>
             {showDisplay && filteredData && filteredData.map((datum) => {
-                return <ListCard card={datum} typeFields={typeFields}
-                path={typePath} key={`${typePath}/card/${datum.key}`}/>;
+                return <ListCard card={datum} typeFields={typeFields} highlightedField={display.highlightedField}
+                    path={typePath} key={`${typePath}/card/${datum.key}`} />;
             })}
         </div>
     );
@@ -214,6 +214,7 @@ const ListCard = (props) => {
     if (!card) return <div className="card">No card prop found</div>;
     const cardPath = `${props.path}/data/${card.key}`;
 
+    const highlightedFieldKey = props.highlightedField;
     const fields = props.typeFields;
 
     const [input, setInput] = useState(card.name);
@@ -226,13 +227,29 @@ const ListCard = (props) => {
         setInput(card.name);
     }
 
+    let highlightedFieldValue = card.fields[highlightedFieldKey];
+    let highlightedTypeField = fields.find((field) => field.key == highlightedFieldKey);
+    if (highlightedTypeField?.fieldKey == 'fields/select') {
+        let translatedFieldValue = highlightedTypeField?.options[highlightedFieldValue];
+        highlightedFieldValue = translatedFieldValue?.name;
+    }
+
     return (
         <Card card={card}
             cardPath={cardPath}
             updateContent={updateContent}
             resetContent={resetContent}
             viewComponent={
-                <h3>{card.name}</h3>
+                <div className="cardContentContainer">
+                    <div id="col1">
+                        <h3>{card.name}</h3>
+                    </div>
+                    <div id="col2">
+                        {highlightedFieldValue &&
+                            <h3 className={'floatRight'}>{highlightedTypeField?.name}: {highlightedFieldValue}</h3>
+                        }
+                    </div>
+                </div>
             }
             editComponent={
                 <>
@@ -240,7 +257,7 @@ const ListCard = (props) => {
                     <label>Fields</label>
                     {
                         fields && fields.map(field => {
-                            return <FieldInput field={field} fields={fields} path={cardPath} key={`${cardPath}/fieldInput/${field.key}`}/>;
+                            return <FieldInput field={field} fields={fields} path={cardPath} key={`${cardPath}/fieldInput/${field.key}`} />;
                         })
                     }
                 </>
@@ -258,15 +275,15 @@ const FieldInput = (props) => {
 
     if (field.fieldKey == "fields/select") {
         return (
-            <EditableSelect label={field.name} path={`${path}/fields`} dataname={field.key} options={options} defaultOption="None" key={`${path}/fieldInput`}/>
+            <EditableSelect label={field.name} path={`${path}/fields`} dataname={field.key} options={options} defaultOption="None" key={`${path}/fieldInput`} />
         );
     } else if (field.fieldKey === 'fields/date') {
         return (
-            <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key} type={'date'}/>
+            <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key} type={'date'} />
         );
     } else {
         return (
-            <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key}/>
+            <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key} />
         );
     }
 };
@@ -324,7 +341,7 @@ const ScreenCard = (props) => {
         <Card card={card}
             cardPath={cardPath}
             updateContent={updateContent}
-            resetContent={()=>{}}
+            resetContent={() => { }}
             viewComponent={
                 <h3>{card.name}</h3>
             }
@@ -337,7 +354,7 @@ const ScreenCard = (props) => {
                             let type = types[screenType.typeKey];
                             if (!type) return;
                             return (
-                                <AssociatedTypeCard type={type} screenPath={cardPath} screenTypePath={`${screenType.key}`}/>
+                                <AssociatedTypeCard type={type} screenPath={cardPath} screenTypePath={`${screenType.key}`} />
                             );
                         })
                     }
@@ -371,19 +388,19 @@ const ScreenCard = (props) => {
 const AssociatedTypeCard = (props) => {
     return (
         <Card card={props.type}
-        cardPath={`${props.screenPath}/types/${props.screenTypePath}`}
-        resetContent={()=>{}}
-        viewComponent={
-            <p>{props.type.name}</p>
-        }
-        editComponent={
-            <>
+            cardPath={`${props.screenPath}/types/${props.screenTypePath}`}
+            resetContent={() => { }}
+            viewComponent={
                 <p>{props.type.name}</p>
-            </>
-        }
+            }
+            editComponent={
+                <>
+                    <p>{props.type.name}</p>
+                </>
+            }
         />
-    )
-}
+    );
+};
 
 const DisplayCard = (props) => {
     const { updateObject, asKeyedList } = useContext(DBContext);
@@ -398,10 +415,10 @@ const DisplayCard = (props) => {
         screenType = screenTypes[0];
     }
     if (!screenType) {
-        return <p>No type selected for screen.</p>
+        return <p>No type selected for screen.</p>;
     }
     let typeObject = typesList.find(type => type.key === screenType.typeKey);
-    if (!typeObject) return <p>Invalid type object for screen type: {JSON.stringify(screenType)} vs {JSON.stringify(typesList)}</p>
+    if (!typeObject) return <p>Invalid type object for screen type: {JSON.stringify(screenType)} vs {JSON.stringify(typesList)}</p>;
     let typeFields = asKeyedList(typeObject.fields || []);
     if (!typeFields && typeFields != []) return <p>No valid type fields ({JSON.stringify(typeObject)})</p>;
 
@@ -415,7 +432,7 @@ const DisplayCard = (props) => {
         <Card card={card}
             cardPath={cardPath}
             updateContent={updateContent}
-            resetContent={()=>{}}
+            resetContent={() => { }}
             viewComponent={
                 <>
                     {card.name && <h3>{card.name}</h3>}
@@ -432,21 +449,22 @@ const DisplayCard = (props) => {
                     </div>
                     {/* {typeFields && typeFields.length > 0 &&
                         <EditableSelect label={`Filter by Field`} path={`${cardPath}`} dataname={`filterField`} options={typeFields} defaultOption="None" /> } */}
+                    <EditableSelect label={`Highlighted Field`} path={cardPath} dataname={`highlightedField`} options={typeFields} defaultOption="None" />
                     {typeFields && typeFields.length > 0 &&
-                    <>
-                        <label>Field filters</label>
-                        {typeFields.map(field => {
-                            let filterFieldOptions = asKeyedList(field.options);
-                            switch(field.fieldKey) {
-                                case 'fields/select':
-                                    return <EditableSelect label={`${field.name} Filter`} path={`${cardPath}/filters`} dataname={field.key} options={filterFieldOptions} defaultOption="None" />
-                                case 'fields/date':
-                                    return <EditableSelect label={`${field.name} Filter`} path={`${cardPath}/filters`} dataname={field.key} options={[{'key': '-1w', 'name': '1 Week Before'}, {'key':'+1w', 'name':'1 Week After'}]} defaultOption="None" />
-                                default:
-                                    return <p>Invalid: {field.fieldKey}</p>
-                            }
-                        })}
-                    </>}
+                        <>
+                            <label>Field filters</label>
+                            {typeFields.map(field => {
+                                let filterFieldOptions = asKeyedList(field.options);
+                                switch (field.fieldKey) {
+                                    case 'fields/select':
+                                        return <EditableSelect label={`${field.name} Filter`} path={`${cardPath}/filters`} dataname={field.key} options={filterFieldOptions} defaultOption="None" />;
+                                    case 'fields/date':
+                                        return <EditableSelect label={`${field.name} Filter`} path={`${cardPath}/filters`} dataname={field.key} options={[{ 'key': '-1w', 'name': '1 Week Before' }, { 'key': '+1w', 'name': '1 Week After' }]} defaultOption="None" />;
+                                    default:
+                                        return <p>Invalid: {field.fieldKey}</p>;
+                                }
+                            })}
+                        </>}
                 </>
             }
         />
