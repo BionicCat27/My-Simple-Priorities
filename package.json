@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --mode development",
-    "prod": "vite",
+    "prod": "vite --mode production",
     "build": "vite build",
     "docker": "docker-compose up --build",
     "emulators": "firebase emulators:start --project demo-test --import emulatorDataExport",
