@@ -313,7 +313,6 @@ const ScreenCard = (props) => {
 
     const defaultSelectorInput = "None";
 
-    const [input, setInput] = useState(card.name);
     const [typeSelectorInput, setTypeSelectorInput] = useState(defaultSelectorInput);
     const [displaySelectorInput, setDisplaySelectorInput] = useState(defaultSelectorInput);
 
@@ -336,15 +335,10 @@ const ScreenCard = (props) => {
         updateObject(`${cardPath}/configuration`, "displays/alignment", value);
     }
 
-    function updateContent() {
-        updateObject(cardPath, "name", input || "");
-    }
-
-
     return (
         <Card card={card}
             cardPath={cardPath}
-            updateContent={updateContent}
+            updateContent={() => { }}
             resetContent={() => { }}
             viewComponent={
                 <h3>{card.name}</h3>
