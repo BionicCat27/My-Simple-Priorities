@@ -229,8 +229,8 @@ const ListCard = (props) => {
 
     let highlightedFieldValue;
     let highlightedTypeField;
-    if (highlightedFieldKey) {
-        highlightedFieldValue = card?.fields[highlightedFieldKey];
+    if (highlightedFieldKey && card && 'fields' in card) {
+        highlightedFieldValue = card.fields[highlightedFieldKey];
         highlightedTypeField = fields?.find((field) => field.key == highlightedFieldKey);
         if (highlightedTypeField?.fieldKey == 'fields/select') {
             let translatedFieldValue = highlightedTypeField?.options[highlightedFieldValue];
