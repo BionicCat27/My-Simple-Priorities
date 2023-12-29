@@ -59,12 +59,12 @@ const Sidebar = (props) => {
 
 const Header = (props) => {
     const [showMenu, setShowMenu] = useState(false);
-    
+
     const location = useLocation();
 
-    useEffect(()=> {
+    useEffect(() => {
         setShowMenu(false);
-    }, [location.pathname])
+    }, [location.pathname]);
 
     const toggleMenu = () => {
         setShowMenu(!showMenu);
@@ -94,21 +94,20 @@ const LinksList = () => {
 
     const [screens, setScreens] = useState();
 
-    useEffect(()=>{
-        if(ready) {
-            addDataListener(`screens`, setScreens, true)
+    useEffect(() => {
+        if (ready) {
+            addDataListener(`screens`, setScreens, true);
         }
-    }, [ready])
+    }, [ready]);
     return (
         <>
             <a className={"nav-button"} onClick={() => navigate("/capture")}>Capture</a>
-            <a className={"nav-button"} onClick={() => navigate("/goals")}>Goals</a>
             <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
             <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
             <a className={"nav-button"} onClick={() => navigate("/types")}>Types</a>
             <a className={"nav-button"} onClick={() => navigate("/screens")}>Screens</a>
             {
-                screens && screens.map(screen => 
+                screens && screens.map(screen =>
                     <a className={"nav-button"} key={`navLink/${screen.key}`} onClick={() => navigate(`/screens/${screen.key}`)}>{screen.name}</a>
                 )
             }
