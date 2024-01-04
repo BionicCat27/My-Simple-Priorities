@@ -8,7 +8,7 @@ import ReviewPage from './pages/ReviewPage';
 import SignupPage from './pages/SignupPage';
 import TodoPage from './pages/TodoPage';
 import ScreensPage, { ScreenPage } from './pages/ScreensPage';
-import TypesPage from './pages/TypesPage';
+import ConfigurePage from './pages/ConfigurePage';
 import PageWrapper from './pages/PageWrapper';
 
 function App() {
@@ -21,9 +21,8 @@ function App() {
             <Route path="/capture" element={<PageWrapper protected navmenu={"Capture"} page={<CapturePage />} />} title="Capture" />
             <Route path="/todo" element={<PageWrapper protected navmenu={"Todo"} page={<TodoPage />} />} title="Todo" />
             <Route path="/review" element={<PageWrapper protected navmenu={"Review"} page={<ReviewPage />} />} />
-            <Route path="/screens" element={<PageWrapper protected navmenu={"Screens"} page={<ScreensPage />} />} />
             <Route path="/screens/:screenId" element={<PageWrapper protected navmenu={"Screen"} page={<ScreenPage />} />} />
-            <Route path="/types" element={<PageWrapper protected navmenu={"Types"} page={<TypesPage />} />} />
+            <Route path="/configure" element={<PageWrapper protected navmenu={"Configure"} page={<ConfigurePage />} />} />
             <Route path="/login" element={<PageWrapper redirector page={<LoginPage />} />} />
             <Route path="/signup" element={<PageWrapper redirector page={<SignupPage />} />} />
             <Route path="*" element={<PageWrapper navmenu={"Not Found"} page={<NotFoundPage />} />} />

@@ -36,7 +36,10 @@ select {
   display: inline-block;
 }
 
-button:disabled, button:disabled:hover, select:disabled, select:disabled:hover {
+button:disabled,
+button:disabled:hover,
+select:disabled,
+select:disabled:hover {
   background-color: lightgray;
   color: black
 }
@@ -60,7 +63,8 @@ a {
   background-color: rgba(0, 0, 0, 0.20);
 }
 
-input {
+input,
+textarea {
   background-color: rgba(0, 0, 0, 0.10);
   box-shadow: 0px 1px 2px -1px black;
   padding: 0.5rem;
@@ -185,4 +189,8 @@ button:hover {
 
 h3.hide {
   color: gray;
+}
+
+.displayBlock {
+  display: block;
 }

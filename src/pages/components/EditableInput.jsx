@@ -9,10 +9,9 @@ import { DBContext } from "../../contexts/DBContext";
  * @param path (Self-controlled) - data path for self controlled input
  * @param dataname (Self-controlled) - data type name for path
  * @param type (Optional) - input type
- * @returns 
  */
 export const EditableInput = (props) => {
-    const {addDataListener, ready, updateObject, asKeyedList} = useContext(DBContext);
+    const { addDataListener, ready, updateObject, asKeyedList } = useContext(DBContext);
 
     const label = props.label;
     const type = props.type;
@@ -21,12 +20,12 @@ export const EditableInput = (props) => {
     let onSubmit = props.onSubmit;
 
     function handleSubmit(event) {
-        if(event.key === 'Enter' && onSubmit) {
+        if (event.key === 'Enter' && onSubmit) {
             onSubmit();
         }
     }
 
-    if(!path) {
+    if (!path) {
         const value = props.value;
         const setValue = props.setValue;
         return (
@@ -42,18 +41,18 @@ export const EditableInput = (props) => {
 
     function handleSetValue(input) {
         setInitialValue(input || "");
-        setValue(input || "")
+        setValue(input || "");
     }
 
     onSubmit = () => {
         updateObject(path, dataname, value);
-    }
-    
-    useEffect(()=> {
-        if(ready) {
+    };
+
+    useEffect(() => {
+        if (ready) {
             addDataListener(`${path}/${dataname}`, handleSetValue, false);
         }
-    }, [])
+    }, []);
 
     return (
         <>
@@ -61,6 +60,6 @@ export const EditableInput = (props) => {
             <input className="display-inline-block" value={value} onChange={(field) => { setValue(field.target.value); }} onKeyDown={handleSubmit} type={type} />
             <button className="display-inline-block margin-x-002" onClick={onSubmit} disabled={value === initialValue}>Save {label}</button>
         </>
-    )
+    );
 
 };
