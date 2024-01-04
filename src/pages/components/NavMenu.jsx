@@ -111,7 +111,7 @@ const LinksList = () => {
                     <a className={"nav-button"} key={`navLink/${screen.key}`} onClick={() => navigate(`/screens/${screen.key}`)}>{screen.name}</a>
                 )
             }
-            <a className={"nav-button"} onClick={() => signUserOut()}>Logout {user.email}</a>
+            <a className={"nav-button"} onClick={() => signUserOut()}>Logout {user?.email}</a>
         </>
     );
 };
