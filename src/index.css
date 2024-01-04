@@ -71,6 +71,12 @@ textarea {
   border: none;
   border-bottom: 1px solid black;
   transition: background-color 50ms;
+  min-width: 16em
+}
+
+textarea {
+  width: 80%;
+  height: 10em;
 }
 
 *:focus {
