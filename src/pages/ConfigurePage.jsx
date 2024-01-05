@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { DBContext } from "../contexts/DBContext";
 import { Card } from "./components/Card";
 import { EditableInput } from "./components/EditableInput";
-import { EditableSelect } from "./components/EditableSelect";
+import { EditableSelect, optionsFromList } from "./components/EditableSelect";
 import ScreensPage from "./ScreensPage";
 import { EditableTextarea } from "./components/EditableTextarea";
 
@@ -214,18 +214,62 @@ const OptionCard = (props) => {
 };
 
 const ImportExportPage = () => {
+    const { addDataListener, asKeyedList, ready } = useContext(DBContext);
     const States = {
         waitingForInput: 0,
-        parsingJSON: 1
+        selectingTargetType: 1,
+        mapping: 2
     };
     const [state, setState] = useState(States.waitingForInput);
-    const [json, setJson] = useState("");
+    const [jsonInput, setJsonInput] = useState("");
     const [parsedJson, setParsedJson] = useState({});
+    const [targetTypeKey, setTargetTypeKey] = useState(undefined);
+    const [targetType, setTargetType] = useState(undefined);
+    const [types, setTypes] = useState(undefined);
+    const [nonCommonFields, setNonCommonFields] = useState({});
+    const [commonFields, setCommonFields] = useState({});
+    const [fieldMappings, setFieldsMappings] = useState({});
+
+    function setFieldMapping(name, value) {
+        let mappings = fieldMappings;
+        mappings[name] = value;
+        setFieldsMappings(mappings);
+    }
+
+    useEffect(() => {
+        console.log("mappings changed");
+    }, [fieldMappings]);
+
+    useEffect(() => {
+        if (ready) {
+            addDataListener(`types`, setTypes, true);
+        }
+    }, [ready]);
+
+    useEffect(() => {
+        if (targetTypeKey && types) {
+            setTargetType(Object.values(types).find(type => type.key === targetTypeKey));
+        }
+    }, [targetTypeKey]);
 
     function toggleJsonField() {
         if (state === States.waitingForInput) {
-            setParsedJson(JSON.parse(json));
-            setState(States.parsingJSON);
+            let parsedJsonInput = JSON.parse(jsonInput);
+            let seenFields = new Set([]);
+            let commonFields = new Set([]);
+            Object.values(parsedJsonInput).forEach(object => {
+                let keys = Object.keys(object);
+                if (seenFields.size == 0 && commonFields.size == 0) {
+                    keys.forEach(key => commonFields.add(key));
+                }
+                keys.forEach(key => seenFields.add(key));
+                commonFields = Array.from(commonFields).filter(field => keys.includes(field));
+            });
+            let differentFields = Array.from(seenFields).filter(field => !commonFields.includes(field));
+            setCommonFields(commonFields);
+            setNonCommonFields(differentFields);
+            setParsedJson(parsedJsonInput);
+            setState(States.selectingTargetType);
         } else {
             setState(States.waitingForInput);
         }
@@ -234,15 +278,46 @@ const ImportExportPage = () => {
     return (
         <>
             <h1>Import/Export</h1>
-            <EditableTextarea label={"JSON"} value={json} setValue={setJson} disabled={state === States.waitingForInput ? false : true} />
+            <EditableTextarea label={"JSON"} value={jsonInput} setValue={setJsonInput} disabled={state === States.waitingForInput ? false : true} />
             <button className="displayBlock" onClick={toggleJsonField}>{state === States.waitingForInput ? "Parse JSON" : "Edit JSON"}</button>
-            {state === States.parsingJSON &&
+            {state > States.waitingForInput &&
                 <>
-                    <h2>Fields</h2>
+                    <h2>Data</h2>
                     <ul>
                         <ExpandableField isRoot object={parsedJson} />
                     </ul>
-                    <button className="displayBlock" onClick={toggleJsonField}>Parse JSON</button>
+                    <h2>Mapping</h2>
+                    {
+                        types ? <EditableSelect label={"Target type"} value={targetTypeKey} setValue={setTargetTypeKey} options={types} defaultOption={"None"} />
+                            : <p>No types found.</p>
+                    }
+                    <p>{JSON.stringify(targetType)}</p>
+                    <h3>Common Fields</h3>
+                    <table>
+                        <thead>
+
+                            <tr>
+                                <th>Source Name</th>
+                                <th>Target Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {commonFields.map(field =>
+                                <tr>
+                                    <td>{field}</td>
+                                    <td><EditableSelect
+                                        value={fieldMappings && Array.from(fieldMappings).includes(field) && fieldMappings[field]}
+                                        setValue={(value) => setFieldMapping(field, value)}
+                                        options={asKeyedList(targetType?.fields)}
+                                        defaultOption={"None"} /></td>
+                                </tr>)}
+                        </tbody>
+                    </table>
+                    <h3>Noncommon Fields</h3>
+                    <ul>
+                        {nonCommonFields.map(field => <li>{field}</li>)}
+                    </ul>
                 </>
             }
         </>
