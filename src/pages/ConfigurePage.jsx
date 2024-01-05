@@ -231,13 +231,13 @@ const ImportExportPage = () => {
     const [fieldMappings, setFieldsMappings] = useState({});
 
     function setFieldMapping(name, value) {
-        let mappings = fieldMappings;
+        let mappings = { ...fieldMappings };
         mappings[name] = value;
+        // console.log(`changing field mappings: ${JSON.stringify(mappings)} vs ${JSON.stringify(fieldMappings)} given ${name}: ${value}`);
         setFieldsMappings(mappings);
     }
 
     useEffect(() => {
-        console.log("mappings changed");
     }, [fieldMappings]);
 
     useEffect(() => {
@@ -303,13 +303,13 @@ const ImportExportPage = () => {
                         </thead>
                         <tbody>
 
-                            {commonFields.map(field =>
-                                <tr>
+                            {commonFields.map((field, index) =>
+                                <tr key={index}>
                                     <td>{field}</td>
                                     <td><EditableSelect
-                                        value={fieldMappings && Array.from(fieldMappings).includes(field) && fieldMappings[field]}
+                                        value={fieldMappings && Object.keys(fieldMappings).includes(field) && fieldMappings[field]}
                                         setValue={(value) => setFieldMapping(field, value)}
-                                        options={asKeyedList(targetType?.fields)}
+                                        options={asKeyedList(targetType?.fields)?.filter(typeField => !Object.keys(fieldMappings).includes(typeField))}
                                         defaultOption={"None"} /></td>
                                 </tr>)}
                         </tbody>
