@@ -278,11 +278,14 @@ const ImportExportPage = () => {
     function getUnmappedFields(field) {
         let fields = targetType?.fields;
         if (fields) {
-            let unmappedFields = Object.fromEntries(
-                Object.entries(fields).filter(
-                    ([fieldKey, fieldValue]) => !Object.values(fieldMappings).includes(fieldKey)
-                        || Object.values(fieldMappings).includes(fieldKey)
-                        && fieldMappings[field] === fieldKey
+            let unmappedFields = Object.entries(fields);
+            unmappedFields.push(["name", { "name": "Name" }]);
+            unmappedFields = Object.fromEntries(
+                unmappedFields.filter(
+                    ([fieldKey, fieldValue]) =>
+                        !Object.values(fieldMappings).includes(fieldKey)
+                        || (Object.values(fieldMappings).includes(fieldKey)
+                            && fieldMappings[field] === fieldKey)
                 )
             );
             console.log(unmappedFields);
