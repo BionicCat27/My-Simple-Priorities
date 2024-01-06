@@ -275,6 +275,21 @@ const ImportExportPage = () => {
         }
     }
 
+    function getUnmappedFields(field) {
+        let fields = targetType?.fields;
+        if (fields) {
+            let unmappedFields = Object.fromEntries(
+                Object.entries(fields).filter(
+                    ([fieldKey, fieldValue]) => !Object.values(fieldMappings).includes(fieldKey)
+                        || Object.values(fieldMappings).includes(fieldKey)
+                        && fieldMappings[field] === fieldKey
+                )
+            );
+            console.log(unmappedFields);
+            return asKeyedList(unmappedFields);
+        }
+    }
+
     return (
         <>
             <h1>Import/Export</h1>
@@ -309,7 +324,7 @@ const ImportExportPage = () => {
                                     <td><EditableSelect
                                         value={fieldMappings && Object.keys(fieldMappings).includes(field) && fieldMappings[field]}
                                         setValue={(value) => setFieldMapping(field, value)}
-                                        options={asKeyedList(targetType?.fields)?.filter(typeField => !Object.keys(fieldMappings).includes(typeField))}
+                                        options={getUnmappedFields(field)}
                                         defaultOption={"None"} /></td>
                                 </tr>)}
                         </tbody>
