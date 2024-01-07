@@ -294,19 +294,20 @@ const ImportExportPage = () => {
 
     function getUnmappedFields(field) {
         let fields = targetType?.fields;
+        let unmappedFields = [];
+        unmappedFields.push(["name", { "name": "Name" }]);
         if (fields) {
-            let unmappedFields = Object.entries(fields);
-            unmappedFields.push(["name", { "name": "Name" }]);
-            unmappedFields = Object.fromEntries(
-                unmappedFields.filter(
-                    ([fieldKey, fieldValue]) =>
-                        !Object.values(fieldMappings).includes(fieldKey)
-                        || (Object.values(fieldMappings).includes(fieldKey)
-                            && fieldMappings[field] === fieldKey)
-                )
-            );
-            return asKeyedList(unmappedFields);
+            unmappedFields.push(...Object.entries(fields));
         }
+        unmappedFields = Object.fromEntries(
+            unmappedFields.filter(
+                ([fieldKey, fieldValue]) =>
+                    !Object.values(fieldMappings).includes(fieldKey)
+                    || (Object.values(fieldMappings).includes(fieldKey)
+                        && fieldMappings[field] === fieldKey)
+            )
+        );
+        return asKeyedList(unmappedFields);
     }
 
     function mergeData() {
