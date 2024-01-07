@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { DBContext } from "../contexts/DBContext";
 import { Card } from "./components/Card";
-import { EditableInput } from "./components/EditableInput";
+import { EditableInput, InputSizes } from "./components/EditableInput";
 import { EditableSelect, optionsFromList } from "./components/EditableSelect";
 import ScreensPage from "./ScreensPage";
 import { EditableTextarea } from "./components/EditableTextarea";
@@ -106,16 +106,19 @@ const TypesCard = (props) => {
             }
             editComponent={
                 <>
-                    <EditableInput label={"Name"} value={titleInput} setValue={setTitleInput} />
-                    <label>Fields</label>
+                    <EditableInput placeholder={"Name"} value={titleInput} setValue={setTitleInput} size={InputSizes.h1} />
                     {
-                        typeFields && typeFields.map(field => {
-                            return (
-                                <FieldCard card={field}
-                                    path={cardPath} key={`${cardPath}/${field.key}`}
-                                />
-                            );
-                        })
+                        typeFields &&
+                        <>
+                            <h3>Fields</h3>
+                            {typeFields.map(field => {
+                                return (
+                                    <FieldCard card={field}
+                                        path={cardPath} key={`${cardPath}/${field.key}`}
+                                    />
+                                );
+                            })}
+                        </>
                     }
                     <EditableSelect label={""} value={fieldSelectorInput} setValue={setFieldSelectorInput}
                         options={fieldsList} defaultOption={defaultSelectorInput} />

@@ -2,7 +2,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 //Firebase
 //Contexts
-import './TimelineGantt.css';
 
 import { DBContext } from '../contexts/DBContext';
 //Components

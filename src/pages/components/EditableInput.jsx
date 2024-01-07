@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { DBContext } from "../../contexts/DBContext";
+import '../common.css';
 
 /**
  * 
@@ -9,14 +10,28 @@ import { DBContext } from "../../contexts/DBContext";
  * @param path (Self-controlled) - data path for self controlled input
  * @param dataname (Self-controlled) - data type name for path
  * @param type (Optional) - input type
+ * @param size (Optional) - size of the input text
  */
+
+export const InputSizes = {
+    "h1": 1,
+    "h2": 2,
+    "h3": 3,
+    "h4": 4,
+    "h5": 5,
+    "h6": 6,
+    "p": 7,
+};
+
 export const EditableInput = (props) => {
     const { addDataListener, ready, updateObject, asKeyedList } = useContext(DBContext);
 
     const label = props.label;
+    const placeholder = props.placeholder;
     const type = props.type;
     const path = props.path;
     const dataname = props.dataname;
+    const size = props.size;
     let onSubmit = props.onSubmit;
 
     function handleSubmit(event) {
@@ -31,7 +46,7 @@ export const EditableInput = (props) => {
         return (
             <>
                 {label && <label>{label}</label>}
-                <input value={value} onChange={(field) => { setValue(field.target.value); }} onKeyDown={handleSubmit} type={type} />
+                <input size={value.length} placeholder={placeholder || ""} className={`input-${size}`} value={value} onChange={(field) => { setValue(field.target.value); }} onKeyDown={handleSubmit} type={type} />
             </>
         );
     }
@@ -44,9 +59,11 @@ export const EditableInput = (props) => {
         setValue(input || "");
     }
 
-    onSubmit = () => {
-        updateObject(path, dataname, value);
-    };
+    if (!onSubmit) {
+        onSubmit = () => {
+            updateObject(path, dataname, value);
+        };
+    }
 
     useEffect(() => {
         if (ready) {
@@ -57,8 +74,8 @@ export const EditableInput = (props) => {
     return (
         <>
             {label && <label>{label}</label>}
-            <input className="display-inline-block" value={value} onChange={(field) => { setValue(field.target.value); }} onKeyDown={handleSubmit} type={type} />
-            <button className="display-inline-block margin-x-002" onClick={onSubmit} disabled={value === initialValue}>Save {label}</button>
+            <input className={`display-inline-block input-${size}`} placeholder={placeholder || ""} size={value.length} value={value} onChange={(field) => { setValue(field.target.value); }} onKeyDown={handleSubmit} type={type} />
+            <button className={`display-inline-block margin-x-002`} onClick={onSubmit} disabled={value === initialValue}>Save {label}</button>
         </>
     );
 

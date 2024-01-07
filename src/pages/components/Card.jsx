@@ -87,7 +87,7 @@ export const Card = (props) => {
         return classes;
     }
     return (
-        <div draggable className={generateClasses()}
+        <div draggable={!editing} className={generateClasses()}
             key={`${cardPath}`}
             onClick={() => (!editing && setEditing(true))}
             onDrop={(e) => { handleDrop(e); }}

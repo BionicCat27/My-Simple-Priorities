@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { DBContext } from "../contexts/DBContext";
 import { Card } from "./components/Card";
-import { EditableInput } from "./components/EditableInput";
+import { EditableInput, InputSizes } from "./components/EditableInput";
 import { EditableSelect } from "./components/EditableSelect";
 
 const ScreensPage = () => {
@@ -257,12 +257,16 @@ const ListCard = (props) => {
             }
             editComponent={
                 <>
-                    <EditableInput label={"Name"} value={input} setValue={setInput} />
-                    <label>Fields</label>
+                    <EditableInput placeholder={"Name"} value={input} setValue={setInput} size={InputSizes.h1} />
                     {
-                        fields && fields.map(field => {
-                            return <FieldInput field={field} fields={fields} path={cardPath} key={`${cardPath}/fieldInput/${field.key}`} />;
-                        })
+                        fields && <>
+                            <h3>Fields</h3>
+                            {
+                                fields.map(field => {
+                                    return <FieldInput field={field} fields={fields} path={cardPath} key={`${cardPath}/fieldInput/${field.key}`} />;
+                                })
+                            }
+                        </>
                     }
                 </>
             }
@@ -271,7 +275,7 @@ const ListCard = (props) => {
 };
 
 const FieldInput = (props) => {
-    const { updateObject, asKeyedList } = useContext(DBContext);
+    const { asKeyedList } = useContext(DBContext);
 
     const path = props.path;
     const field = props.field;
@@ -281,13 +285,9 @@ const FieldInput = (props) => {
         return (
             <EditableSelect label={field.name} path={`${path}/fields`} dataname={field.key} options={options} defaultOption="None" key={`${path}/fieldInput`} />
         );
-    } else if (field.fieldKey === 'fields/date') {
-        return (
-            <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key} type={'date'} />
-        );
     } else {
         return (
-            <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key} />
+            <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key} type={field.fieldKey === 'fields/date' ? 'date' : ''} />
         );
     }
 };
@@ -345,7 +345,7 @@ const ScreenCard = (props) => {
             }
             editComponent={
                 <>
-                    <EditableInput label="Name" path={cardPath} dataname={"name"} />
+                    <EditableInput placeholder="Name" path={cardPath} dataname={"name"} size={InputSizes.h1} />
                     <label>Associated Types</label>
                     {
                         screenTypes && screenTypes.map(screenType => {

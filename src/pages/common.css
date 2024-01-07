@@ -230,3 +230,12 @@ button {
     margin-bottom: 1rem;
     display: block;
 }
+
+.input-1 {
+    font-size: large;
+    border: none;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    box-shadow: none;
+}
