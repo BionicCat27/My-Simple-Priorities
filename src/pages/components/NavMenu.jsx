@@ -101,7 +101,6 @@ const LinksList = () => {
     }, [ready]);
     return (
         <>
-            <a className={"nav-button"} onClick={() => navigate("/capture")}>Capture</a>
             <a className={"nav-button"} onClick={() => navigate("/todo")}>Todo</a>
             <a className={"nav-button"} onClick={() => navigate("/review")}>Review</a>
             <a className={"nav-button"} onClick={() => navigate("/configure")}>Configure</a>
