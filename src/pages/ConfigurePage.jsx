@@ -418,14 +418,16 @@ const ExpandableField = (props) => {
         );
     } else {
         return (
-            <li onClick={e => toggleExpanded(e)}>
-                {objectkey}
+            <>
+                <li onClick={e => toggleExpanded(e)} className={"clickable"}>
+                    {objectkey}
+                </li>
                 {isExpanded &&
                     <ul>
                         {expandObject()}
                     </ul>
                 }
-            </li>
+            </>
         );
     }
 };
