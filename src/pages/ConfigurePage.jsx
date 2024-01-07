@@ -214,11 +214,12 @@ const OptionCard = (props) => {
 };
 
 const ImportExportPage = () => {
-    const { addDataListener, asKeyedList, ready } = useContext(DBContext);
+    const { addDataListener, asKeyedList, ready, pushObject } = useContext(DBContext);
     const States = {
         waitingForInput: 0,
         selectingTargetType: 1,
-        mapping: 2
+        mapping: 2,
+        approving: 3
     };
     const [state, setState] = useState(States.waitingForInput);
     const [jsonInput, setJsonInput] = useState("");
@@ -229,15 +230,22 @@ const ImportExportPage = () => {
     const [nonCommonFields, setNonCommonFields] = useState({});
     const [commonFields, setCommonFields] = useState({});
     const [fieldMappings, setFieldsMappings] = useState({});
+    const [importMsg, setImportMsg] = useState("");
 
     function setFieldMapping(name, value) {
         let mappings = { ...fieldMappings };
         mappings[name] = value;
-        // console.log(`changing field mappings: ${JSON.stringify(mappings)} vs ${JSON.stringify(fieldMappings)} given ${name}: ${value}`);
         setFieldsMappings(mappings);
     }
 
     useEffect(() => {
+        if (state >= States.mapping) {
+            if (commonFields.length > 0 && fieldMappings && commonFields.length === Object.keys(fieldMappings).length) {
+                setState(States.approving);
+            } else {
+                setState(States.mapping);
+            }
+        }
     }, [fieldMappings]);
 
     useEffect(() => {
@@ -249,12 +257,21 @@ const ImportExportPage = () => {
     useEffect(() => {
         if (targetTypeKey && types) {
             setTargetType(Object.values(types).find(type => type.key === targetTypeKey));
+            if (state > States.waitingForInput && state < States.mapping) {
+                setState(States.mapping);
+            }
         }
-    }, [targetTypeKey]);
+    }, [targetTypeKey, state]);
 
     function toggleJsonField() {
+        setImportMsg("");
         if (state === States.waitingForInput) {
-            let parsedJsonInput = JSON.parse(jsonInput);
+            let parsedJsonInput;
+            try {
+                parsedJsonInput = JSON.parse(jsonInput);
+            } catch (error) {
+                setImportMsg("JSON invalid, please check formatting to continue.");
+            }
             let seenFields = new Set([]);
             let commonFields = new Set([]);
             Object.values(parsedJsonInput).forEach(object => {
@@ -288,9 +305,30 @@ const ImportExportPage = () => {
                             && fieldMappings[field] === fieldKey)
                 )
             );
-            console.log(unmappedFields);
             return asKeyedList(unmappedFields);
         }
+    }
+
+    function mergeData() {
+        let createdObjects = 0;
+        Object.entries(parsedJson).forEach(([objectKey, object]) => {
+            let newObject = Object.fromEntries(Object.entries(object).filter(([fieldName, fieldValue]) => Object.keys(fieldMappings).includes(fieldName))
+                .map(([fieldName, fieldValue]) => {
+                    let fieldKey = fieldMappings[fieldName];
+                    return [fieldKey, fieldValue];
+                }));
+            pushObject(`types/${targetTypeKey}/data`, newObject);
+            createdObjects++;
+        });
+        setState(States.waitingForInput);
+        setImportMsg(`Created ${createdObjects} ${targetType.name} object(s)`);
+        setJsonInput("");
+        setParsedJson({});
+        setTargetTypeKey(undefined);
+        setTargetType(undefined);
+        setNonCommonFields({});
+        setCommonFields({});
+        setFieldsMappings({});
     }
 
     return (
@@ -298,6 +336,9 @@ const ImportExportPage = () => {
             <h1>Import/Export</h1>
             <EditableTextarea label={"JSON"} value={jsonInput} setValue={setJsonInput} disabled={state === States.waitingForInput ? false : true} />
             <button className="displayBlock" onClick={toggleJsonField}>{state === States.waitingForInput ? "Parse JSON" : "Edit JSON"}</button>
+            {state === States.waitingForInput &&
+                <p>{importMsg}</p>
+            }
             {state > States.waitingForInput &&
                 <>
                     <h2>Data</h2>
@@ -309,7 +350,6 @@ const ImportExportPage = () => {
                         types ? <EditableSelect label={"Target type"} value={targetTypeKey} setValue={setTargetTypeKey} options={types} defaultOption={"None"} />
                             : <p>No types found.</p>
                     }
-                    <p>{JSON.stringify(targetType)}</p>
                     <h3>Common Fields</h3>
                     <table>
                         <thead>
@@ -321,7 +361,7 @@ const ImportExportPage = () => {
                         </thead>
                         <tbody>
 
-                            {commonFields.map((field, index) =>
+                            {commonFields && commonFields.length > 0 && commonFields.map((field, index) =>
                                 <tr key={index}>
                                     <td>{field}</td>
                                     <td><EditableSelect
@@ -334,9 +374,16 @@ const ImportExportPage = () => {
                     </table>
                     <h3>Noncommon Fields</h3>
                     <ul>
-                        {nonCommonFields.map(field => <li>{field}</li>)}
+                        {nonCommonFields && nonCommonFields.length > 0 && nonCommonFields.map(field => <li>{field}</li>)}
                     </ul>
                 </>
+            }
+            {
+                state >= States.approving &&
+                <div style={{ marginBottom: '2em' }}>
+                    <h2>Approving</h2>
+                    <button onClick={mergeData}>Merge data</button>
+                </div>
             }
         </>
     );
