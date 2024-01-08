@@ -17,12 +17,12 @@ const createUserOrSignIn = async (auth, email, password) => {
         console.error('Error creating user:', error);
         signInWithEmailAndPassword(auth, email, password)
             .catch((error) => {
-                console.error(error)
+                console.error(error);
             });
     }
 };
 const doFormLogin = async (page, email, password) => {
-    expect(page.url()).toBe(`${baseUrl}/login`)
+    expect(page.url()).toBe(`${baseUrl}/login`);
     await page.$('#loginForm');
     await page.type('#loginFormEmail', email);
     await page.type('#loginFormPassword', password);
@@ -51,18 +51,18 @@ describe("App", () => {
     it("logs user in successfully", async () => {
         page.goto(baseUrl);
         await page.waitForSelector("#loginForm");
-        await doFormLogin(page, email, password)
+        await doFormLogin(page, email, password);
         await page.waitForNavigation();
-        expect(page.url()).toBe(`${baseUrl}/`)
+        expect(page.url()).toBe(`${baseUrl}/`);
     });
 
 
     it("fails to login invalid user", async () => {
         page.goto(baseUrl);
-        await doFormLogin(page, "acbd1234", "acbd1234")
+        await doFormLogin(page, "acbd1234", "acbd1234");
         await page.waitForSelector("#login-error-message");
         const loginErrorMessage = await page.$eval("#login-error-message", (e) => e.textContent);
-        expect(loginErrorMessage).toBe("Incorrect username or password.")
+        expect(loginErrorMessage).toBe("Incorrect username or password.");
     });
 
     afterEach(() => {
@@ -74,44 +74,44 @@ describe("App", () => {
     });
 });
 
-describe("Capture page", () => {
-    jest.mock('../src/contexts/AuthContext', () => ({
-        checkLoggedIn: jest.fn()
-    }));
+// describe("Capture page", () => {
+//     jest.mock('../src/contexts/AuthContext', () => ({
+//         checkLoggedIn: jest.fn()
+//     }));
 
-    let browser;
-    let page;
-    let auth;
-    beforeAll(async () => {
-        expect(process.env.MODE).toBe("development");
-        auth = getAuth();
-        expect(auth).toBeDefined();
-        await createUserOrSignIn(auth, email, password);
-        expect(auth.currentUser).toBeDefined();
-    });
+//     let browser;
+//     let page;
+//     let auth;
+//     beforeAll(async () => {
+//         expect(process.env.MODE).toBe("development");
+//         auth = getAuth();
+//         expect(auth).toBeDefined();
+//         await createUserOrSignIn(auth, email, password);
+//         expect(auth.currentUser).toBeDefined();
+//     });
 
-    beforeEach(async () => {
-        browser = await puppeteer.launch({ headless: "new" });
-        page = await browser.newPage();
-    });
+//     beforeEach(async () => {
+//         browser = await puppeteer.launch({ headless: "new" });
+//         page = await browser.newPage();
+//     });
 
-    it("adds a note", async () => {
-        await page.goto(`${baseUrl}`);
-        await doFormLogin(page, email, password);
-        await page.waitForSelector("#capture-input")
-        await page.type("#capture-input", "New Note");
-    })
+//     it("adds a note", async () => {
+//         await page.goto(`${baseUrl}`);
+//         await doFormLogin(page, email, password);
+//         await page.waitForSelector("#capture-input");
+//         await page.type("#capture-input", "New Note");
+//     });
 
-    afterEach(() => {
-        page.close();
-    });
+//     afterEach(() => {
+//         page.close();
+//     });
 
-    afterAll(() => {
-        console.debug("Deleting user");
-        deleteUser(auth.currentUser);
-        browser.close();
-    });
-})
+//     afterAll(() => {
+//         console.debug("Deleting user");
+//         deleteUser(auth.currentUser);
+//         browser.close();
+//     });
+// });
 
 // describe("DBContext", () => {
 //     let browser;

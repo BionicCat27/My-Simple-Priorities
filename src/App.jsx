@@ -16,7 +16,7 @@ function App() {
       <DBProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Navigate to="/capture" />} />
+            <Route path="/" element={<Navigate to="/todo" />} />
             <Route path="/todo" element={<PageWrapper protected navmenu={"Todo"} page={<TodoPage />} />} title="Todo" />
             <Route path="/review" element={<PageWrapper protected navmenu={"Review"} page={<ReviewPage />} />} />
             <Route path="/screens/:screenId" element={<PageWrapper protected navmenu={"Screen"} page={<ScreenPage />} />} />

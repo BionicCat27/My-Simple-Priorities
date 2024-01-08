@@ -84,19 +84,6 @@ textarea {
   outline: none;
 }
 
-.capture_card {
-  min-width: 200px;
-}
-
-#capture-input {
-  width: 100px;
-  transition: width 50ms;
-}
-
-#capture-input:focus {
-  width: 200px;
-}
-
 button:hover {
   color: white;
   background-color: #374780;
