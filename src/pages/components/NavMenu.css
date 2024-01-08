@@ -83,6 +83,13 @@ h1 {
     position: fixed;
     top: 0;
     left: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+#sidebar:hover {
+    overflow-y: auto;
 }
 
 #sidebarTitle {
@@ -90,17 +97,10 @@ h1 {
     padding: 1rem;
 }
 
-#sidebarCreditContainer {
-    position: fixed;
-    display: block;
-    bottom: 0;
-    margin: 1rem;
-    width: 10rem;
-}
 
 #sidebarLinksContainer {
     width: 100%;
-    display: block;
+    /* display: block; */
 }
 
 #sidebarLinksContainer a {
@@ -115,6 +115,13 @@ h1 {
     color: white;
     background-color: #374780;
     cursor: pointer;
+}
+
+#sidebarCreditContainer {
+    /* display: block; */
+    bottom: 0;
+    margin: 1rem;
+    width: 10rem;
 }
 
 /* Header */
