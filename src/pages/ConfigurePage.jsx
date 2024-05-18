@@ -234,6 +234,11 @@ const ImportExportPage = () => {
     const [commonFields, setCommonFields] = useState({});
     const [fieldMappings, setFieldsMappings] = useState({});
     const [importMsg, setImportMsg] = useState("");
+    const [hideImportData, setHideImportData] = useState(false);
+
+    function toggleHideData() {
+        setHideImportData(!hideImportData);
+    }
 
     function setFieldMapping(name, value) {
         let mappings = { ...fieldMappings };
@@ -346,9 +351,11 @@ const ImportExportPage = () => {
             {state > States.waitingForInput &&
                 <>
                     <h2>Data</h2>
-                    <ul>
-                        <ExpandableField isRoot object={parsedJson} />
-                    </ul>
+                    <button onClick={toggleHideData}>{hideImportData ? `Show data` : ` Hide data`}</button>
+                    {!hideImportData &&
+                        <ul>
+                            <ExpandableField isRoot object={parsedJson} />
+                        </ul>}
                     <h2>Mapping</h2>
                     {
                         types ? <EditableSelect label={"Target type"} value={targetTypeKey} setValue={setTargetTypeKey} options={types} defaultOption={"None"} />
