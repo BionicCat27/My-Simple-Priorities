@@ -23,7 +23,8 @@ const LoginPage = () => {
     return (
         <div className="main-content">
             <div className="text-center vertical-center">
-                <PageTitle title="Login" />
+                <h1 className='text-center'>Welcome back,</h1>
+                <h2 className='text-center'>Login to manage your priorities!</h2>
                 <form id="centeredForm" onSubmit={prepareSignIn}>
                     <input id="loginFormEmail" className="centeredFormElement" type="email" value={email} onChange={field => setEmail(field.target.value)}></input>
                     <input id="loginFormPassword" className="centeredFormElement" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
