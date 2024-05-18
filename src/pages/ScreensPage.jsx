@@ -287,7 +287,7 @@ const FieldInput = (props) => {
         );
     } else {
         return (
-            <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key} type={field.fieldKey === 'fields/date' ? 'date' : ''} />
+            <EditableInput key={`${path}/fieldInput`} label={field.name} path={`${path}/fields`} dataname={field.key} type={field.fieldKey === 'fields/date' ? 'date' : field.fieldKey === 'fields/number' ? 'number' : ''} />
         );
     }
 };
@@ -349,6 +349,7 @@ const ScreenCard = (props) => {
                     <label>Associated Types</label>
                     {
                         screenTypes && screenTypes.map(screenType => {
+                            if (!screenType || !screenType?.typeKey || !types) return;
                             let type = types[screenType.typeKey];
                             if (!type) return;
                             return (

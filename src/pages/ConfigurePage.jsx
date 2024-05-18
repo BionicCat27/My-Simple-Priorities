@@ -70,6 +70,9 @@ const TypesCard = (props) => {
         },
         'fields/date': {
             'name': 'Date'
+        },
+        'fields/number': {
+            'name': 'Number'
         }
     };
     const fieldsList = asKeyedList(fieldsMap);
