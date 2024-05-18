@@ -22,7 +22,7 @@ const LoginPage = () => {
 
     return (
         <div className="main-content">
-            <div className="text-center div-card vertical-center">
+            <div className="text-center vertical-center">
                 <PageTitle title="Login" />
                 <form id="centeredForm" onSubmit={prepareSignIn}>
                     <input id="loginFormEmail" className="centeredFormElement" type="email" value={email} onChange={field => setEmail(field.target.value)}></input>
