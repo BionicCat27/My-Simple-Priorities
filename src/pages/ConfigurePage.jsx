@@ -11,6 +11,7 @@ const ConfigurePage = () => {
         <TypesPage />
         <ScreensPage />
         <ImportExportPage />
+		<MergeTypesPage />
     </>;
 };
 
@@ -402,6 +403,76 @@ const ImportExportPage = () => {
         </>
     );
 };
+
+const MergeTypesPage = () => {
+	const { addDataListener, asKeyedList, ready, pushObject } = useContext(DBContext);
+	const [sourceTypeKey, setSourceTypeKey] = useState("None");
+	const [targetTypeKey, setTargetTypeKey] = useState("None");
+	const [types, setTypes] = useState(undefined);
+	const [sourceType, setSourceType] = useState(undefined);
+	const [targetType, setTargetType] = useState(undefined);
+	const [fieldsMap, setFieldsMap] = useState({});
+
+
+	useEffect(()=>{
+			if(ready) {
+					addDataListener(`types`, setTypes, true);
+			}
+	}, [ready]);
+	
+	useEffect(()=>{
+		if(!types) return;
+		setSourceType(types.find((type) => type.key == sourceTypeKey));
+	}, [sourceTypeKey]);
+
+	useEffect(()=>{
+		if(!types) return;
+		setTargetType(types.find((type) => type.key == targetTypeKey));
+	}, [targetTypeKey]);
+	
+	useEffect(() => {
+		if(!sourceType || !targetType) {
+			return;
+		}
+
+	}, [sourceType, targetType]);
+
+
+	return (
+		<>
+			<h1>Merge Types</h1>
+			{ types ? 
+				<>
+					<EditableSelect label={"Source Type"} value={sourceTypeKey} setValue={setSourceTypeKey} options={types} defaultOption={"None"} />
+					<EditableSelect label={"Target Type"} value={targetTypeKey} setValue={setTargetTypeKey} options={types} defaultOption={"None"} />
+				</>
+				: <p>No Types Found.</p>
+			}	
+			{ sourceTypeKey != "None" && targetTypeKey != "None" ?
+				<>
+					<h2>Map Source fields to Target fields</h2>
+					<table>
+						<thead>
+							<tr>
+								<th>Target Field</th>
+								<th>Source Field</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>{JSON.stringify(targetType)}</td></tr>
+							{targetType && targetType.fields && false && targetType.fields.map(field => <tr><td>JSON.stringify(field)</td></tr>)}
+							<tr>
+								<td>{ sourceType && sourceType.name}</td>
+								<td>{ targetType && targetType.name}</td>
+							</tr>
+						</tbody>
+					</table>
+				</>
+				: undefined
+			}
+		</>
+	);
+}
 
 const ExpandableField = (props) => {
     const isRoot = props.isRoot;
