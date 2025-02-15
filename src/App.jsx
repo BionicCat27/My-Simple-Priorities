@@ -6,6 +6,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import ReviewPage from './pages/ReviewPage';
 import SignupPage from './pages/SignupPage';
 import TodoPage from './pages/TodoPage';
+import AccountPage from './pages/AccountPage';
 import { ScreenPage } from './pages/ScreensPage';
 import ConfigurePage from './pages/ConfigurePage';
 import PageWrapper from './pages/PageWrapper';
@@ -21,6 +22,7 @@ function App() {
             <Route path="/review" element={<PageWrapper protected navmenu={"Review"} page={<ReviewPage />} />} />
             <Route path="/screens/:screenId" element={<PageWrapper protected navmenu={"Screen"} page={<ScreenPage />} />} />
             <Route path="/configure" element={<PageWrapper protected navmenu={"Configure"} page={<ConfigurePage />} />} />
+            <Route path="/account" element={<PageWrapper protected navmenu={"Account"} page={<AccountPage />} />} />
             <Route path="/login" element={<PageWrapper redirector page={<LoginPage />} />} />
             <Route path="/signup" element={<PageWrapper redirector page={<SignupPage />} />} />
             <Route path="*" element={<PageWrapper navmenu={"Not Found"} page={<NotFoundPage />} />} />

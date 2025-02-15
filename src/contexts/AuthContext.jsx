@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged, connectAuthEmulator, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged, connectAuthEmulator, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updatePassword } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { connectDatabaseEmulator, getDatabase } from "firebase/database";
 import { useCookies } from "react-cookie";
@@ -34,6 +34,13 @@ export const AuthProvider = ({ children }) => {
             .catch((error) => errorCallback(`An error occurred during signout: ${error.code} - ${error.message}`));
     }
 
+	function updateUsersPassword(password, errorCallback, successCallback) {
+		if (!auth) return;
+		updatePassword(auth.currentUser, password)
+			.then((result) => successCallback(`Password updated successfully.`))
+			.catch((error) => errorCallback(`An error occurred during password update: ${error.code} - ${error.message}`));
+	}
+
     useEffect(() => {
         //Get auth
         if (!auth) return;
@@ -48,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     }, [setCookie, removeCookie]);
 
     return (
-        <AuthContext.Provider value={{ user, loading, auth, signUserOut, signIn, signUp }}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ user, loading, auth, signUserOut, signIn, signUp, updateUsersPassword }}>{children}</AuthContext.Provider>
     );
 };
 
