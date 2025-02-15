@@ -32,9 +32,9 @@ const LandingPage = () => {
     }, [user]);
 
     return (
-        <div className="flex flex-col justify-content items-center place-content-center h-screen">
+        <div className="flex flex-col justify-content items-center place-content-center h-screen p-10">
 			<h1 className="text-xl">My Simple Priorities</h1>
-            <div className="mt-8 rounded-md shadow-md p-8 w-auto">
+            <div className="mt-8 rounded-md shadow-md p-8">
                 <h2 className='text-center text-xl'>Priorities and Productivity.</h2>
                 <span className='text-center'>Manage your notes, tasks and time.</span>
                 <form className='flex flex-col justify-center items-center mt-4' onSubmit={prepareSignIn}>
