@@ -32,13 +32,12 @@ const LandingPage = () => {
     }, [user]);
 
     return (
-        <div className="flex justify-content items-center h-screen">
-            <div className='basis-1/2 rounded-md shadow-md p-8 ml-4 mr-2'>
+        <div className="flex flex-col justify-content items-center place-content-center h-screen">
+			<h1 className="text-xl">My Simple Priorities</h1>
+            <div className="mt-8 rounded-md shadow-md p-8 w-auto">
                 <h2 className='text-center text-xl'>Priorities and Productivity.</h2>
-                <h2 className='text-center'>Manage your notes, tasks and time.</h2>
-            </div>
-            <div className="basis-1/2 rounded-md shadow-md p-8 ml-2 mr-4 w-auto">
-                <form className='flex flex-col justify-center items-center' onSubmit={prepareSignIn}>
+                <span className='text-center'>Manage your notes, tasks and time.</span>
+                <form className='flex flex-col justify-center items-center mt-4' onSubmit={prepareSignIn}>
                     <input id="loginFormEmail" placeholder={"Username"} className="centeredFormElement bg-opacity-50 bg-gray-300 hover:bg-gray-100 focus:bg-gray-100 rounded p-1" type="email" value={email} onChange={field => setEmail(field.target.value)}></input>
                     <input id="loginFormPassword" placeholder={"Password"} className="centeredFormElement bg-opacity-50 bg-gray-300 hover:bg-gray-100 focus:bg-gray-100 rounded p-1" type="password" value={password} onChange={field => setPassword(field.target.value)}></input>
                     <div className='flex flex-row items-center'>
