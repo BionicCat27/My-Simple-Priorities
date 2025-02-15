@@ -1,0 +1,1 @@
+Leave me here. The Firebase emulators require the emulatorDataExport/ folder to contain database_export/, but git doesn't like empty folders.
