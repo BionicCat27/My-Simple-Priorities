@@ -11,6 +11,7 @@ import '../common.css';
  * @param dataname (Self-controlled) - data type name for path
  * @param type (Optional) - input type
  * @param size (Optional) - size of the input text
+ * @param disabled (Optional) - input should be disabled
  */
 
 export const InputSizes = {
@@ -32,6 +33,7 @@ export const EditableInput = (props) => {
     const path = props.path;
     const dataname = props.dataname;
     const size = props.size;
+	const disabled = props.disabled;
     let onSubmit = props.onSubmit;
 
     function handleSubmit(event) {
@@ -46,7 +48,7 @@ export const EditableInput = (props) => {
         return (
             <>
                 {label && <label>{label}</label>}
-                <input size={value.length} placeholder={placeholder || ""} className={`input-${size}`} value={value} onChange={(field) => { setValue(field.target.value); }} onKeyDown={handleSubmit} type={type} />
+                <input disabled={disabled} size={value.length} placeholder={placeholder || ""} className={`input-${size}`} value={value} onChange={(field) => { setValue(field.target.value); }} onKeyDown={handleSubmit} type={type} />
             </>
         );
     }
@@ -74,7 +76,7 @@ export const EditableInput = (props) => {
     return (
         <>
             {label && <label>{label}</label>}
-            <input className={`display-inline-block input-${size}`} placeholder={placeholder || ""} size={value.length} value={value} onChange={(field) => { setValue(field.target.value); }} onKeyDown={handleSubmit} type={type} />
+            <input disabled={disabled} className={`display-inline-block input-${size}`} placeholder={placeholder || ""} size={value.length} value={value} onChange={(field) => { setValue(field.target.value); }} onKeyDown={handleSubmit} type={type} />
             <button className={`display-inline-block margin-x-002`} onClick={onSubmit} disabled={value === initialValue}>Save {label}</button>
         </>
     );

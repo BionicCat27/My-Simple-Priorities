@@ -166,6 +166,14 @@ button {
     padding: 1rem;
 }
 
+#pageContainer {
+	display: block;
+}
+
+.block, .block label, .block input, .block button{
+	display: block !important;
+}
+
 .content_field {
 
     line-height: 1rem;
